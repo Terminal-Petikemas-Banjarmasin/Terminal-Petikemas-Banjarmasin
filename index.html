@@ -1,0 +1,927 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Kinerja Terminal Petikemas Banjarmasin</title>
+<meta name="description" content="Dashboard kinerja kunjungan kapal Terminal Petikemas Banjarmasin 2026: TEUs, waktu sandar, produktivitas dan waiting time.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f766e'/%3E%3Crect x='7' y='16' width='4' height='9' rx='1' fill='white'/%3E%3Crect x='14' y='11' width='4' height='14' rx='1' fill='white'/%3E%3Crect x='21' y='7' width='4' height='18' rx='1' fill='white'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap">
+<style>html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<style id="app-style">
+/* Layout: satu kolom lebar 1120px; ringkasan dan angka utama di atas, grafik 2 kolom, tabel, lalu form input untuk editor. */
+:root{--y25:#8796a1;--bg:#f4f6f7;--panel:#ffffff;--fg:#14212b;--muted:#586875;--line:#dce3e8;--grid:#e8edf0;--c1:#0f766e;--c2:#c2610c;--c3:#4a5fb0;--bad:#b42318;--ok:#15803d;--chip:#e7f1f0;--font-body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;--font-head:'Space Grotesk','Inter',system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--y25:#6f808c;--bg:#0d151b;--panel:#15212a;--fg:#e5ecf1;--muted:#94a5b2;--line:#263641;--grid:#213039;--c1:#2dd4bf;--c2:#fbab4c;--c3:#93a6f0;--bad:#f87171;--ok:#4ade80;--chip:#173431;color-scheme:dark}}
+:root[data-theme="dark"]{--y25:#6f808c;--bg:#0d151b;--panel:#15212a;--fg:#e5ecf1;--muted:#94a5b2;--line:#263641;--grid:#213039;--c1:#2dd4bf;--c2:#fbab4c;--c3:#93a6f0;--bad:#f87171;--ok:#4ade80;--chip:#173431;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:14px;line-height:1.5;padding-block:24px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.site{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+.site *{box-sizing:border-box}
+h1,h2{font-family:var(--font-head);margin:0;text-wrap:balance}
+h1{font-size:clamp(24px,4vw,34px);font-weight:600;letter-spacing:-.01em}
+h2{font-size:16px;font-weight:600}
+.top{display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:space-between;align-items:flex-end}
+.sub{margin:4px 0 0;color:var(--muted)}
+.stamp{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);display:inline-block}
+.take{margin:0;font-size:17px;line-height:1.55;max-width:72ch}
+.take b{font-weight:600;font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:999px;padding:5px 12px;font:inherit;font-size:13px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--c1);border-color:var(--c1);color:#fff}
+.chip:focus-visible,.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--c3);outline-offset:2px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:10px}@media(max-width:891px){.kpis>.card:last-child:nth-child(odd){grid-column:1/-1}}@media(max-width:520px){.kpis{grid-template-columns:1fr 1fr}}.kpis .kv{font-size:24px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
+.kl{font-size:12px;color:var(--muted)}
+.kv{font-family:var(--font-head);font-size:28px;font-weight:600;line-height:1.2;margin-top:4px;font-variant-numeric:tabular-nums}
+.kn{font-size:12px;color:var(--muted);margin-top:2px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,480px),1fr));gap:12px}
+.cap{margin:2px 0 10px;font-size:12px;color:var(--muted)}
+.ms{display:flex;flex-wrap:wrap;gap:20px;align-items:center}.ms .pie{flex:0 0 240px;min-height:0;margin:0 auto}.ms .tw{flex:1 1 320px}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px}
+.anh{font-family:var(--font-head);font-size:14px;font-weight:600;margin:22px 0 8px}.abars{display:flex;flex-direction:column;gap:10px;margin:10px 0 14px;max-width:760px}.abars .brow span:first-child{white-space:normal}.bfill.w{background:var(--c2)}.bfill.now{background:var(--muted)}.and{margin-top:14px}.and summary{font-weight:600}#analisis p,#analisis-nov p,#analisis-teus p{max-width:90ch}.bfill.neg{background:var(--muted)}.an{padding-left:20px;margin:14px 0}.an li{margin-bottom:10px;line-height:1.55;max-width:90ch}
+.chart{position:relative;min-height:220px;width:100%}
+.chart svg{display:block;max-width:100%}
+.chart svg text{font-size:11px;fill:var(--muted);font-family:var(--font-body)}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;margin-bottom:6px;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);box-shadow:0 4px 14px rgba(0,0,0,.18);color:var(--fg);font-size:12px;padding:5px 8px;border-radius:6px;white-space:nowrap;z-index:2}
+.bars{display:flex;flex-direction:column;gap:10px;min-height:220px}
+.brow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;align-items:end;font-size:12px}
+.brow small{color:var(--muted);margin-left:6px}
+.brow-v{font-weight:600;font-variant-numeric:tabular-nums}
+.btrack{grid-column:1/-1;height:8px;background:var(--grid);border-radius:4px;overflow:hidden}
+.bfill{height:100%;border-radius:4px;background:var(--c1)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:12px;font-weight:600;color:var(--muted)}
+.n{text-align:right}
+td.note{white-space:normal;min-width:220px;max-width:420px;color:var(--fg);line-height:1.45}
+.clamp{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.btn{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:8px;padding:7px 14px;cursor:pointer}
+.btn.primary{background:var(--c1);border-color:var(--c1);color:#fff;font-weight:600}
+.btn.danger{color:var(--bad)}
+.btn:disabled{opacity:.5;cursor:default}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:12px 0}
+label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}
+input,select,textarea{font:inherit;font-size:14px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0;width:100%}
+.wide{grid-column:1/-1}
+.status{font-size:13px;min-height:20px}
+.status.err{color:var(--bad)}
+details{color:var(--muted)}
+details summary{cursor:pointer;color:var(--fg)}
+dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:10px 0 0}
+dt{font-weight:600;color:var(--fg)}
+dd{margin:0}
+.uprow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0}.uprow .cap{margin:0}.prev{margin:10px 0;font-size:14px}.prev b{font-variant-numeric:tabular-nums}
+.wl{display:flex;flex-direction:column;gap:8px}
+.wl details{border:1px solid var(--line);border-radius:8px}
+.wl summary{list-style:none;display:grid;grid-template-columns:minmax(120px,230px) minmax(0,1fr) auto;gap:6px 14px;align-items:center;padding:10px 12px;cursor:pointer;color:var(--fg)}
+.wl summary::-webkit-details-marker{display:none}
+.wl summary:focus-visible{outline:2px solid var(--c3);outline-offset:2px;border-radius:8px}
+.wl details[open] summary{border-bottom:1px solid var(--line)}
+.wl .wbar{height:8px;background:var(--grid);border-radius:4px;overflow:hidden}
+.wl .wbar i{display:block;height:100%;background:var(--c2);border-radius:4px}
+.wl .wv{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap;font-weight:600}
+.wl .wsub{color:var(--muted);font-size:12px;margin-left:6px;font-weight:400}
+.wl .wlist{padding:4px 12px 10px}
+.wl table{font-size:13px}
+#c-top{min-height:0}
+@media (max-width:560px){.wl summary{grid-template-columns:minmax(0,1fr) auto}.wl .wbar{grid-column:1/-1;order:3}}
+.grid>.card:last-child:nth-child(odd){grid-column:1/-1}
+@media (prefers-reduced-motion:no-preference){.bfill{transition:width .3s ease}}
+.ycols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:22px 30px;margin:8px 0 6px}.ycol{min-width:0}.ycol h4{font-family:var(--font-head);font-size:13.5px;font-weight:600;margin:0 0 4px;text-wrap:balance}.ycol p{margin:12px 0 0;font-size:13px;line-height:1.55}.dv{position:relative;display:flex;flex-direction:column;gap:9px;margin:10px 0 0}.dvr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 10px;align-items:end;font-size:12px}.dvr small{color:var(--muted);margin-left:6px}.dvr.tot{border-top:1px solid var(--line);padding-top:9px}.dvr.tot>span:first-child{font-weight:600}.dvt{grid-column:1/-1;position:relative;height:10px;background:var(--grid);border-radius:4px}.dvt i{position:absolute;top:0;bottom:0;border-radius:4px;background:var(--c1)}.dvt i.neg{background:var(--c2)}.dvt b{position:absolute;top:-3px;bottom:-3px;width:2px;margin-left:-1px;background:var(--fg);opacity:.45}.dvt i.ref{background:var(--y25)}.rkl{max-width:760px}#c-wtd .tip,#c-rk .tip,#c-yoy .tip,.dv .tip{white-space:pre-line;width:max-content;max-width:min(280px,100%)}.sr{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.wv small{display:block;font-weight:400;color:var(--muted);font-size:11.5px}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+</head>
+<body>
+<div class="site" id="site">
+<header class="top">
+  <div>
+    <h1>Kinerja Terminal Petikemas Banjarmasin</h1>
+    <p class="sub">Kunjungan kapal tahun 2026: waktu sandar, produktivitas, dan penyebab henti.</p>
+  </div>
+  <div class="stamp" aria-live="polite"><span class="dot"></span><span id="stamp" data-dyn=""></span></div>
+</header>
+
+<div class="chips" id="chips" data-dyn="" role="group" aria-label="Pilih bulan"></div>
+
+<p class="take" id="take" data-dyn=""></p>
+
+<section class="kpis" id="kpis" data-dyn="" aria-label="Angka utama"></section>
+
+<section class="card">
+  <h2>Market share pelayaran</h2>
+  <div class="ms"><div class="chart pie" id="c-pie" data-dyn=""></div>
+  <div class="tw"><table><thead><tr><th>Pelayaran</th><th class="n">Kapal</th><th class="n">TEUs</th><th class="n">Market share</th></tr></thead><tbody id="t-line" data-dyn=""></tbody></table></div></div>
+</section>
+
+<section class="grid">
+  <div class="card"><h2>TEUs per bulan</h2><p class="cap">Ribuan TEUs, bongkar dan muat. Garis putus-putus adalah target RKAP per bulan.</p><div class="chart" id="c-box" data-dyn=""></div></div>
+  <div class="card"><h2>Produktivitas per bulan</h2><p class="cap">Rata-rata box per jam kerja sandar (BWT), per kapal.</p><div class="chart" id="c-prod" data-dyn=""></div></div>
+</section>
+
+<section class="card" id="analisis-teus">
+  <h2>Analisis: mengapa TEUs naik dibanding 2025</h2>
+  <p><b>Ringkasnya:</b> Januari–Oktober 2026 terminal melayani <b>494.405 TEUs</b>, naik <b>5,4%</b> (+25.299 TEUs) dari 469.106 TEUs pada periode yang sama tahun 2025. Sampai pertengahan November kenaikannya sekitar 5%. Kenaikan ini <b>bukan karena kapal bertambah</b>: jumlah kunjungan justru turun 5,8%. Penyebabnya, setiap kapal membawa muatan 11,9% lebih banyak. Dua pertiga tambahan TEUs berupa kontainer Empty yang dimuat keluar.</p>
+
+  <h3 class="anh">TEUs naik di 8 dari 10 bulan</h3>
+  <p class="cap">Ribuan TEUs per bulan. Angka di atas batang adalah perubahan dibanding 2025.</p>
+  <div class="chart" id="c-yoy" data-dyn=""></div>
+
+  <h3 class="anh">Tiga penyebab utama</h3>
+  <div class="legend"><span><i style="background:var(--c1)"></i>menambah TEUs</span><span><i style="background:var(--c2)"></i>mengurangi TEUs</span></div>
+  <div class="ycols">
+    <div class="ycol">
+      <h4>1. Kapal lebih besar, bukan lebih banyak</h4>
+      <div class="dv" id="c-y1" data-dyn=""></div>
+      <p>Kunjungan berkurang 53 kali, tetapi setiap kunjungan membawa 62 TEUs lebih banyak, sehingga total TEUs tetap naik. Contoh terbesar: Panurjwan mengganti kapalnya dengan ICON GALATIA V dan INTAN DAYA 17. Muatan per kunjungannya naik dari 565 menjadi 787 TEUs walaupun kunjungannya turun dari 101 menjadi 86.</p>
+    </div>
+    <div class="ycol">
+      <h4>2. Dua pelayaran menyumbang 83% kenaikan</h4>
+      <div class="dv" id="c-y2" data-dyn=""></div>
+      <p>Panurjwan dan SPIL bersama menambah 21.015 TEUs. Tanto ikut naik 8,1%. Indo Container dan Caraka turun karena kunjungannya berkurang.</p>
+    </div>
+    <div class="ycol">
+      <h4>3. Barang masuk naik, barang keluar turun</h4>
+      <div class="dv" id="c-y3" data-dyn=""></div>
+      <p>Bongkar kontainer Full naik 5,3%, artinya barang yang masuk ke Banjarmasin bertambah. Kontainer itu kembali keluar dalam keadaan Empty, sehingga muat Empty naik 10,3%. Sebaliknya muat Full turun 5,9%, terutama di Meratus (−38%). Kini 73% kontainer yang dimuat adalah kontainer Empty, naik dari 70%.</p>
+    </div>
+  </div>
+
+  <h3 class="anh">Angka utama</h3>
+  <div class="tw"><table><thead><tr><th>Januari–Oktober</th><th class="n">2025</th><th class="n">2026</th><th class="n">Perubahan</th></tr></thead><tbody>
+    <tr><td><b>TEUs</b></td><td class="n">469.106</td><td class="n">494.405</td><td class="n"><b>+5,4%</b></td></tr>
+    <tr><td>Kunjungan kapal</td><td class="n">907</td><td class="n">854</td><td class="n">−5,8%</td></tr>
+    <tr><td>TEUs per kunjungan</td><td class="n">517</td><td class="n">579</td><td class="n">+11,9%</td></tr>
+    <tr><td>Kontainer 20 feet (box)</td><td class="n">320.973</td><td class="n">335.827</td><td class="n">+4,6%</td></tr>
+    <tr><td>Kontainer 40 feet (box)</td><td class="n">74.063</td><td class="n">79.289</td><td class="n">+7,1%</td></tr>
+    <tr><td>Kontainer Full (TEUs)</td><td class="n">303.216</td><td class="n">311.671</td><td class="n">+2,8%</td></tr>
+    <tr><td>Kontainer Empty (TEUs)</td><td class="n">165.883</td><td class="n">182.734</td><td class="n">+10,2%</td></tr>
+  </tbody></table></div>
+
+  <h3 class="anh">Per pelayaran</h3>
+  <div class="tw"><table><thead><tr><th>Pelayaran</th><th class="n">TEUs 2025</th><th class="n">TEUs 2026</th><th class="n">Perubahan</th><th class="n">Andil</th><th class="n">Kunjungan</th><th class="n">TEUs per kunjungan</th></tr></thead><tbody>
+    <tr><td>Panurjwan</td><td class="n">57.041</td><td class="n">67.683</td><td class="n">+18,7%</td><td class="n">42%</td><td class="n">101 → 86</td><td class="n">565 → 787</td></tr>
+    <tr><td>SPIL</td><td class="n">124.055</td><td class="n">134.428</td><td class="n">+8,4%</td><td class="n">41%</td><td class="n">235 → 232</td><td class="n">528 → 579</td></tr>
+    <tr><td>Tanto</td><td class="n">66.347</td><td class="n">71.728</td><td class="n">+8,1%</td><td class="n">21%</td><td class="n">111 → 113</td><td class="n">598 → 635</td></tr>
+    <tr><td>Meratus</td><td class="n">102.547</td><td class="n">103.781</td><td class="n">+1,2%</td><td class="n">5%</td><td class="n">184 → 176</td><td class="n">557 → 590</td></tr>
+    <tr><td>Temas</td><td class="n">52.762</td><td class="n">52.652</td><td class="n">−0,2%</td><td class="n">0%</td><td class="n">93 → 84</td><td class="n">567 → 627</td></tr>
+    <tr><td>Indo Container</td><td class="n">39.852</td><td class="n">38.628</td><td class="n">−3,1%</td><td class="n">−5%</td><td class="n">98 → 82</td><td class="n">407 → 471</td></tr>
+    <tr><td>Caraka</td><td class="n">26.398</td><td class="n">25.501</td><td class="n">−3,4%</td><td class="n">−4%</td><td class="n">83 → 80</td><td class="n">318 → 319</td></tr>
+  </tbody></table></div>
+
+  <p><b>Yang bukan penyebab:</b> jumlah kapal (turun 5,8%) dan lonjakan sesaat. Delapan dari sepuluh bulan naik: Januari–Juni +4,6% dan Juli–Oktober +6,5%. Maret turun 9% dan April naik 37% hanya karena Idul Fitri jatuh di bulan berbeda; kalau digabung, Maret–April naik 10%.</p>
+
+  <h3 class="anh">Yang perlu diperhatikan manajemen</h3>
+  <ol class="an">
+    <li><b>Pendapatan.</b> Dua pertiga tambahan TEUs adalah kontainer Empty. Kalau tarif kontainer Empty lebih rendah, kenaikan pendapatan akan di bawah 5%.</li>
+    <li><b>Dermaga.</b> Kapal yang lebih besar membuat jam sandar naik 7,2% (15.135 menjadi 16.220 jam), lebih cepat daripada kenaikan box (5,1%). Ini menambah tekanan pada dermaga yang hanya muat 3 kapal, seperti dijelaskan di analisis waiting time.</li>
+    <li><b>Komersial.</b> Muat Full turun 5,9%, terutama Meratus. Perlu dicari tahu apakah muatan keluar pindah ke pelayaran atau pelabuhan lain.</li>
+  </ol>
+</section>
+
+<section class="card" id="analisis-rkap">
+  <h2>Analisis: TEUs dibanding RKAP 2026</h2>
+  <p><b>Ringkasnya:</b> Sampai Oktober terminal melayani <b>494.405 TEUs</b>, atau <b>101,5% dari RKAP</b> Januari–Oktober (486.901 TEUs), lebih 7.504 TEUs. Kelebihan ini <b>bukan karena box lebih banyak</b>: jumlah box justru 0,4% di bawah RKAP. Penyebabnya kontainer 40 feet jauh melampaui rencana, terutama kontainer 40 feet Empty yang dimuat keluar. Kartu Capaian target TEUs di atas membandingkan dengan RKAP setahun penuh (589.966 TEUs), jadi angkanya baru mendekati 100% di akhir Desember.</p>
+
+  <h3 class="anh">Kumulatif di atas RKAP sejak Juli</h3>
+  <p class="cap">Capaian TEUs setiap bulan terhadap RKAP bulan itu. Garis menunjukkan capaian kumulatif sejak Januari.</p>
+  <div class="chart" id="c-rk" data-dyn=""></div>
+  <p>Bulan yang di bawah RKAP punya penyebab yang jelas. Maret hanya 89% karena Idul Fitri jatuh 20 Maret, sedangkan target April dibuat paling rendah (38.183 TEUs) seperti pola 2025 ketika penurunan Lebaran terjadi di April. Akibatnya April 130%, dan bila digabung Maret–April 107%. Mei–Juni 95% karena libur Idul Adha dan kekurangan crane di Juni membuat antrean panjang. Sebagian kapal antrean Juni baru selesai di Juli, sehingga Juli 109%. Sejak Juli jumlah crane kembali normal dan Juli–Oktober mencapai 104,5%.</p>
+
+  <h3 class="anh">Mengapa TEUs di atas RKAP</h3>
+  <p class="cap">Selisih dengan RKAP Januari–Oktober, dalam TEUs.</p>
+  <div class="legend"><span><i style="background:var(--c1)"></i>menambah TEUs</span><span><i style="background:var(--c2)"></i>mengurangi TEUs</span></div>
+  <div class="ycols">
+    <div class="ycol">
+      <h4>1. Kontainer 40 feet jauh di atas rencana</h4>
+      <div class="dv" id="c-r1" data-dyn=""></div>
+      <p>Jumlah box hanya 99,6% dari RKAP. Tetapi kontainer 40 feet mencapai 19,1% dari seluruh box, sedangkan RKAP menghitung 16,8%. Satu box 40 feet dihitung 2 TEUs, sehingga tambahan 9.340 box 40 feet lebih dari menutup kekurangan 11.176 box 20 feet.</p>
+    </div>
+    <div class="ycol">
+      <h4>2. Muat Empty di atas rencana, muat Full di bawah</h4>
+      <div class="dv" id="c-r2" data-dyn=""></div>
+      <p>Sumber terbesar adalah muat Empty 40 feet, 135% dari RKAP (+15.832 TEUs). RKAP memperkirakan muat Empty 40 feet turun 14% dari 2025, kenyataannya naik 16%, karena kontainer 40 feet yang masuk berisi barang kembali keluar dalam keadaan Empty. Sebaliknya muat Full hanya 90% dari RKAP: RKAP memperkirakan naik 4%, kenyataannya turun 6%, terutama di Meratus.</p>
+    </div>
+  </div>
+
+  <h3 class="anh">Peluang mencapai target setahun</h3>
+  <div class="dv rkl" id="c-r3" data-dyn=""></div>
+  <p id="rk-out" data-dyn=""></p>
+
+  <h3 class="anh">Yang perlu diperhatikan manajemen</h3>
+  <ol class="an">
+    <li><b>Jaga laju sampai akhir tahun.</b> Laju sekarang hanya sedikit di atas laju yang dibutuhkan, jadi gangguan sekitar satu minggu di Desember bisa membuat target setahun meleset. Pastikan CC 02 kembali beroperasi dan jangan jadwalkan perawatan crane besar sampai akhir tahun.</li>
+    <li><b>Muat Full di bawah RKAP (90%).</b> Perlu tindak lanjut komersial dengan pelayaran, terutama Meratus, untuk mengetahui apakah muatan keluar pindah ke pelayaran atau pelabuhan lain.</li>
+    <li><b>Untuk RKAP 2027.</b> Susun target bulanan mengikuti tanggal hari raya; Idul Fitri 2027 juga jatuh di bulan Maret. Hitung juga porsi kontainer 40 feet dan muat Empty sesuai tren 2026, karena keduanya yang membuat TEUs tahun ini berbeda dari rencana.</li>
+  </ol>
+</section>
+
+
+<section class="card">
+  <h2>5 kapal dengan BSH BT tertinggi</h2>
+  <p class="cap">Box per jam sandar, per kunjungan, dengan tanggal first line.</p>
+  <div class="bars" id="c-top" data-dyn=""></div>
+</section>
+
+<section class="card"><h2>Waiting time sandar</h2><p class="cap">Rata-rata waktu dari kapal tiba (Arrive) sampai first line, per kapal, dalam jam dan hari.</p><div class="chart" id="c-waktu" data-dyn=""></div><h3 class="anh" id="wtd-h" data-dyn=""></h3><p class="cap">Rata-rata waiting time kapal dalam hari, menurut tanggal first line.</p><div class="chart" id="c-wtd" data-dyn=""></div></section>
+
+<section class="card" id="analisis">
+  <h2>Analisis: mengapa waiting time sandar tinggi</h2>
+  <p><b>Kesimpulan untuk manajemen.</b> Waiting time naik dari 18,9 jam (Januari–Mei) menjadi 33,5 jam (Juni–November) karena dermaga hampir selalu penuh. Dermaga hanya muat 3 kapal sekaligus, dan setiap kapal kini bersandar 4,8 jam lebih lama. Akibatnya dalam sehari dermaga paling banyak bisa menyelesaikan 2,9 kapal, sama dengan rata-rata kapal yang datang, 2,9 per hari. Dermaga hampir tidak punya waktu longgar: begitu ada hari dengan kapal datang lebih banyak, atau satu kapal bersandar lebih lama, kapal berikutnya langsung antre dan antreannya lama habis. Januari–Mei dermaga masih punya sisa sekitar 1 kapal per hari, sehingga antrean cepat terurai. Akar masalahnya tiga: crane lebih lambat karena menunggu truk dan yard, crane per kapal berkurang, dan istirahat lebih panjang. Mengembalikan kinerja ke tingkat Januari–Mei menurunkan waiting time ke sekitar 16–18 jam.</p>
+
+  <h3 class="anh">1. Seberapa besar masalahnya</h3>
+  <div class="tw"><table><thead><tr><th>Indikator</th><th class="n">Target</th><th class="n">Jan–Mei</th><th class="n">Jun–Nov</th></tr></thead><tbody>
+    <tr><td>Waiting time rata-rata (jam)</td><td class="n">—</td><td class="n">18,9</td><td class="n">33,5</td></tr>
+    <tr><td>Kapal menunggu lebih dari 24 jam</td><td class="n">—</td><td class="n">26%</td><td class="n">54%</td></tr>
+    <tr><td>Kapal menunggu lebih dari 72 jam</td><td class="n">—</td><td class="n">14 kapal</td><td class="n">47 kapal</td></tr>
+    <tr><td>BT (jam)</td><td class="n">17</td><td class="n">16,7</td><td class="n">21,4</td></tr>
+    <tr><td>ET (jam)</td><td class="n">11</td><td class="n">11,5</td><td class="n">14,6</td></tr>
+    <tr><td>IT (jam)</td><td class="n">1</td><td class="n">1,1</td><td class="n">2,0</td></tr>
+    <tr><td>NOT (jam)</td><td class="n">4</td><td class="n">4,1</td><td class="n">4,7</td></tr>
+    <tr><td>BSH BT</td><td class="n">28</td><td class="n">30,8</td><td class="n">25,4</td></tr>
+    <tr><td>Kapal yang memenuhi target BT</td><td class="n">—</td><td class="n">56%</td><td class="n">26%</td></tr>
+  </tbody></table></div>
+  <p>Januari–Mei terminal bekerja sesuai target dan waiting time 19 jam. Sejak Juni semua indikator keluar dari target. Tambahan menunggu sejak Juni setara sekitar 7.200 jam kapal. Jadi targetnya sudah tepat dan pernah tercapai; yang perlu diputuskan adalah cara kembali ke sana.</p>
+
+  <h3 class="anh">2. Mengapa kapal antre: dermaga hampir selalu penuh</h3>
+  <div class="tw"><table><thead><tr><th>Hitungan kapasitas</th><th class="n">Jan–Mei</th><th class="n">Jun–Nov</th></tr></thead><tbody>
+    <tr><td>Kapal tiba per hari</td><td class="n">2,7</td><td class="n">2,9</td></tr>
+    <tr><td>BT per kapal ditambah jeda pergantian sekitar 3 jam</td><td class="n">19,7 jam</td><td class="n">24,4 jam</td></tr>
+    <tr><td>Kapasitas dermaga, 3 kapal bersamaan (kapal per hari)</td><td class="n">3,7</td><td class="n">2,9</td></tr>
+    <tr><td>Pemakaian kapasitas</td><td class="n">75%</td><td class="n">98%</td></tr>
+    <tr><td>Waktu dermaga terisi 3 kapal</td><td class="n">32%</td><td class="n">61%</td></tr>
+  </tbody></table></div>
+  <p>Dermaga hanya bisa disandari 3 kapal bersamaan, jadi setiap jam tambahan di dermaga langsung mengurangi kapasitas. Pada pemakaian 98% tidak ada cadangan: antrean libur Idul Fitri terurai dalam 5 hari saat pemakaian 75%, sedangkan antrean Idul Adha butuh sebulan. Pemakaian yang aman sekitar 80–85%, dan itu berarti BT 17–18 jam.</p>
+
+  <h3 class="anh">3. Akar penyebab: dari mana tambahan 4,8 jam BT</h3>
+  <div class="abars">
+    <div class="brow"><span>Crane lebih lambat <small>BCH ET 32,1 → 29,2</small></span><span class="brow-v">+1,3 jam</span><div class="btrack"><div class="bfill" style="width:100%"></div></div></div>
+    <div class="brow"><span>Crane per kapal lebih sedikit <small>1,55 → 1,43</small></span><span class="brow-v">+1,1 jam</span><div class="btrack"><div class="bfill" style="width:85%"></div></div></div>
+    <div class="brow"><span>Menunggu truk dan kontainer <small>0,6 → 1,4 jam per kapal</small></span><span class="brow-v">+0,8 jam</span><div class="btrack"><div class="bfill" style="width:62%"></div></div></div>
+    <div class="brow"><span>Muatan per kapal naik 5% <small>475 → 498 box</small></span><span class="brow-v">+0,5 jam</span><div class="btrack"><div class="bfill" style="width:38%"></div></div></div>
+    <div class="brow"><span>Istirahat lebih panjang <small>1,3 → 2,1 jam, dikurangi jeda ibadah Ramadan</small></span><span class="brow-v">+0,5 jam</span><div class="btrack"><div class="bfill" style="width:38%"></div></div></div>
+    <div class="brow"><span>Lainnya <small>breakdown, buka-tutup palka, listrik padam</small></span><span class="brow-v">+0,2 jam</span><div class="btrack"><div class="bfill" style="width:15%"></div></div></div>
+  </div>
+  <p>Dua pertiga kenaikan ada di waktu kerja efektif (ET), bukan di jam henti. Penyebabnya berganti dari bulan ke bulan:</p>
+  <div class="tw"><table><thead><tr><th>Fase</th><th class="n">Waiting time</th><th class="n">Crane per kapal</th><th class="n">BCH ET</th><th class="n">Menunggu truk</th><th>Yang terjadi</th></tr></thead><tbody>
+    <tr><td>Jan–Mei</td><td class="n">18,9</td><td class="n">1,55</td><td class="n">32,1</td><td class="n">0,6</td><td class="note">Normal, sesuai target.</td></tr>
+    <tr><td>Juni</td><td class="n">51,4</td><td class="n">1,15</td><td class="n">33,6</td><td class="n">1,0</td><td class="note">Kekurangan crane. 68% kapal dilayani 1 crane, termasuk 63% kapal 400 box ke atas. Antrean Idul Adha tidak terurai.</td></tr>
+    <tr><td>Jul–Okt</td><td class="n">26,4</td><td class="n">1,50</td><td class="n">28,5</td><td class="n">1,4</td><td class="note">Crane kembali, tetapi 11% lebih lambat dan menunggu truk dua kali lipat.</td></tr>
+    <tr><td>November</td><td class="n">54,3</td><td class="n">1,37</td><td class="n">27,8</td><td class="n">2,2</td><td class="note">Keduanya sekaligus: CC 02 breakdown sehingga Berth 1 hanya 1 crane, dan crane lambat.</td></tr>
+  </tbody></table></div>
+  <p><b>Kepadatan memperburuk dirinya sendiri.</b> Kapal yang sandar saat dermaga berisi paling banyak 2 kapal dilayani 44 box per jam (BSH ET). Saat dermaga hampir selalu berisi 3 kapal hanya 35 box per jam, dan menunggu truk naik dari 0,5 menjadi 1,3 jam. Ini tanda bahwa crane, truk dan alat yard terbagi terlalu tipis saat 3 kapal dilayani bersamaan. Pola ini muncul di kedua periode.</p>
+
+  <h3 class="anh">4. Pilihan keputusan dan perkiraan waiting time Jun–Nov</h3>
+  <div class="abars">
+    <div class="brow"><span>Keadaan sekarang</span><span class="brow-v">33,5 jam</span><div class="btrack"><div class="bfill now" style="width:100%"></div></div></div>
+    <div class="brow"><span>Kinerja kembali seperti Jan–Mei <small>empat tindakan di bawah sekaligus, BT turun 3,9 jam</small></span><span class="brow-v">16–18 jam</span><div class="btrack"><div class="bfill w" style="width:52%"></div></div></div>
+    <div class="brow"><span>Truk dan yard: crane kembali 32 box per jam, menunggu truk normal <small>operasi lapangan, BT turun 2,0 jam</small></span><span class="brow-v">21–23 jam</span><div class="btrack"><div class="bfill w" style="width:66%"></div></div></div>
+    <div class="brow"><span>Crane per kapal kembali ke 1,55 <small>perbaikan CC 02 dan ketersediaan crane, BT turun 1,1 jam</small></span><span class="brow-v">25–27 jam</span><div class="btrack"><div class="bfill w" style="width:78%"></div></div></div>
+    <div class="brow"><span>Pergantian kapal 1 jam lebih cepat <small>koordinasi pandu, agen dan dokumen</small></span><span class="brow-v">25–27 jam</span><div class="btrack"><div class="bfill w" style="width:79%"></div></div></div>
+    <div class="brow"><span>Istirahat bergiliran, kembali ke 1,3 jam per kapal <small>pola kerja, BT turun 0,8 jam</small></span><span class="brow-v">27–28 jam</span><div class="btrack"><div class="bfill w" style="width:82%"></div></div></div>
+    <div class="brow"><span>Siapkan masa sesudah hari raya <small>crane lengkap, kedatangan bertahap, kapal kecil dulu; waiting time Juni turun hampir separuh</small></span><span class="brow-v">30–31 jam</span><div class="btrack"><div class="bfill w" style="width:91%"></div></div></div>
+  </div>
+
+  <h3 class="anh">5. Rekomendasi</h3>
+  <ol class="an">
+    <li><b>Jaga jumlah crane yang bekerja.</b> Percepat perbaikan CC 02: rencana sandar 12 November mencatat CC 02 masih breakdown sampai 20 November. Selama itu Berth 1 hanya dilayani 1 crane, jadi pakai Berth 1 untuk kapal kecil. Cegah juga terulangnya Juni. Dua bulan terburuk (Juni dan November) sama-sama terjadi saat crane berkurang. Ukuran berhasil: crane per kapal 1,55 dan hampir tidak ada kapal 400 box ke atas yang dilayani 1 crane (Januari–April 0–2%).</li>
+    <li><b>Pulihkan kecepatan crane lewat truk dan yard.</b> Ini pengungkit operasional terbesar (BT turun 2,0 jam). Atur jumlah truk per crane saat 3 kapal dilayani, dan pisahkan receiving dan delivery dari jalur bongkar muat. Ukuran berhasil: BCH ET 32 dan menunggu truk/kontainer 0,6 jam per kapal.</li>
+    <li><b>Istirahat bergiliran.</b> Istirahat kini 2,1 jam per kapal, jam henti terbesar. Ukuran berhasil: 1,3 jam per kapal.</li>
+    <li><b>Percepat pergantian kapal.</b> Kapal berikutnya, pandu dan dokumen siap sebelum kapal di dermaga selesai. Sejak Juni ada 38 kejadian paling banyak 2 berth terisi selama 8 jam atau lebih padahal sedikitnya 2 kapal siap sandar, total 501 jam. Catat sebab setiap kejadian.</li>
+    <li><b>Tetapkan aturan urutan sandar.</b> Rata-rata tidak berubah, tetapi kapal yang menunggu lebih dari 72 jam bisa turun dari 47 menjadi sekitar 20 kapal jika urutan tiba dipatuhi. Sekarang kapal kecil paling dirugikan: kapal sampai 300 box menunggu 41,7 jam, kapal di atas 600 box 29,5 jam.</li>
+    <li><b>Siapkan masa sesudah Idul Fitri dan Idul Adha.</b> Liburnya sendiri bukan masalah utama. Yang menentukan adalah seberapa cepat antrean habis sesudah dermaga buka. Sesudah Idul Fitri dermaga tutup 64 jam, tetapi crane lengkap dan BT 13,9 jam, sehingga 12 kapal yang antre habis dalam 5 hari. Sesudah Idul Adha dermaga tutup lebih singkat (44 jam), tetapi 74% kapal hanya dilayani 1 crane dan BT 22,7 jam, sehingga antrean bertahan sebulan. Tiga langkah tanpa bekerja di hari libur:
+      <br>• Selesaikan perawatan dan perbaikan crane sebelum libur, dan jangan jadwalkan perawatan dalam 4 minggu sesudahnya. Langkah ini saja diperkirakan menurunkan waiting time Juni sekitar sepertiga (dari 51,4 ke sekitar 33–34 jam), lebih besar daripada tetap bekerja saat libur.
+      <br>• Beri tahu pelayaran tanggal tutup jauh hari, dan sepakati kedatangan bertahap sesudah dermaga buka, sekitar 1 kapal tiap 8 jam, agar kapal tidak menumpuk di area labuh.
+      <br>• Selama 1–2 minggu sesudah libur, dahulukan kapal kecil agar jumlah kapal yang antre cepat turun. Siapkan juga truk dan yard sebelum dermaga buka: sesudah Idul Adha menunggu truk 1,0 jam per kapal, hampir dua kali sesudah Idul Fitri (0,6 jam).
+      <br>Ketiga langkah bersama diperkirakan menurunkan waiting time Juni hampir separuh, ke sekitar 27–29 jam.</li>
+  </ol>
+
+  <h3 class="anh">6. Risiko jika tidak ada perubahan</h3>
+  <p>Tambahan volume 5% tanpa perbaikan menaikkan waiting time ke sekitar 50–54 jam. Tambahan 10% membuat kebutuhan melebihi kapasitas, sehingga antrean tidak pernah terurai. Dengan keempat perbaikan kinerja, volume 10% lebih tinggi masih bisa dilayani dengan waiting time sekitar 21–22 jam.</p>
+
+  <h3 class="anh">7. Yang dipantau setiap minggu</h3>
+  <div class="tw"><table><thead><tr><th>Indikator</th><th class="n">Batas</th><th class="n">Jan–Mei</th><th class="n">Jun–Nov</th></tr></thead><tbody>
+    <tr><td>BT rata-rata (jam)</td><td class="n">paling tinggi 19</td><td class="n">16,7</td><td class="n">21,4</td></tr>
+    <tr><td>Antrean saat kapal tiba (kapal)</td><td class="n">di bawah 4</td><td class="n">1,7</td><td class="n">3,5</td></tr>
+    <tr><td>Crane per kapal</td><td class="n">paling rendah 1,5</td><td class="n">1,55</td><td class="n">1,43</td></tr>
+    <tr><td>BCH ET</td><td class="n">paling rendah 32</td><td class="n">32,1</td><td class="n">29,2</td></tr>
+    <tr><td>Menunggu truk/kontainer per kapal (jam)</td><td class="n">paling tinggi 0,6</td><td class="n">0,6</td><td class="n">1,4</td></tr>
+    <tr><td>Istirahat per kapal (jam)</td><td class="n">paling tinggi 1,3</td><td class="n">1,3</td><td class="n">2,1</td></tr>
+  </tbody></table></div>
+  <p>Minggu dengan BT di atas 19 jam mencatat waiting time 30 jam lebih; minggu dengan BT sampai 19 jam mencatat 17–19 jam. Kapal yang tiba saat antrean 4 kapal atau lebih menunggu rata-rata di atas 37 jam.</p>
+
+</section>
+
+<section class="card" id="analisis-nov">
+  <h2>Analisis November: mengapa waiting time tertinggi tahun ini</h2>
+  <p><b>Ringkasnya:</b> 54 kapal yang dilayani 30 Oktober–19 November menunggu rata-rata 54,3 jam. Sebanyak 29 kapal menunggu lebih dari 48 jam, 18 kapal lebih dari 72 jam, dan 8 kapal lebih dari 96 jam. Antrean mulai berkurang tetapi belum normal: kapal yang sandar 7–14 November menunggu rata-rata 64 jam, sedangkan 12 kapal yang sandar 15–19 November 48 jam. Penyebabnya gabungan lima hal: kapal datang bergelombang saat dermaga sudah penuh, CC 02 breakdown sehingga Berth 1 hanya punya 1 crane, bongkar muat paling lambat tahun ini, berth sempat kosong lama di sela kapal, dan urutan sandar tidak mengikuti urutan tiba.</p>
+
+  <h3 class="anh">1. Kapal datang lebih cepat daripada yang bisa disandarkan</h3>
+  <p>Dalam 5 hari, 31 Oktober–4 November, tiba 21 kapal (4,2 per hari), sedangkan yang bisa sandar hanya 12 kapal. Dermaga hanya bisa disandari 3 kapal bersamaan, dan dengan BT sekarang kapasitasnya sekitar 3 kapal per hari. Antrean menumpuk sampai 11 kapal pada 5 November, dan kapal yang tiba 5 November baru sandar 10 November.</p>
+
+  <h3 class="anh">2. CC 02 breakdown: Berth 1 hanya 1 crane</h3>
+  <div class="tw"><table><thead><tr><th>Berth</th><th class="n">Kapal</th><th class="n">Waiting time (jam)</th><th class="n">BT (jam)</th><th class="n">Crane per kapal</th><th class="n">Box per kapal</th><th class="n">BSH BT</th></tr></thead><tbody>
+    <tr><td>Berth 1</td><td class="n">15</td><td class="n">71,6</td><td class="n">25,6</td><td class="n">1,0</td><td class="n">450</td><td class="n">17,6</td></tr>
+    <tr><td>Berth 2</td><td class="n">1</td><td class="n">22,5</td><td class="n">24,8</td><td class="n">1,9</td><td class="n">936</td><td class="n">39,7</td></tr>
+    <tr><td>Berth 3</td><td class="n">19</td><td class="n">39,4</td><td class="n">22,4</td><td class="n">1,6</td><td class="n">538</td><td class="n">25,3</td></tr>
+    <tr><td>Berth 4</td><td class="n">18</td><td class="n">57,2</td><td class="n">24,3</td><td class="n">1,4</td><td class="n">544</td><td class="n">23,2</td></tr>
+  </tbody></table></div>
+  <p>Berth 2 hanya melayani 1 kapal pada 31 Oktober; LCT EMPAT SAUDARA 03 (3 box) tidak dihitung. Rencana sandar 12 November mencatat CC 02 masih breakdown sampai 20 November. Selama CC 02 tidak beroperasi, crane yang bekerja tinggal empat untuk tiga kapal: Berth 1 hanya dilayani QC 01, sedangkan QC 04 dipakai bergantian oleh Berth 3 dan Berth 4.</p>
+  <p>Akibatnya kapal di atas 450 box butuh 31,3 jam di Berth 1, dibanding 25,2 jam di Berth 3 dan 4, padahal muatannya lebih sedikit (562 dan 622 box). Contoh terbaru MERATUS PARIAMAN (688 box, 45,6 jam, 15–17 November) dan ARMADA SENADA (686 box, 33,4 jam, 18–20 November), keduanya dengan 1 crane. Kapal sampai 350 box hampir sama lamanya di berth mana pun (16–17 jam).</p>
+
+  <h3 class="anh">3. Bongkar muat paling lambat tahun ini</h3>
+  <div class="tw"><table><thead><tr><th>Indikator</th><th class="n">Target</th><th class="n">Jan–Mei</th><th class="n">November</th></tr></thead><tbody>
+    <tr><td>BT (jam)</td><td class="n">17</td><td class="n">16,7</td><td class="n">23,6</td></tr>
+    <tr><td>ET (jam)</td><td class="n">11</td><td class="n">11,5</td><td class="n">15,7</td></tr>
+    <tr><td>IT (jam)</td><td class="n">1</td><td class="n">1,1</td><td class="n">3,1</td></tr>
+    <tr><td>NOT (jam)</td><td class="n">4</td><td class="n">4,1</td><td class="n">4,8</td></tr>
+    <tr><td>BCH ET</td><td class="n">—</td><td class="n">32,1</td><td class="n">27,8</td></tr>
+    <tr><td>Menunggu truk/kontainer per kapal (jam)</td><td class="n">—</td><td class="n">0,6</td><td class="n">2,2</td></tr>
+    <tr><td>Istirahat per kapal (jam)</td><td class="n">—</td><td class="n">1,3</td><td class="n">2,7</td></tr>
+    <tr><td>Kapal dilayani 1 crane</td><td class="n">—</td><td class="n">25%</td><td class="n">39%</td></tr>
+    <tr><td>Kapal yang memenuhi target BT</td><td class="n">—</td><td class="n">56%</td><td class="n">19%</td></tr>
+  </tbody></table></div>
+  <p>Produktivitas kapal 22,7 box per jam sandar (BSH BT, tanpa LCT EMPAT SAUDARA 03) adalah yang terendah tahun ini. Kecepatan crane 27,8 box per jam, jauh di bawah Januari–Mei. Menunggu truk dan kontainer naik lebih dari tiga kali lipat, dan istirahat dua kali lipat. Kapal 15–19 November bersandar lama: MERATUS PARIAMAN 45,6 jam, PULAU HOKI 38,0 jam, TANTO LANGGENG 37,1 jam, ARMADA SENADA 33,4 jam dan DERYA MAS 32,1 jam.</p>
+
+  <h3 class="anh">4. Berth kosong di sela kapal padahal antrean panjang</h3>
+  <p>Dari 49 pergantian kapal, berth kosong rata-rata 3,3 jam, total 161 jam. Tiga pergantian memakan 8 jam atau lebih saat 9–11 kapal sedang menunggu: di Berth 4 sebelum LUMOSO SELAMAT (10,6 jam) dan sebelum ICON PERDANA (10,6 jam), dan di Berth 3 sebelum INTAN DAYA 17 (8,9 jam).</p>
+
+  <h3 class="anh">5. Urutan sandar tidak mengikuti urutan tiba</h3>
+  <div class="tw"><table><thead><tr><th>Kapal</th><th>Berth</th><th>Tiba</th><th>Sandar</th><th class="n">Waiting time (jam)</th><th class="n">Didahului kapal yang tiba belakangan</th></tr></thead><tbody>
+    <tr><td>INTAN DAYA</td><td>1</td><td>5 Nov 00.00</td><td>10 Nov 17.20</td><td class="n">137,3</td><td class="n">7</td></tr>
+    <tr><td>MAGELLAN</td><td>1</td><td>7 Nov 17.00</td><td>12 Nov 16.47</td><td class="n">119,8</td><td class="n">6</td></tr>
+    <tr><td>DERYA MAS</td><td>3</td><td>1 Nov 06.00</td><td>5 Nov 21.53</td><td class="n">111,9</td><td class="n">7</td></tr>
+    <tr><td>MERATUS PANGKALPINANG</td><td>3</td><td>5 Nov 12.00</td><td>10 Nov 02.40</td><td class="n">110,7</td><td class="n">5</td></tr>
+    <tr><td>MERATUS SANGATTA</td><td>1</td><td>31 Okt 19.00</td><td>5 Nov 07.36</td><td class="n">108,6</td><td class="n">8</td></tr>
+    <tr><td>ICON PERDANA</td><td>4</td><td>1 Nov 02.30</td><td>5 Nov 12.50</td><td class="n">106,3</td><td class="n">8</td></tr>
+  </tbody></table></div>
+  <p>Sebanyak 63% kapal didahului kapal yang tiba belakangan, dan 15 kapal didahului 3 kapal atau lebih. Contoh terbaru: SELILI BARU dan MERATUS CIREBON sandar kurang dari 2 jam setelah tiba, sedangkan ARMADA SENADA yang tiba 15 November menunggu 76,2 jam. Kapal kecil paling lama menunggu: 8 kapal sampai 300 box menunggu rata-rata 83,4 jam, kapal yang lebih besar sekitar 49 jam. Satu-satunya alasan yang tercatat adalah "prioritas BI" untuk EDEN MAS.</p>
+
+  <h3 class="anh">Yang perlu diputuskan</h3>
+  <ol class="an">
+    <li><b>Percepat perbaikan CC 02.</b> Selama CC 02 breakdown, Berth 1 hanya punya 1 crane, dan kapal di atas 450 box di sana butuh sekitar 6 jam lebih lama. Dengan dermaga yang hanya muat 3 kapal, setiap jam yang dihemat langsung menambah kapasitas.</li>
+    <li><b>Selama CC 02 belum pulih, pakai Berth 1 untuk kapal kecil</b> dan arahkan kapal di atas 450 box ke Berth 3 dan 4. Di November 9 kapal besar memakai Berth 1 sementara 4 kapal kecil memakai Berth 3 dan 4. Menukarnya menghemat sekitar 6 jam sandar per kapal besar.</li>
+    <li><b>Tambah truk per crane dan pisahkan delivery</b> saat 3 kapal dilayani, agar kecepatan crane kembali ke 32 box per jam.</li>
+    <li><b>Istirahat bergiliran</b>, karena 2,7 jam per kapal adalah jam henti terbesar.</li>
+    <li><b>Periksa tiga jeda berth di atas 8 jam</b> dan siapkan kapal berikutnya, pandu dan dokumen sebelum kapal di dermaga selesai.</li>
+    <li><b>Tetapkan urutan sandar</b> dan catat alasan setiap pengecualian.</li>
+  </ol>
+</section>
+
+<section class="card">
+  <h2>Waiting time sandar per pelayaran</h2>
+  <p class="cap">Rata-rata jam dari Arrive sampai first line. Klik satu pelayaran untuk melihat kapal dengan waiting time terlama.</p>
+  <div class="wl" id="wl" data-dyn=""></div>
+</section>
+
+<section class="card"><h2>Penyebab henti terbesar</h2><p class="cap" id="sebab-cap">Total jam dan rata-rata jam per kapal.</p><div class="bars" id="c-sebab" data-dyn=""></div></section>
+
+<section class="card">
+  <h2>Kunjungan terbaru</h2>
+  <p class="cap">Dua belas kunjungan terakhir yang tercatat.</p>
+  <div class="tw"><table><thead><tr><th>Bulan</th><th>Kapal</th><th>Pelayaran</th><th class="n">Box</th><th class="n">TEUs</th><th class="n">BSH BT</th><th>Catatan ringkas</th></tr></thead><tbody id="t-last" data-dyn=""></tbody></table></div>
+</section>
+
+<section class="card" id="bsh-banding">
+  <h2 id="h-banding" data-dyn=""></h2>
+  <p class="cap" id="cap-banding" data-dyn=""></p>
+  <div class="tw" id="t-banding" data-dyn=""></div>
+</section>
+<details>
+  <summary>Arti istilah</summary>
+  <dl>
+    <dt>BT</dt><dd>Berthing time: jam kapal bersandar di dermaga.</dd>
+    <dt>ET</dt><dd>Effective time: jam bongkar muat berjalan.</dd>
+    <dt>Waiting time sandar</dt><dd>Jam dari kapal tiba (Arrive) sampai first line, yaitu menunggu berth. Kunjungan dengan tanggal kosong, negatif, atau lebih dari 240 jam dianggap salah catat dan tidak dihitung.</dd>
+    <dt>BOR</dt><dd>Berth occupancy ratio: persen panjang dermaga yang terpakai kapal sepanjang waktu. Januari–Oktober dari form input utilisasi Terminal Petikemas. November dihitung dari data kapal dengan cara yang sama: (panjang kapal + 5 meter) × jam sandar, dibagi panjang dermaga 600 meter × 24 jam × jumlah hari, sesuai Laporan BOR BTP. Hari terakhir di data belum dihitung karena kapal yang masih sandar belum tercatat.</dd>
+    <dt>YOR</dt><dd>Yard occupancy ratio: persen kapasitas lapangan penumpukan yang terisi kontainer. Januari–Oktober dari form input utilisasi, November rata-rata YOR harian dari Laporan Summary YOR 1–16 November.</dd>
+    <dt>ET/BT</dt><dd>Persen waktu sandar yang terpakai untuk bongkar muat.</dd>
+    <dt>BWT</dt><dd>Berth working time: jam kerja kapal di dermaga.</dd>
+    <dt>BCH</dt><dd>Box per crane per jam. Grafik produktivitas memakai jam kerja sandar (BWT).</dd>
+    <dt>BSH</dt><dd>Box per kapal per jam. Grafik memakai jam kerja sandar (BWT), angka utama dan tabel memakai jam sandar (BT).</dd>
+    <dt>Rata-rata</dt><dd>Rata-rata per kapal, bukan rata-rata tertimbang jumlah box.</dd>
+  </dl>
+</details>
+</div>
+<script>
+function startApp(DATA) {
+  var D = DATA;
+  var TGT = 589966, TGTM = [47209, 46130, 50147, 38183, 51187, 50961, 50879, 51141, 49154, 51910, 52555, 50510];
+  var YOY = {
+    bln: [[45819, 46890], [42653, 44314], [49244.5, 44654], [36242.5, 49555], [48222, 48350], [47640, 48501], [47661.75, 55481], [51714, 51077], [48277, 51804], [51632, 53779]],
+    cat: { 3: 'Libur Idul Fitri 2026 jatuh di bulan Maret.', 4: 'Libur Idul Fitri 2025 jatuh di bulan April.' },
+    dek: [
+      { t: 'Kunjungan berkurang', s: '907 → 854', v: -27412, tip: '53 kunjungan lebih sedikit\n× 517 TEUs per kunjungan' },
+      { t: 'Muatan per kunjungan naik', s: '517 → 579 TEUs', v: 52711, tip: '854 kunjungan\n× 62 TEUs tambahan per kunjungan' },
+      { t: 'Total TEUs', s: '+5,4%', v: 25299, tot: 1, tip: '469.106 → 494.405 TEUs' }
+    ],
+    pel: [
+      { t: 'Panurjwan', s: '+18,7%', v: 10642, tip: '57.041 → 67.683 TEUs\nKunjungan 101 → 86\nTEUs per kunjungan 565 → 787' },
+      { t: 'SPIL', s: '+8,4%', v: 10373, tip: '124.055 → 134.428 TEUs\nKunjungan 235 → 232\nTEUs per kunjungan 528 → 579' },
+      { t: 'Tanto', s: '+8,1%', v: 5381, tip: '66.347 → 71.728 TEUs\nKunjungan 111 → 113\nTEUs per kunjungan 598 → 635' },
+      { t: 'Meratus', s: '+1,2%', v: 1234, tip: '102.547 → 103.781 TEUs\nKunjungan 184 → 176\nTEUs per kunjungan 557 → 590' },
+      { t: 'Temas', s: '−0,2%', v: -110, tip: '52.762 → 52.652 TEUs\nKunjungan 93 → 84\nTEUs per kunjungan 567 → 627' },
+      { t: 'Caraka', s: '−3,4%', v: -897, tip: '26.398 → 25.501 TEUs\nKunjungan 83 → 80\nTEUs per kunjungan 318 → 319' },
+      { t: 'Indo Container', s: '−3,1%', v: -1224, tip: '39.852 → 38.628 TEUs\nKunjungan 98 → 82\nTEUs per kunjungan 407 → 471' }
+    ],
+    jen: [
+      { t: 'Muat Empty', s: '+10,3%', v: 16969, tip: '164.958 → 181.927 TEUs' },
+      { t: 'Bongkar Full', s: '+5,3%', v: 12515, tip: '234.467 → 246.982 TEUs' },
+      { t: 'Bongkar Empty', s: '−12,8%', v: -118, tip: '925 → 807 TEUs' },
+      { t: 'Muat Full', s: '−5,9%', v: -4060, tip: '68.749 → 64.689 TEUs' }
+    ]
+  };
+  var RK = {
+    cat: { 3: 'Idul Fitri jatuh 20 Maret.', 4: 'Target April paling rendah, mengikuti pola Lebaran 2025.', 5: 'Libur Idul Adha 26–28 Mei.', 6: '68% kapal dilayani 1 crane, antrean panjang.', 7: 'Termasuk kapal antrean Juni yang baru selesai di Juli.', 11: 'CC 02 breakdown dan antrean panjang.' },
+    uk: [
+      { t: '40 feet', s: '113% RKAP', v: 18680, tip: 'Realisasi 79.289 box\nRKAP 69.949 box\n1 box 40 feet = 2 TEUs' },
+      { t: '20 feet', s: '97% RKAP', v: -11176, tip: 'Realisasi 335.827 box\nRKAP 347.003 box' },
+      { t: 'Total TEUs', s: '101,5% RKAP', v: 7504, tot: 1, tip: 'Realisasi 494.405 TEUs\nRKAP 486.901 TEUs\nJumlah box 99,6% RKAP' }
+    ],
+    ar: [
+      { t: 'Muat Empty', s: '107% RKAP', v: 11214, tip: 'Realisasi 181.927 TEUs, RKAP 170.713\n40 feet: 135% RKAP (+15.832 TEUs)\n20 feet: 96% RKAP (−4.618 TEUs)' },
+      { t: 'Bongkar Full', s: '101% RKAP', v: 3105, tip: 'Realisasi 246.982 TEUs, RKAP 243.877\n40 feet: 108% RKAP (+5.962 TEUs)\n20 feet: 98% RKAP (−2.857 TEUs)' },
+      { t: 'Bongkar Empty', s: '151% RKAP', v: 272, tip: 'Realisasi 807 TEUs, RKAP 535' },
+      { t: 'Muat Full', s: '90% RKAP', v: -7087, tip: 'Realisasi 64.689 TEUs, RKAP 71.776\n40 feet: 85% RKAP (−3.012 TEUs)\n20 feet: 92% RKAP (−4.075 TEUs)' }
+    ]
+  };
+  var BORF = [30, 37, 33, 34, 33, 44, 43, 41, 43, 49];
+  var YOR = [42.11, 41.82, 44.64, 47.13, 52.06, 51.16, 49.83, 52.22, 55.43, 52.48, 36.71];
+  var BLN = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  var BLNF = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  var RUTIN = ['Rest','Prayer, breakfasting, Sahur','Day Off Operation'];
+  var LINES = ['Salam Pacific Indonesia Lines','Meratus Line','Tanto Intim Line','Panurjwan','Temas Shipping','Indo Container Lines','Caraka Tirta Perkasa','Lainnya'];
+  var L = d3.formatLocale({decimal: ',', thousands: '.', grouping: [3], currency: ['', '']});
+  var n0 = L.format(',.0f'), n1 = L.format(',.1f');
+  var sel = 0, canEdit = false, art = null, busy = false, smp = null;
+
+  function $(id) { return document.getElementById(id); }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  // kunjungan sangat kecil (di bawah 10 box, mis. LCT) tidak dihitung di rata-rata BSH BT
+  function bshOk(r) { return r.bshb != null && !(r.box != null && r.box < 10); }
+  function avg(a, f) { var v = a.map(f).filter(function (x) { return x != null && x !== '' && isFinite(x); }).map(Number); return v.length ? d3.mean(v) : null; }
+  function f1(v) { return v == null ? '—' : n1(v); }
+  function lastM() { return d3.max(D.r, function (r) { return r.m; }) || 1; }
+  function subset() { return sel ? D.r.filter(function (r) { return r.m === sel; }) : D.r; }
+
+  function monthly() {
+    return d3.groups(D.r, function (r) { return r.m; }).sort(function (a, b) { return a[0] - b[0]; }).map(function (g) {
+      var v = g[1];
+      return { m: g[0], n: v.length, box: d3.sum(v, function (r) { return r.box; }), teus: d3.sum(v, function (r) { return r.teus; }),
+        et: avg(v, function (r) { return r.et; }) || 0, nt: avg(v, function (r) { return r.nt; }) || 0, it: avg(v, function (r) { return r.it; }) || 0,
+        bch: avg(v, function (r) { return r.bch; }), bsh: avg(v, function (r) { return r.bsh; }),
+        bchw: avg(v, function (r) { return r.bchw; }), bshw: avg(v, function (r) { return r.bshw; }),
+        wt: avg(v, function (r) { return r.wt; }), wtn: v.filter(function (r) { return r.wt != null; }).length, wtmax: d3.max(v, function (r) { return r.wt; }) };
+    });
+  }
+
+  function makeTip(host) {
+    var t = el('div', 'tip'); t.hidden = true; host.appendChild(t);
+    return { show: function (ev, text) {
+      var r = host.getBoundingClientRect(); t.textContent = text; t.hidden = false;
+      t.style.left = Math.min(Math.max(ev.clientX - r.left + 12, 0), Math.max(0, r.width - t.offsetWidth)) + 'px';
+      t.style.top = Math.max(0, ev.clientY - r.top - 34) + 'px';
+    }, hide: function () { t.hidden = true; } };
+  }
+  function legend(items) {
+    var d = el('div', 'legend');
+    items.forEach(function (it) { var s = el('span'); var i = el('i'); i.style.background = it[1]; s.appendChild(i); s.appendChild(document.createTextNode(it[0])); d.appendChild(s); });
+    return d;
+  }
+  function frame(host, h, lg) {
+    host.replaceChildren();
+    if (lg) host.appendChild(lg);
+    var W = Math.max(260, host.clientWidth || 320);
+    var svg = d3.select(host).append('svg').attr('width', W).attr('height', h).attr('viewBox', [0, 0, W, h]);
+    return { svg: svg, W: W };
+  }
+  function axes(svg, y, ticks, W, m, fmt) {
+    svg.append('g').selectAll('line').data(ticks).join('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y).attr('y2', y).style('stroke', 'var(--grid)');
+    svg.append('g').selectAll('text').data(ticks).join('text').attr('x', m.l - 6).attr('y', y).attr('dy', '0.32em').attr('text-anchor', 'end').text(fmt);
+  }
+
+  function chartBox(M) {
+    var host = $('c-box'); var H = 230, m = { t: 18, r: 6, b: 24, l: 34 };
+    var f = frame(host, H), svg = f.svg, W = f.W; var tip = makeTip(host);
+    svg.attr('role', 'img').attr('aria-label', 'Diagram batang total TEUs per bulan');
+    var x = d3.scaleBand().domain(M.map(function (r) { return r.m; })).range([m.l, W - m.r]).padding(0.25);
+    var y = d3.scaleLinear().domain([0, Math.max(d3.max(M, function (r) { return r.teus; }), d3.max(M, function (r) { return TGTM[r.m - 1]; })) * 1.1]).nice().range([H - m.b, m.t]);
+    axes(svg, y, y.ticks(4), W, m, function (v) { return n0(v / 1000); });
+    var last = lastM();
+    svg.append('g').selectAll('text').data(M).join('text').attr('x', function (r) { return x(r.m) + x.bandwidth() / 2; }).attr('y', H - 8).attr('text-anchor', 'middle').text(function (r) { return BLN[r.m - 1]; });
+    svg.append('g').selectAll('rect').data(M).join('rect').attr('x', function (r) { return x(r.m); }).attr('width', x.bandwidth())
+      .attr('y', function (r) { return y(r.teus); }).attr('height', function (r) { return y(0) - y(r.teus); }).attr('rx', 2).style('fill', 'var(--c1)')
+      .style('opacity', function (r) { return (sel && r.m !== sel) ? 0.3 : (r.m === last && !sel ? 0.55 : 1); })
+      .on('pointermove', function (ev, r) { tip.show(ev, BLNF[r.m - 1] + ': ' + n0(r.teus) + ' TEUs, ' + n0(r.n) + ' kapal. Target ' + n0(TGTM[r.m - 1]) + ' (' + n1(r.teus / TGTM[r.m - 1] * 100) + '%)'); })
+      .on('pointerleave', function () { tip.hide(); });
+    svg.append('g').selectAll('text').data(M).join('text').attr('x', function (r) { return x(r.m) + x.bandwidth() / 2; }).attr('y', function (r) { return y(0) - 8; })
+      .attr('text-anchor', 'middle').style('font-size', '10px').style('fill', '#fff').style('font-weight', '600').style('pointer-events', 'none').text(function (r) { return n1(r.teus / 1000); });
+    var pad = x.step() * x.paddingInner() / 2, pts = [];
+    M.forEach(function (r) { var yy = y(TGTM[r.m - 1]); pts.push([x(r.m) - pad, yy], [x(r.m) + x.bandwidth() + pad, yy]); });
+    svg.append('path').attr('d', d3.line()(pts)).attr('fill', 'none').style('stroke', 'var(--c2)').attr('stroke-width', 2).attr('stroke-dasharray', '5 4').style('pointer-events', 'none');
+  }
+
+  function chartProd(M) {
+    var host = $('c-prod'); var H = 206, m = { t: 10, r: 14, b: 24, l: 34 };
+    var f = frame(host, H, legend([['BCH BWT: box per crane', 'var(--c1)'], ['BSH BWT: box per kapal', 'var(--c3)']])), svg = f.svg, W = f.W; var tip = makeTip(host);
+    svg.attr('role', 'img').attr('aria-label', 'Diagram garis produktivitas BCH BWT dan BSH BWT per bulan');
+    var vals = []; M.forEach(function (r) { if (r.bchw != null) vals.push(r.bchw); if (r.bshw != null) vals.push(r.bshw); });
+    var lo = d3.min(vals), hi = d3.max(vals);
+    var x = d3.scalePoint().domain(M.map(function (r) { return r.m; })).range([m.l + 8, W - m.r]).padding(0.2);
+    var y = d3.scaleLinear().domain([Math.floor(lo / 5) * 5 - 5, Math.ceil(hi / 5) * 5 + 2]).range([H - m.b, m.t]);
+    axes(svg, y, y.ticks(4), W, m, n0);
+    svg.append('g').selectAll('text').data(M).join('text').attr('x', function (r) { return x(r.m); }).attr('y', H - 8).attr('text-anchor', 'middle').text(function (r) { return BLN[r.m - 1]; });
+    [['bchw', 'var(--c1)', 16], ['bshw', 'var(--c3)', -9]].forEach(function (s) {
+      var k = s[0], data = M.filter(function (r) { return r[k] != null; });
+      svg.append('path').datum(data).attr('fill', 'none').style('stroke', s[1]).attr('stroke-width', 2).attr('d', d3.line().x(function (r) { return x(r.m); }).y(function (r) { return y(r[k]); }));
+      svg.append('g').selectAll('circle').data(data).join('circle').attr('cx', function (r) { return x(r.m); }).attr('cy', function (r) { return y(r[k]); })
+        .attr('r', function (r, i) { return (i === 0 || i === data.length - 1) ? 4 : 2.5; }).style('fill', s[1])
+        .on('pointermove', function (ev, r) { tip.show(ev, BLNF[r.m - 1] + ' ' + (k === 'bchw' ? 'BCH BWT' : 'BSH BWT') + ': ' + n1(r[k])); }).on('pointerleave', function () { tip.hide(); });
+      [data[0], data[data.length - 1]].forEach(function (r, j) {
+        if (r) svg.append('text').attr('x', x(r.m)).attr('y', y(r[k]) + s[2]).attr('text-anchor', j ? 'end' : 'start').style('font-size', '10px').text(n1(r[k]));
+      });
+    });
+  }
+
+  function chartWaktu(M) {
+    var host = $('c-waktu'); var H = 250, m = { t: 32, r: 6, b: 24, l: 30 };
+    var f = frame(host, H), svg = f.svg, W = f.W; var tip = makeTip(host);
+    svg.attr('role', 'img').attr('aria-label', 'Diagram batang rata-rata waiting time sandar per bulan');
+    var D2 = M.filter(function (r) { return r.wt != null; });
+    var all = avg(D.r, function (r) { return r.wt; });
+    var x = d3.scaleBand().domain(M.map(function (r) { return r.m; })).range([m.l, W - m.r]).padding(0.25);
+    var y = d3.scaleLinear().domain([0, Math.max(d3.max(D2, function (r) { return r.wt; }) || 1, all || 0) * 1.12]).nice().range([H - m.b, m.t]);
+    axes(svg, y, y.ticks(4), W, m, n0);
+    svg.append('g').selectAll('text').data(M).join('text').attr('x', function (r) { return x(r.m) + x.bandwidth() / 2; }).attr('y', H - 8).attr('text-anchor', 'middle').text(function (r) { return BLN[r.m - 1]; });
+    svg.append('g').selectAll('rect').data(D2).join('rect').attr('x', function (r) { return x(r.m); }).attr('width', x.bandwidth())
+      .attr('y', function (r) { return y(r.wt); }).attr('height', function (r) { return y(0) - y(r.wt); }).attr('rx', 2).style('fill', 'var(--c2)')
+      .style('opacity', function (r) { return (sel && r.m !== sel) ? 0.3 : 1; })
+      .on('pointermove', function (ev, r) { tip.show(ev, BLNF[r.m - 1] + ': rata-rata ' + n1(r.wt) + ' jam (' + n1(r.wt / 24) + ' hari), tertinggi ' + n1(r.wtmax) + ' jam, ' + n0(r.wtn) + ' kapal'); })
+      .on('pointerleave', function () { tip.hide(); });
+    var wide = x.bandwidth() >= 44;
+    svg.append('g').selectAll('text').data(D2).join('text').attr('x', function (r) { return x(r.m) + x.bandwidth() / 2; }).attr('y', function (r) { return y(r.wt) - 4; })
+      .attr('text-anchor', 'middle').style('font-size', '10px').style('paint-order', 'stroke').style('stroke', 'var(--panel)').style('stroke-width', '3px').text(function (r) { return n1(r.wt) + (wide ? ' jam' : ''); });
+    svg.append('g').selectAll('text').data(D2).join('text').attr('x', function (r) { return x(r.m) + x.bandwidth() / 2; }).attr('y', function (r) { return y(r.wt) - 16; })
+      .attr('text-anchor', 'middle').style('font-size', '10px').style('font-weight', '600').style('paint-order', 'stroke').style('stroke', 'var(--panel)').style('stroke-width', '3px').text(function (r) { return n1(r.wt / 24) + (wide ? ' hari' : ''); });
+  }
+
+  function chartWtd() {
+    var host = $('c-wtd'); if (!host) return;
+    var last = d3.max(D.r, function (r) { return r.fl; }); if (!last) { host.replaceChildren(); return; }
+    var mo = sel || +last.slice(5, 7), yr = +last.slice(0, 4), dim = new Date(yr, mo, 0).getDate();
+    var endDay = (+last.slice(5, 7) === mo) ? +last.slice(8, 10) : dim;
+    $('wtd-h').textContent = 'Waiting time per hari, ' + BLNF[mo - 1] + (endDay < dim ? ' (sampai tanggal ' + endDay + ')' : '');
+    var g = d3.rollup(D.r.filter(function (r) { return r.wt != null && r.fl && +r.fl.slice(0, 4) === yr && +r.fl.slice(5, 7) === mo; }),
+      function (v) { return { wt: d3.mean(v, function (r) { return r.wt; }) / 24, mx: d3.max(v, function (r) { return r.wt; }) / 24, n: v.length, k: v.map(function (r) { return r.kapal; }) }; },
+      function (r) { return +r.fl.slice(8, 10); });
+    var days = d3.range(1, endDay + 1), R = days.filter(function (d) { return g.has(d); }).map(function (d) { var o = g.get(d); o.d = d; return o; });
+    var H = 230, m = { t: 18, r: 6, b: 24, l: 30 };
+    var f = frame(host, H), svg = f.svg, W = f.W; var tip = makeTip(host);
+    svg.attr('role', 'img').attr('aria-label', 'Diagram batang waiting time sandar per hari, ' + BLNF[mo - 1]);
+    if (!R.length) return;
+    var x = d3.scaleBand().domain(days).range([m.l, W - m.r]).padding(0.2);
+    var y = d3.scaleLinear().domain([0, d3.max(R, function (r) { return r.wt; }) * 1.12]).nice().range([H - m.b, m.t]);
+    axes(svg, y, y.ticks(4), W, m, function (v) { return L.format(',.1~f')(v); });
+    var every = x.step() < 16 ? 5 : x.step() < 26 ? 2 : 1;
+    svg.append('g').selectAll('text').data(days.filter(function (d) { return d === 1 || d % every === 0; })).join('text').attr('x', function (d) { return x(d) + x.bandwidth() / 2; })
+      .attr('y', H - 8).attr('text-anchor', 'middle').text(function (d) { return d; });
+    svg.append('g').selectAll('rect').data(R).join('rect').attr('x', function (r) { return x(r.d); }).attr('width', x.bandwidth())
+      .attr('y', function (r) { return y(r.wt); }).attr('height', function (r) { return y(0) - y(r.wt); }).attr('rx', 2).style('fill', 'var(--c2)');
+    if (x.step() >= 26) svg.append('g').selectAll('text').data(R).join('text').attr('x', function (r) { return x(r.d) + x.bandwidth() / 2; }).attr('y', function (r) { return y(r.wt) - 4; })
+      .attr('text-anchor', 'middle').style('font-size', '10px').style('paint-order', 'stroke').style('stroke', 'var(--panel)').style('stroke-width', '3px').text(function (r) { return n1(r.wt); });
+    svg.append('g').selectAll('rect').data(R).join('rect').attr('x', function (r) { return x(r.d) - x.step() * x.paddingInner() / 2; }).attr('width', x.step())
+      .attr('y', m.t).attr('height', H - m.b - m.t).style('fill', 'transparent')
+      .on('pointermove', function (ev, r) { tip.show(ev, r.d + ' ' + BLNF[mo - 1] + '\nRata-rata ' + n1(r.wt) + ' hari, tertinggi ' + n1(r.mx) + ' hari\n' + r.n + ' kapal: ' + r.k.join(', ')); })
+      .on('pointerleave', function () { tip.hide(); });
+  }
+
+  function sebab() {
+    var rows = D.c.filter(function (c) { return RUTIN.indexOf(c[2]) < 0 && (!sel || c[0] === sel); });
+    return d3.groups(rows, function (c) { return c[1] + '|' + c[2]; }).map(function (g) { return { p: g[1][0][2], k: g[1][0][1], j: Math.round(d3.sum(g[1], function (c) { return c[3]; })), raw: d3.sum(g[1], function (c) { return c[3]; }) }; })
+      .filter(function (r) { return r.j > 0; }).sort(function (a, b) { return b.j - a.j; }).slice(0, 8);
+  }
+  function drawSebab() {
+    var host = $('c-sebab'); host.replaceChildren(); var d = sebab();
+    if (!d.length) { host.appendChild(el('p', 'cap', 'Belum ada jam henti tercatat untuk periode ini.')); return; }
+    var max = d3.max(d, function (r) { return r.j; }), nk = subset().length;
+    d.forEach(function (r) {
+      var row = el('div', 'brow'); var nm = el('div', null, r.p); nm.appendChild(el('small', null, r.k.toLowerCase()));
+      row.appendChild(nm); var val = el('div', null, n0(r.j) + ' jam'); if (nk) val.appendChild(el('small', null, '· rata-rata ' + L.format(',.2f')(r.raw / nk) + ' jam/kapal')); row.appendChild(val);
+      var tr = el('div', 'btrack'); var fl = el('div', 'bfill'); fl.style.width = (r.j / max * 100) + '%'; tr.appendChild(fl); row.appendChild(tr); host.appendChild(row);
+    });
+  }
+
+  function drawLines(S) {
+    var tb = $('t-line'); tb.replaceChildren();
+    var cnt = d3.rollup(S, function (v) { return v.length; }, function (r) { return r.line; });
+    var all = d3.rollup(D.r, function (v) { return v.length; }, function (r) { return r.line; });
+    S = S.filter(function (r) { return all.get(r.line) >= 5; });
+    var rows = d3.groups(S, function (r) { return r.line; }).map(function (g) {
+      return { p: g[0], n: g[1].length, teus: d3.sum(g[1], function (r) { return r.teus; }), bt: avg(g[1], function (r) { return r.bt; }), bsb: avg(g[1].filter(bshOk), function (r) { return r.bshb; }) };
+    }).sort(function (a, b) { return b.teus - a.teus; });
+    var tot = d3.sum(rows, function (r) { return r.teus; });
+    var PC = ['#0f766e','#c2610c','#4a5fb0','#b42318','#7c3aed','#0e7490','#a16207','#be185d','#4d7c0f','#475569','#9333ea'];
+    var pc = $('c-pie'); pc.replaceChildren();
+    var W = 240, arc = d3.arc().innerRadius(0).outerRadius(W / 2 - 2), out = d3.arc().innerRadius(W / 2 - 30).outerRadius(W / 2 - 30);
+    var svg = d3.select(pc).append('svg').attr('width', W).attr('height', W).attr('viewBox', '0 0 ' + W + ' ' + W).attr('role', 'img').attr('aria-label', 'Market share pelayaran');
+    var gp = svg.append('g').attr('transform', 'translate(' + W / 2 + ',' + W / 2 + ')');
+    var pie = d3.pie().sort(null).value(function (r) { return r.teus; })(rows);
+    gp.selectAll('path').data(pie).join('path').attr('d', arc).attr('fill', function (d, i) { return PC[i % PC.length]; }).attr('stroke', 'var(--panel)').attr('stroke-width', 2)
+      .append('title').text(function (d) { return d.data.p + ': ' + n1(d.data.teus / tot * 100) + '%'; });
+    gp.selectAll('text').data(pie.filter(function (d) { return d.data.teus > 0; })).join('text').attr('transform', function (d) { if (d.data.teus / tot >= 0.05) return 'translate(' + arc.centroid(d) + ')'; var a = (d.startAngle + d.endAngle) / 2 * 180 / Math.PI - 90; if (a > 90) a -= 180; return 'translate(' + out.centroid(d) + ') rotate(' + a + ')'; })
+      .attr('text-anchor', 'middle').attr('dy', '0.35em').style('fill', '#fff').style('font-size', function (d) { return d.data.teus / tot >= 0.05 ? '11px' : '9.5px'; }).style('font-weight', '600').text(function (d) { return n1(d.data.teus / tot * 100) + '%'; });
+    rows.forEach(function (r, i) {
+      var tr = el('tr'); [[r.p, 0], [n0(r.n), 1], [n0(r.teus), 1], [tot ? n1(r.teus / tot * 100) + '%' : '—', 1]].forEach(function (c) { var td = el('td', c[1] ? 'n' : null, c[0]); if (!c[1] && c[0] === r.p) { var dt = el('span', 'dot'); dt.style.background = PC[i % PC.length]; td.insertBefore(dt, td.firstChild); } tr.appendChild(td); }); tb.appendChild(tr);
+    });
+  }
+
+  function drawWL(S) {
+    var host = $('wl'); host.replaceChildren();
+    var valid = S.filter(function (r) { return r.wt != null; });
+    var cnt = d3.rollup(S, function (v) { return v.length; }, function (r) { return r.line; });
+    var rows = d3.groups(valid, function (r) { return cnt.get(r.line) >= 5 ? r.line : 'Lainnya'; }).map(function (g) {
+      return { p: g[0], n: g[1].length, avg: d3.mean(g[1], function (r) { return r.wt; }), ships: g[1].slice().sort(function (a, b) { return b.wt - a.wt; }) };
+    }).filter(function (r) { return r.p !== 'Lainnya'; }).sort(function (a, b) { return b.avg - a.avg; });
+    if (!rows.length) { host.appendChild(el('p', 'cap', 'Belum ada data waiting time untuk periode ini.')); return; }
+    var max = d3.max(rows, function (r) { return r.avg; });
+    rows.forEach(function (r) {
+      var d = el('details'), s = el('summary');
+      var nm = el('div', null, r.p); nm.appendChild(el('span', 'wsub', n0(r.n) + ' kapal'));
+      var bar = el('div', 'wbar'), fill = el('i'); fill.style.width = (r.avg / max * 100) + '%'; bar.appendChild(fill);
+      s.appendChild(nm); s.appendChild(bar); var wv = el('div', 'wv', n1(r.avg) + ' jam'); wv.appendChild(el('small', null, n1(r.avg / 24) + ' hari')); s.appendChild(wv);
+      d.appendChild(s);
+      var box = el('div', 'wlist tw'), tb = el('table'), th = el('thead'), tr0 = el('tr');
+      [['Bulan', 0], ['Kapal', 0], ['Waiting (jam)', 1], ['Waiting (hari)', 1]].forEach(function (c) { tr0.appendChild(el('th', c[1] ? 'n' : null, c[0])); });
+      th.appendChild(tr0); tb.appendChild(th);
+      var body = el('tbody');
+      r.ships.slice(0, 10).forEach(function (x) {
+        var tr = el('tr'); tr.appendChild(el('td', null, BLN[x.m - 1])); tr.appendChild(el('td', null, x.kapal)); tr.appendChild(el('td', 'n', n1(x.wt))); tr.appendChild(el('td', 'n', n1(x.wt / 24))); body.appendChild(tr);
+      });
+      tb.appendChild(body); box.appendChild(tb);
+      if (r.ships.length > 10) box.appendChild(el('p', 'cap', 'dan ' + n0(r.ships.length - 10) + ' kapal lainnya dengan waiting time lebih rendah.'));
+      d.appendChild(box); host.appendChild(d);
+    });
+  }
+
+  function drawTop5(S) {
+    var host = $('c-top'); host.replaceChildren();
+    var d = S.filter(bshOk).sort(function (a, b) { return b.bshb - a.bshb; }).slice(0, 5);
+    if (!d.length) { host.appendChild(el('p', 'cap', 'Belum ada data BSH BT untuk periode ini.')); return; }
+    var max = d3.max(d, function (r) { return r.bshb; });
+    d.forEach(function (r) {
+      var row = el('div', 'brow'), nm = el('div', null, r.kapal);
+      if (r.fl) nm.appendChild(el('small', null, Number(r.fl.slice(8, 10)) + ' ' + BLN[Number(r.fl.slice(5, 7)) - 1]));
+      row.appendChild(nm); row.appendChild(el('div', 'brow-v', n1(r.bshb)));
+      var tr = el('div', 'btrack'), fl = el('div', 'bfill'); fl.style.width = (r.bshb / max * 100) + '%'; fl.style.background = 'var(--c3)'; tr.appendChild(fl); row.appendChild(tr); host.appendChild(row);
+    });
+  }
+
+  function nmK(s) { return String(s || '').toUpperCase().replace(/\s+11$/, '').replace('SIANGTAR', 'SIANTAR').replace(/\s+/g, ' ').trim(); }
+  function drawBanding() {
+    var host = $('t-banding'); host.replaceChildren();
+    var m = sel || lastM(), M = D.r.filter(function (r) { return r.m === m && r.box >= 10; });
+    var hasApp = M.some(function (r) { return r.app; }), T = hasApp ? M.filter(function (r) { return r.app === 'TOSNOS'; }) : M;
+    $('h-banding').textContent = 'BSH BT kapal ' + BLNF[m - 1] + (hasApp ? ' (TOSNOS)' : '') + ' dibanding Januari–' + (m > 1 ? BLNF[m - 2] : '') + ' kapal yang sama';
+    if (!T.length || m === 1) { $('cap-banding').textContent = 'Belum ada data untuk dibandingkan.'; return; }
+    var H = D.r.filter(function (r) { return r.m < m && r.box >= 10 && r.bshb != null; }), G = {};
+    H.forEach(function (r) { var k = nmK(r.kapal); (G[k] = G[k] || []).push(r.bshb); });
+    var rows = T.filter(function (r) { return r.bshb != null; }).map(function (r) { var h = G[nmK(r.kapal)]; return { r: r, n: h ? h.length : 0, avg: h ? d3.mean(h) : null, min: h ? d3.min(h) : null }; })
+      .sort(function (a, b) { return a.r.bshb - b.r.bshb; });
+    var cmp = rows.filter(function (x) { return x.avg != null; }), below = cmp.filter(function (x) { return x.r.bshb < x.avg; }).length, belowMin = cmp.filter(function (x) { return x.r.bshb < x.min; }).length;
+    var one = rows.filter(function (x) { return x.r.ci != null && x.r.ci < 1.1; }), many = rows.filter(function (x) { return x.r.ci != null && x.r.ci >= 1.5; });
+    $('cap-banding').textContent = rows.length + ' kunjungan' + (hasApp ? ' yang tercatat di TOSNOS' : '') + ', diurutkan dari BSH BT terendah. Rata-rata BSH BT ' + n1(d3.mean(rows, function (x) { return x.r.bshb; })) + (cmp.length ? ', sedangkan rata-rata Januari–' + BLNF[m - 2] + ' kapal yang sama ' + n1(d3.mean(cmp, function (x) { return x.avg; })) + '. ' + below + ' dari ' + cmp.length + ' kunjungan di bawah rata-rata kapal itu sendiri, dan ' + belowMin + ' di bawah BSH BT terendahnya.' : '.') +
+      (one.length && many.length ? ' Kapal dengan 1 crane rata-rata ' + n1(d3.mean(one, function (x) { return x.r.bshb; })) + ' (' + one.length + ' kunjungan), kapal dengan 1,5 crane atau lebih ' + n1(d3.mean(many, function (x) { return x.r.bshb; })) + ' (' + many.length + ' kunjungan).' : '') + ' Kunjungan di bawah 10 box tidak dihitung.';
+    var t = el('table'), th = el('thead'), hr = el('tr'), tb = el('tbody');
+    [['No', 1], ['Kapal'], ['Sandar'], ['Box', 1], ['BT (jam)', 1], ['Crane', 1], ['BSH BT', 1], ['Rata-rata Jan–' + BLN[m - 2] + ' (kunjungan)', 1], ['Selisih', 1]].forEach(function (h) { hr.appendChild(el('th', h[1] ? 'n' : null, h[0])); });
+    th.appendChild(hr); t.appendChild(th);
+    rows.forEach(function (x, i) { var r = x.r, tr = el('tr'), d = r.ft ? new Date(r.ft) : null;
+      tr.appendChild(el('td', 'n', String(i + 1))); tr.appendChild(el('td', null, r.kapal)); tr.appendChild(el('td', null, d ? d.getDate() + ' ' + BLN[d.getMonth()] : '—'));
+      [n0(r.box), f1(r.bt), r.ci == null ? '—' : n1(r.ci), f1(r.bshb), x.avg == null ? '—' : n1(x.avg) + ' (' + x.n + ')'].forEach(function (v) { tr.appendChild(el('td', 'n', v)); });
+      var sd = el('td', 'n', x.avg == null ? '—' : (r.bshb >= x.avg ? '+' : '−') + n0(Math.abs(r.bshb - x.avg) / x.avg * 100) + '%'); if (x.avg != null) sd.style.color = r.bshb < x.avg ? 'var(--bad)' : 'var(--ok)'; tr.appendChild(sd);
+      tb.appendChild(tr); });
+    t.appendChild(tb); host.appendChild(t);
+  }
+  function drawLast() {
+    var tb = $('t-last'); tb.replaceChildren(); 
+    var start = Math.max(0, D.r.length - 12);
+    D.r.slice(start).reverse().forEach(function (r, i) {
+      var idx = D.r.length - 1 - i; var tr = el('tr');
+      [[BLN[r.m - 1], 0], [r.kapal, 0], [r.line, 0], [n0(r.box), 1], [n0(r.teus), 1], [r.bshb == null ? '—' : f1(r.bshb), 1]].forEach(function (c) { tr.appendChild(el('td', c[1] ? 'n' : null, c[0])); });
+      var nt = el('td', 'note'); nt.appendChild(el('div', 'clamp', r.ring || r.cat || '')); tr.appendChild(nt);
+      tb.appendChild(tr);
+    });
+  }
+
+  var QUAY = 600;
+  function borPct(a, b) {
+    if (!(b > a)) return null;
+    var iv = {}, tot = 0;
+    D.r.forEach(function (r) {
+      if (!r.ft || r.bt == null) return; var s0 = new Date(r.ft).getTime(); if (!isFinite(s0)) return;
+      (iv[r.kapal] = iv[r.kapal] || []).push([s0, s0 + r.bt * 3600000, (r.loa > 0 ? r.loa : 106) + 5]);
+    });
+    Object.keys(iv).forEach(function (k) {
+      var cs = null, ce = 0, cw = 0;
+      iv[k].sort(function (x, y) { return x[0] - y[0]; }).forEach(function (p) {
+        if (cs === null) { cs = p[0]; ce = p[1]; cw = p[2]; }
+        else if (p[0] < ce) { ce = Math.max(ce, p[1]); cw = Math.max(cw, p[2]); }
+        else { tot += cw * Math.max(0, Math.min(ce, b) - Math.max(cs, a)); cs = p[0]; ce = p[1]; cw = p[2]; }
+      });
+      if (cs !== null) tot += cw * Math.max(0, Math.min(ce, b) - Math.max(cs, a));
+    });
+    return tot / (QUAY * (b - a)) * 100;
+  }
+  function drawTop(S) {
+    var ch = $('chips'); ch.replaceChildren();
+    var months = [0]; for (var i = 1; i <= lastM(); i++) months.push(i);
+    months.forEach(function (m) {
+      var b = el('button', 'chip', m ? BLNF[m - 1] : 'Semua bulan'); b.type = 'button'; b.setAttribute('aria-pressed', String(sel === m));
+      b.addEventListener('click', function () { sel = m; render(); }); ch.appendChild(b);
+    });
+    var box = d3.sum(S, function (r) { return r.box; }), teus = d3.sum(S, function (r) { return r.teus; });
+    var bt = avg(S, function (r) { return r.bt; }), eb = avg(S, function (r) { return r.etbt; }), bsb = avg(S.filter(bshOk), function (r) { return r.bshb; });
+    var take = $('take'); take.replaceChildren();
+    function b(t) { var e = el('b', null, t); return e; }
+    [(sel ? BLNF[sel - 1] + ': ' : 'Januari sampai ' + BLNF[lastM() - 1] + ': '), b(n0(S.length)), ' kapal dan ', b(n0(box)), ' box. Waktu sandar rata-rata ', b(f1(bt)), ' jam, ', b(eb == null ? '—' : n1(eb) + '%'), ' di antaranya bongkar muat efektif, dengan produktivitas kapal (BSH BT) ', b(f1(bsb)), ' box per jam.'].forEach(function (p) { take.appendChild(typeof p === 'string' ? document.createTextNode(p) : p); });
+    var tg = sel ? TGTM[sel - 1] : TGT, sisa = tg - teus;
+    var lastFl = d3.max(D.r, function (r) { return r.fl; }), ld = lastFl ? new Date(lastFl + 'T00:00:00') : null, yr = ld ? ld.getFullYear() : 2026;
+    var endD = sel ? new Date(yr, sel, 0) : new Date(yr, 11, 31), hari = ld ? Math.round((endD - ld) / 86400000) : 0;
+    var sisaNote = sisa <= 0 ? 'target sudah tercapai' : (hari > 0 && (!sel || sel === ld.getMonth() + 1) ? 'perlu ' + n0(sisa / hari) + ' TEUs per hari dalam ' + hari + ' hari tersisa' : 'tidak tercapai');
+    var bCut = ld ? ld.getTime() : null, bA = sel ? new Date(yr, sel - 1, 1).getTime() : new Date(yr, 0, 1).getTime(), bE = sel ? new Date(yr, sel, 1).getTime() : null;
+    var bB = bCut == null ? null : (sel ? Math.min(bE, bCut) : bCut), bor = bB == null ? null : borPct(bA, bB), bLast = bor == null ? null : new Date(bB - 86400000);
+    var borNote = '4 tambatan' + (bor == null ? '' : ', ' + (sel ? (bB >= bE ? BLNF[sel - 1] : '1–' + bLast.getDate() + ' ' + BLNF[sel - 1]) : '1 Januari–' + bLast.getDate() + ' ' + BLNF[bLast.getMonth()]));
+    var BM = BORF.slice(), bNov = null;
+    if (bCut != null) for (var mm = BORF.length + 1; mm <= 12; mm++) {
+      var ms0 = new Date(yr, mm - 1, 1).getTime(), me0 = Math.min(new Date(yr, mm, 1).getTime(), bCut);
+      if (me0 > ms0) { BM[mm - 1] = borPct(ms0, me0); if (me0 < new Date(yr, mm, 1).getTime()) bNov = { m: mm, d: new Date(me0 - 86400000).getDate() }; }
+    }
+    var bVals = BM.filter(function (v) { return v != null; }), bv = sel ? BM[sel - 1] : (bVals.length ? d3.mean(bVals) : null);
+    var bn = sel ? (BM[sel - 1] == null ? 'belum ada data' : (sel > BORF.length ? (bNov && bNov.m === sel ? '1–' + bNov.d + ' ' + BLNF[sel - 1] : BLNF[sel - 1]) + ', dari data kapal' : BLNF[sel - 1])) : 'rata-rata Januari–' + BLNF[bVals.length - 1];
+    var k = $('kpis'); k.replaceChildren();
+    [['Kapal dilayani', n0(S.length), sel ? BLNF[sel - 1] : 'seluruh periode'], ['Total box', n0(box), 'bongkar dan muat'], ['Total TEUs', n0(teus), 'bongkar dan muat'], ['Capaian target TEUs', n1(teus / (sel ? TGTM[sel - 1] : TGT) * 100) + '%', sel ? 'dari target ' + BLNF[sel - 1] + ' ' + n0(TGTM[sel - 1]) + ' TEUs' : 'dari target 2026 ' + n0(TGT) + ' TEUs', teus / (sel ? TGTM[sel - 1] : TGT)], [sisa > 0 ? 'Kekurangan TEUs' : 'Kelebihan TEUs', n0(Math.abs(sisa)), sisaNote], ['BOR', bv == null ? '—' : n1(bv) + '%', bn], ['YOR', sel ? (YOR[sel - 1] == null ? '—' : n1(YOR[sel - 1]) + '%') : n1(d3.mean(YOR)) + '%', sel ? (sel === 11 ? 'rata-rata harian 1–16 November' : BLNF[sel - 1]) : 'rata-rata Januari–' + BLNF[YOR.length - 1]],
+     ['Waktu sandar (BT)', f1(bt), 'jam rata-rata per kapal'], ['Waktu efektif (ET/BT)', eb == null ? '—' : n1(eb) + '%', 'dari waktu sandar'], ['Produktivitas kapal (BSH BT)', f1(bsb), 'box per jam sandar']].forEach(function (c) {
+      var d = el('div', 'card'); d.appendChild(el('div', 'kl', c[0])); d.appendChild(el('div', 'kv', c[1])); d.appendChild(el('div', 'kn', c[2])); if (c[3] != null) { var tr = el('div', 'btrack'); tr.style.marginTop = '8px'; var fl = el('div', 'bfill'); fl.style.width = Math.min(100, c[3] * 100) + '%'; tr.appendChild(fl); d.appendChild(tr); } k.appendChild(d);
+    });
+    $('stamp').textContent = 'Diperbarui ' + new Date(D.u).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) + ' WIB' + (D.f ? ' dari ' + D.f : '');
+  }
+
+  function pct(p, short) { var a = Math.abs(p); return (p < 0 ? '−' : '+') + (short && a >= 1 ? n0(a) : n1(a)) + '%'; }
+  function chartYoy() {
+    var host = $('c-yoy'); if (!host) return;
+    var H = 250, m = { t: 22, r: 6, b: 24, l: 34 };
+    var f = frame(host, H, legend([['2025', 'var(--y25)'], ['2026', 'var(--c1)']])), svg = f.svg, W = f.W; var tip = makeTip(host);
+    svg.attr('role', 'img').attr('aria-label', 'Diagram batang TEUs per bulan, Januari sampai Oktober 2025 dibanding 2026. TEUs 2026 lebih tinggi di 8 dari 10 bulan.');
+    var R = YOY.bln.map(function (v, i) { return { m: i + 1, a: v[0], b: v[1], p: (v[1] / v[0] - 1) * 100 }; });
+    var x = d3.scaleBand().domain(R.map(function (r) { return r.m; })).range([m.l, W - m.r]).paddingInner(0.24).paddingOuter(0.08);
+    var xi = d3.scaleBand().domain([0, 1]).range([0, x.bandwidth()]).paddingInner(0.1);
+    var y = d3.scaleLinear().domain([0, d3.max(R, function (r) { return Math.max(r.a, r.b); }) * 1.14]).nice().range([H - m.b, m.t]);
+    axes(svg, y, y.ticks(4), W, m, function (v) { return n0(v / 1000); });
+    svg.append('g').selectAll('text').data(R).join('text').attr('x', function (r) { return x(r.m) + x.bandwidth() / 2; }).attr('y', H - 8).attr('text-anchor', 'middle').text(function (r) { return BLN[r.m - 1]; });
+    var g = svg.append('g').selectAll('g').data(R).join('g').attr('transform', function (r) { return 'translate(' + x(r.m) + ',0)'; });
+    [['a', 'var(--y25)', 0], ['b', 'var(--c1)', 1]].forEach(function (s) {
+      g.append('rect').attr('x', xi(s[2])).attr('width', xi.bandwidth()).attr('y', function (r) { return y(r[s[0]]); })
+        .attr('height', function (r) { return y(0) - y(r[s[0]]); }).attr('rx', 2).style('fill', s[1]);
+    });
+    var short = x.bandwidth() < 46;
+    var prev = null;
+    g.append('text').attr('x', x.bandwidth() / 2).attr('y', function (r) { return y(Math.max(r.a, r.b)) - 6; }).attr('text-anchor', 'middle')
+      .style('font-size', short ? '10px' : '10.5px').style('font-weight', '600').style('fill', 'var(--fg)').text(function (r) { return pct(r.p, short); })
+      .each(function (r) {
+        var bb = this.getBBox(), x0 = x(r.m) + bb.x, yy = +this.getAttribute('y');
+        if (prev && x0 < prev.x1 + 3 && Math.abs(yy - prev.y) < 12) { yy = prev.y - 12; this.setAttribute('y', yy); }
+        prev = { x1: x0 + bb.width, y: yy };
+      });
+    g.append('rect').attr('width', x.bandwidth()).attr('y', m.t).attr('height', H - m.b - m.t).style('fill', 'transparent')
+      .on('pointermove', function (ev, r) { tip.show(ev, BLNF[r.m - 1] + '\n2025: ' + n0(r.a) + ' TEUs\n2026: ' + n0(r.b) + ' TEUs (' + pct(r.p) + ')' + (YOY.cat[r.m] ? '\n' + YOY.cat[r.m] : '')); })
+      .on('pointerleave', function () { tip.hide(); });
+    var t = el('table', 'sr'), hr = el('tr');
+    ['Bulan', '2025', '2026', 'Perubahan'].forEach(function (h) { hr.appendChild(el('th', null, h)); }); t.appendChild(hr);
+    R.forEach(function (r) { var tr = el('tr'); [BLNF[r.m - 1], n0(r.a), n0(r.b), pct(r.p)].forEach(function (c) { tr.appendChild(el('td', null, c)); }); t.appendChild(tr); });
+    host.appendChild(t);
+  }
+  function dvBars(id, rows, o) {
+    o = o || {};
+    var host = $(id); if (!host) return;
+    host.replaceChildren(); var tip = makeTip(host);
+    var lo = Math.min(0, d3.min(rows, function (r) { return r.v; })), hi = Math.max(0, d3.max(rows, function (r) { return r.v; }));
+    var span = (hi - lo) || 1, z = -lo / span * 100;
+    rows.forEach(function (r) {
+      var row = el('div', 'dvr' + (r.tot ? ' tot' : '')), lab = el('span', null, r.t);
+      if (r.s) lab.appendChild(el('small', null, r.s));
+      var w = Math.abs(r.v) / span * 100, tr = el('div', 'dvt'), bar = el('i', r.v < 0 ? 'neg' : (r.c || null)), zl = el('b');
+      bar.style.left = (r.v < 0 ? z - w : z) + '%'; bar.style.width = Math.max(w, 0.8) + '%'; zl.style.left = z + '%';
+      tr.appendChild(bar); if (lo < 0) tr.appendChild(zl);
+      row.appendChild(lab); row.appendChild(el('span', 'brow-v', (o.plain ? '' : (r.v < 0 ? '−' : '+')) + n0(Math.abs(r.v)) + (o.unit || ' TEUs'))); row.appendChild(tr);
+      if (r.tip) { row.addEventListener('pointermove', function (ev) { tip.show(ev, r.tip); }); row.addEventListener('pointerleave', function () { tip.hide(); }); }
+      host.appendChild(row);
+    });
+  }
+  function tgl(d) { return d.getDate() + ' ' + BLNF[d.getMonth()]; }
+  function chartRk(F) {
+    var host = $('c-rk'); if (!host) return;
+    if (!F.length) { host.replaceChildren(); return; }
+    var H = 250, m = { t: 22, r: 8, b: 24, l: 40 };
+    var ca = 0, ct = 0;
+    var R = F.map(function (r) { var t = TGTM[r.m - 1]; ca += r.teus; ct += t; return { m: r.m, a: r.teus, t: t, p: r.teus / t * 100, c: ca / ct * 100 }; });
+    var L = R[R.length - 1];
+    var lg = el('div', 'legend');
+    [['di atas RKAP', 'var(--c1)'], ['di bawah RKAP', 'var(--c2)'], ['capaian kumulatif, kini ' + n1(L.c) + '%', 'var(--c3)', 1]].forEach(function (it) {
+      var s = el('span'), i = el('i'); i.style.background = it[1];
+      if (it[2]) { i.style.height = '3px'; i.style.verticalAlign = '3px'; i.style.width = '14px'; }
+      s.appendChild(i); s.appendChild(document.createTextNode(it[0])); lg.appendChild(s);
+    });
+    var f = frame(host, H, lg), svg = f.svg, W = f.W; var tip = makeTip(host);
+    svg.attr('role', 'img').attr('aria-label', 'Diagram capaian TEUs terhadap RKAP per bulan dan capaian kumulatif. Capaian kumulatif terakhir ' + n1(R[R.length - 1].c) + ' persen.');
+    var lo = Math.min(90, d3.min(R, function (r) { return Math.min(r.p, r.c); })) - 4, hi = Math.max(110, d3.max(R, function (r) { return Math.max(r.p, r.c); })) + 6;
+    var y = d3.scaleLinear().domain([lo, hi]).nice().range([H - m.b, m.t]);
+    var x = d3.scaleBand().domain(R.map(function (r) { return r.m; })).range([m.l, W - m.r]).padding(0.3);
+    axes(svg, y, y.ticks(5), W, m, function (v) { return n0(v) + '%'; });
+    svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(100)).attr('y2', y(100)).style('stroke', 'var(--fg)').style('opacity', 0.5).attr('stroke-width', 1.5);
+    svg.append('g').selectAll('text').data(R).join('text').attr('x', function (r) { return x(r.m) + x.bandwidth() / 2; }).attr('y', H - 8).attr('text-anchor', 'middle')
+      .style('font-size', x.step() < 30 ? '10px' : null).text(function (r) { return BLN[r.m - 1]; });
+    svg.append('g').selectAll('rect').data(R).join('rect').attr('x', function (r) { return x(r.m); }).attr('width', x.bandwidth())
+      .attr('y', function (r) { return Math.min(y(r.p), y(100)); }).attr('height', function (r) { return Math.max(1, Math.abs(y(r.p) - y(100))); }).attr('rx', 2)
+      .style('fill', function (r) { return r.p >= 100 ? 'var(--c1)' : 'var(--c2)'; });
+    var cx = function (r) { return x(r.m) + x.bandwidth() / 2; }, short = x.bandwidth() < 40, prev = null;
+    svg.append('g').selectAll('text').data(R).join('text').attr('x', cx).attr('y', function (r) { return r.p >= 100 ? y(r.p) - 5 : y(r.p) + 13; }).attr('text-anchor', 'middle')
+      .style('font-size', short ? '9.5px' : '10.5px').style('font-weight', '600').style('fill', 'var(--fg)').style('paint-order', 'stroke').style('stroke', 'var(--panel)').style('stroke-width', '3px')
+      .text(function (r) { return (Math.abs(r.p - 100) < 1 || !short ? n1(r.p) : n0(r.p)) + '%'; })
+      .each(function (r) {
+        var bb = this.getBBox(), yy = +this.getAttribute('y'), up = r.p >= 100;
+        if (prev && bb.x < prev.x1 + 2 && Math.abs(yy - prev.y) < 11) { yy = up ? Math.min(yy, prev.y) - 11 : Math.max(yy, prev.y) + 11; this.setAttribute('y', yy); }
+        prev = { x1: bb.x + bb.width, y: yy };
+      });
+    svg.append('path').datum(R).attr('fill', 'none').style('stroke', 'var(--c3)').attr('stroke-width', 2).attr('d', d3.line().x(cx).y(function (r) { return y(r.c); }));
+    svg.append('g').selectAll('circle').data(R).join('circle').attr('cx', cx).attr('cy', function (r) { return y(r.c); }).attr('r', function (r, i) { return i === R.length - 1 ? 4.5 : 3; })
+      .style('fill', 'var(--c3)').style('stroke', 'var(--panel)').attr('stroke-width', 1.5);
+    svg.append('g').selectAll('rect').data(R).join('rect').attr('x', function (r) { return x(r.m) - x.step() * x.paddingInner() / 2; }).attr('width', x.step())
+      .attr('y', m.t).attr('height', H - m.b - m.t).style('fill', 'transparent')
+      .on('pointermove', function (ev, r) { var d = r.a - r.t; tip.show(ev, BLNF[r.m - 1] + '\nRealisasi ' + n0(r.a) + ' TEUs\nRKAP ' + n0(r.t) + ' TEUs\nCapaian ' + n1(r.p) + '% (' + (d < 0 ? '−' : '+') + n0(Math.abs(d)) + ' TEUs)\nKumulatif ' + n1(r.c) + '%' + (RK.cat[r.m] ? '\n' + RK.cat[r.m] : '')); })
+      .on('pointerleave', function () { tip.hide(); });
+  }
+  function drawRk() {
+    if (!$('c-rk')) return;
+    var M = monthly(), lastFl = d3.max(D.r, function (r) { return r.fl; });
+    if (!lastFl) { chartRk([]); return; }
+    var ld = new Date(lastFl + 'T00:00:00'), yr = ld.getFullYear(), cm = ld.getMonth() + 1, dim = new Date(yr, cm, 0).getDate();
+    chartRk(M.filter(function (r) { return r.m < cm || (r.m === cm && ld.getDate() >= dim); }));
+    dvBars('c-r1', RK.uk); dvBars('c-r2', RK.ar);
+    var out = $('rk-out'); out.replaceChildren();
+    var ytd = d3.sum(D.r, function (r) { return r.teus; }), sisa = TGT - ytd, hari = Math.round((new Date(yr, 11, 31) - ld) / 86400000);
+    var mtd = d3.sum(D.r.filter(function (r) { return r.m === cm; }), function (r) { return r.teus; }), dEl = ld.getDate();
+    var prev = M.filter(function (r) { return r.m < cm; }).slice(-4), dPrev = d3.sum(prev, function (r) { return new Date(yr, r.m, 0).getDate(); });
+    var doy = Math.round((ld - new Date(yr, 0, 1)) / 86400000) + 1;
+    if (sisa <= 0 || hari <= 0) {
+      $('c-r3').replaceChildren();
+      out.textContent = sisa <= 0 ? 'Target setahun 589.966 TEUs sudah tercapai: realisasi ' + n0(ytd) + ' TEUs (' + n1(ytd / TGT * 100) + '%).' : 'Realisasi setahun ' + n0(ytd) + ' TEUs, ' + n1(ytd / TGT * 100) + '% dari RKAP.';
+      return;
+    }
+    var need = sisa / hari, paces = [];
+    if (prev.length) paces.push({ t: prev.length > 1 ? BLNF[prev[0].m - 1] + '–' + BLNF[prev[prev.length - 1].m - 1] : BLNF[prev[0].m - 1], v: d3.sum(prev, function (r) { return r.teus; }) / dPrev });
+    if (dim > dEl) paces.push({ t: BLNF[cm - 1], s: 'sampai tanggal ' + dEl, v: mtd / dEl });
+    paces.push({ t: 'Sejak Januari', v: ytd / doy });
+    dvBars('c-r3', [{ t: 'Dibutuhkan', s: 'sampai 31 Desember', v: need, c: 'ref' }].concat(paces), { unit: ' TEUs per hari', plain: 1 });
+    var vs = paces.map(function (p) { return p.v; }), pLo = d3.min(vs), pHi = d3.max(vs);
+    var day = 86400000, dA = new Date(ld.getTime() + sisa / pHi * day), dB = new Date(ld.getTime() + sisa / pLo * day);
+    var P1 = ytd + pLo * hari, P2 = ytd + pHi * hari, rng = function (a, b, f) { return f(a) === f(b) ? f(a) : f(a) + '–' + f(b); };
+    var t = 'Sampai ' + tgl(ld) + ' realisasi ' + n0(ytd) + ' TEUs, ' + n0(ytd / TGT * 100) + '% dari RKAP setahun. Sisa ' + n0(sisa) + ' TEUs perlu dicapai dalam ' + hari + ' hari, atau ' + n0(need) + ' TEUs per hari. ';
+    if (pLo >= need) {
+      var b1 = Math.round((new Date(yr, 11, 31) - dB) / day), b2 = Math.round((new Date(yr, 11, 31) - dA) / day);
+      t += 'Laju sekarang ' + rng((pLo / need - 1) * 100, (pHi / need - 1) * 100, n0) + '% di atas kebutuhan itu, jadi target diperkirakan tercapai sekitar ' +
+        (dA.getMonth() === dB.getMonth() ? rng(dA.getDate(), dB.getDate(), String) + ' ' + BLNF[dB.getMonth()] : tgl(dA) + '–' + tgl(dB)) +
+        ' dan akhir tahun ditutup sekitar ' + rng(P1 / 1000, P2 / 1000, n0) + ' ribu TEUs. Cadangannya ' + (b2 <= 10 ? 'hanya ' : 'sekitar ') + rng(b1, b2, String) + ' hari operasi.';
+    } else if (pHi < need) {
+      t += 'Laju sekarang di bawah kebutuhan itu. Tanpa kenaikan laju, akhir tahun diperkirakan ' + rng(P1 / 1000, P2 / 1000, n0) + ' ribu TEUs (' + rng(P1 / TGT * 100, P2 / TGT * 100, n0) + '% RKAP).';
+    } else {
+      t += 'Sebagian laju sekarang di bawah kebutuhan itu, jadi target setahun belum aman: perkiraan akhir tahun ' + rng(P1 / 1000, P2 / 1000, n0) + ' ribu TEUs (' + rng(P1 / TGT * 100, P2 / TGT * 100, n0) + '% RKAP).';
+    }
+    if (dim > dEl) {
+      var tM = TGTM[cm - 1], needM = (tM - mtd) / (dim - dEl), pM = mtd / dEl;
+      t += ' Bulan berjalan: ' + BLNF[cm - 1] + ' sampai tanggal ' + dEl + ' mencatat ' + n0(mtd) + ' TEUs, atau ' + n0(pM) + ' TEUs per hari. ' +
+        (mtd >= tM ? 'Target ' + BLNF[cm - 1] + ' sudah tercapai.' : 'Untuk mencapai target ' + BLNF[cm - 1] + ' (' + n0(tM) + ' TEUs), sisa bulan perlu ' + n0(needM) + ' TEUs per hari' + (needM > pM ? ', lebih tinggi dari laju sekarang.' : ', masih di bawah laju sekarang.'));
+    }
+    out.textContent = t;
+  }
+
+  function drawYoY() { chartYoy(); dvBars('c-y1', YOY.dek); dvBars('c-y2', YOY.pel); dvBars('c-y3', YOY.jen); }
+
+  function render() {
+    var S = subset(), M = monthly();
+    drawTop(S); chartBox(M); chartProd(M); chartWaktu(M); chartWtd(); drawSebab(); drawLines(S); drawWL(S); drawTop5(S); drawLast(); drawBanding(); drawYoY(); drawRk();
+  }
+
+  var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(function () { render(); }, 150); });
+  render();
+}
+fetch('data.json', { cache: 'no-store' })
+  .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+  .then(function (d) { startApp(d); })
+  .catch(function () { var t = document.getElementById('take'); if (t) t.textContent = 'Data tidak bisa dimuat. Periksa koneksi lalu muat ulang halaman ini.'; });
+</script>
+</body>
+</html>
