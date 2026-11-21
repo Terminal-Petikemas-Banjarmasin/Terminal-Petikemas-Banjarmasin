@@ -72,6 +72,7 @@ tbody tr[tabindex]{cursor:pointer}
 .rec li{margin-bottom:12px;line-height:1.55;max-width:92ch}
 .rec li b{font-weight:600}
 .rec .fix{display:block;margin-top:3px;color:var(--fg)}
+.rec .imp{display:block;margin-top:2px;font-size:12px;color:var(--muted)}
 .rec .fix::before{content:"Solusi: ";font-weight:600;color:var(--c1)}
 .rmk{margin:6px 0 0;padding-left:18px;font-size:13px}
 .rmk li{margin-bottom:4px}
@@ -133,7 +134,7 @@ dt{font-weight:600;color:var(--fg)}dd{margin:0}
 
 <section class="card">
   <h2>Analisis dan rekomendasi</h2>
-  <p class="cap">Disusun otomatis dari catatan berhenti, jam mulai crane, dan target RKAP 2026.</p>
+  <p class="cap">Disusun otomatis dari catatan berhenti, jam mulai crane, dan target RKAP 2026. Diurutkan menurut perkiraan berapa jam sandar bisa dihemat. Perkiraan ini kasar dan bisa tumpang tindih antar butir.</p>
   <ol class="rec" id="d-rec" data-dyn=""></ol>
 </section>
 
@@ -207,7 +208,9 @@ dt{font-weight:600;color:var(--fg)}dd{margin:0}
     <dt>BSH ET, BSH BWT, BSH BT</dt><dd>Box per kapal per jam efektif, per jam kerja, dan per jam sandar.</dd>
     <dt>Target</dt><dd>Target RKAP Kinerja 2026 Terminal Petikemas (LTB SPTP TPK Banjarmasin): BT 17 jam, BWT 14, ET 11, IT 1, NOT 4, ET/BT 65%, BCH ET 31, BCH BWT 23, BCH BT 20, BSH ET 40, BSH BWT 33, BSH BT 28.</dd>
     <dt>CI</dt><dd>Crane intensity: rata-rata jumlah crane yang bekerja di kapal.</dd>
-    <dt>Jam crane</dt><dd>Jam berhenti dijumlahkan untuk setiap crane. Dua crane berhenti bersamaan selama 1 jam dihitung 2 jam crane.</dd>
+    <dt>Jam crane</dt><dd>Jam berhenti dijumlahkan untuk setiap crane. Dua crane berhenti bersamaan selama 1 jam dihitung 2 jam crane. Dashboard ringkasan memakai jam kapal, yaitu jam ketika semua crane berhenti bersamaan; karena itu istirahat (biasanya bersamaan) tampak lebih besar di sana, dan menunggu truk (biasanya tidak bersamaan) tampak lebih kecil.</dd>
+    <dt>Perkiraan dampak</dt><dd>Perkiraan berapa jam sandar bisa dihemat bila hambatan itu tidak terjadi. Jam crane dibagi jumlah crane kapal itu. Untuk crane yang kurang atau lambat, dihitung dari jam efektif (ET). Perkiraan ini kasar dan bisa tumpang tindih antar butir.</dd>
+    <dt>Saat tiba</dt><dd>Jumlah kapal yang sedang sandar dan yang sudah antre ketika kapal ini tiba, dihitung dari laporan kinerja seluruh kapal (dashboard ringkasan). Dermaga dianggap penuh bila 3 kapal sandar.</dd>
   </dl>
 </details>
 
@@ -221,7 +224,7 @@ fetch('kapal.json', { cache: 'no-store' }).then(function (r) { if (!r.ok) throw 
   function nc(n) { return String(n || '').toUpperCase().replace(/\s+/g, '').replace(/^QCC/, 'CC').replace(/^CC0?(\d)$/, 'CC0$1'); }
   function normV(v) { v.cr.forEach(function (c) { c.n = nc(c.n); }); v.ev.forEach(function (e) { if (/^Q?CC/i.test(e[2])) e[2] = nc(e[2]); }); v.hr.c = v.hr.c.map(nc); return v; }
   D.v.forEach(normV);
-  var cur = null, canEdit = location.hash === '#perbarui', busy = false, pending = null, pendingG = [];
+  var cur = null, canEdit = location.hash === '#perbarui', busy = false, pending = null, pendingG = [], WD = null;
 
   function $(id) { return document.getElementById(id); }
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
@@ -371,9 +374,31 @@ fetch('kapal.json', { cache: 'no-store' }).then(function (r) { if (!r.ok) throw 
     });
     return out;
   }
+  // Data kinerja seluruh kapal (data.json, dipakai dashboard ringkasan) untuk menjelaskan antrean saat kapal tiba.
+  function nmW(x) { return String(x || '').toUpperCase().replace(/^(KM|MV|KMP)\.?\s+/, '').replace('SIANGTAR', 'SIANTAR').replace(/\s+/g, ' ').trim().replace(/\s+11$/, ''); }
+  function prepWD(rows) {
+    var L = rows.filter(function (r) { return r.ft && r.bt != null; }).map(function (r) { var s0 = new Date(r.ft).getTime(); return { k: nmW(r.kapal), s: s0, e: s0 + r.bt * 36e5, a: r.wt != null ? s0 - r.wt * 36e5 : null, wt: r.wt }; }).filter(function (x) { return isFinite(x.s); });
+    return { L: L, st: L.map(function (x) { return x.s; }).sort(d3.ascending), en: L.map(function (x) { return x.e; }).sort(d3.ascending) };
+  }
+  function wdAt(t) { return d3.bisectRight(WD.st, t) - d3.bisectRight(WD.en, t); }
+  function wdFind(v) {
+    if (!WD || !v.atb) return null;
+    var k = nmW(v.kapal), pick = function (t0) { return WD.L.filter(function (x) { return x.k === k && Math.abs(x.s - t0) <= 12 * 36e5; }).sort(function (a, b) { return Math.abs(a.s - t0) - Math.abs(b.s - t0); })[0] || null; };
+    var x = pick(tm(v.atb)); if (x) return { x: x, yr: false };
+    x = pick(tm(v.atb) + 365 * 864e5); return x ? { x: x, yr: true } : null;
+  }
+  function wdCtx(x) {
+    if (x.a == null || !(x.wt > 0)) return null;
+    var full = 0, free = 0, lim = x.s - 3 * 36e5;
+    for (var t = x.a; t < lim; t += 6e5) { var dh = Math.min(6e5, lim - t) / 36e5; if (wdAt(t) >= 3) full += dh; else free += dh; }
+    return { b: wdAt(x.a), q: WD.L.filter(function (y) { return y !== x && y.a != null && y.a < x.a && y.s > x.a; }).length,
+      over: WD.L.filter(function (y) { return y !== x && y.a != null && y.a > x.a && y.s < x.s; }).length, full: full, free: free };
+  }
   function others(v) { return D.v.filter(function (x) { return x.id !== v.id && x.ok; }); }
+  // Setiap butir punya j: perkiraan jam sandar (BT) yang bisa dihemat. Jam crane dibagi jumlah crane kapal itu,
+  // supaya hambatan yang dicatat per crane dan per kapal bisa dibandingkan dengan satuan yang sama.
   function analyze(v) {
-    var st = stopsBy(v), out = [], o = others(v);
+    var st = stopsBy(v), out = [], o = others(v), nC = Math.max(1, v.cr.length);
     var ev = function (k) { return v.ev.filter(function (e) { return bucket(e[1]).k === k && e[5] > 0; }); };
     var q = function (t) { return '“' + t + '”'; };
     // 1. lapangan
@@ -382,13 +407,13 @@ fetch('kapal.json', { cache: 'no-store' }).then(function (r) { if (!r.ok) throw 
       var clash = /clash|dlv|deliv|rcv|receiv|rsv/i.test(txt), kap = /km\.|kapal lain|kpl lain/i.test(txt);
       var fix = clash ? 'Saat kapal ini bekerja, hentikan dulu atau alihkan delivery dan receiving di ' + (cy.length ? cy.slice(0, 3).join(', ') : 'blok yang dipakai kapal') + ', atau tumpuk muatan kapal di blok yang tidak dipakai delivery.' : 'Tambah head truck per crane atau dekatkan blok penumpukan ke berth.';
       if (kap) fix += ' Blok yang sama juga dipakai kapal lain, jadi bagi blok per kapal saat dua kapal bekerja bersamaan.';
-      out.push({ h: st.yard.h, t: 'Crane menunggu truk atau kontainer ' + n1(st.yard.h) + ' jam crane (' + st.yard.n + ' kali).' + (tr.length ? ' Catatan terbanyak: ' + tr.map(function (r) { return q(r.t) + ' ' + r.n + ' kali'; }).join(', ') + '.' : ''), f: fix });
+      out.push({ j: st.yard.h / nC, t: 'Crane menunggu truk atau kontainer ' + n1(st.yard.h) + ' jam crane (' + st.yard.n + ' kali).' + (tr.length ? ' Catatan terbanyak: ' + tr.map(function (r) { return q(r.t) + ' ' + r.n + ' kali'; }).join(', ') + '.' : ''), f: fix });
     }
-    // 2. istirahat
+    // 2. istirahat: menggeser jam istirahat tidak memperpendek sandar; yang memperpendek adalah operator pengganti
     var ov = overlapRest(v);
     if (st.rest.h >= 2 || ov >= 0.5) {
-      out.push({ h: Math.max(ov, st.rest.h / 2), t: 'Istirahat ' + n1(st.rest.h) + ' jam crane' + (v.cr.length > 1 ? (ov >= 0.1 ? '; ' + n1(ov) + ' jam di antaranya semua crane berhenti bersamaan.' : ', tidak pernah semua crane berhenti bersamaan.') : '.'),
-        f: ov >= 0.5 ? 'Atur istirahat bergiliran antar crane agar selalu ada crane yang bekerja. Ini bisa memangkas BT sekitar ' + n1(ov) + ' jam.' : 'Istirahat sudah tidak bersamaan; pertahankan pola bergiliran.' });
+      out.push({ j: st.rest.h / nC, t: 'Istirahat ' + n1(st.rest.h) + ' jam crane' + (v.cr.length > 1 ? (ov >= 0.1 ? '; selama ' + n1(ov) + ' jam semua crane berhenti bersamaan sehingga kapal benar-benar diam.' : ', tidak pernah semua crane berhenti bersamaan.') : '.'),
+        f: 'Jam istirahat hanya bisa dikurangi dengan operator pengganti yang menjalankan crane saat operator utama istirahat. Menggeser jam istirahat saja tidak memperpendek sandar, karena setiap crane tetap berhenti selama itu.' });
     }
     // 3. alat
     if (st.alat.h >= 0.3) {
@@ -396,49 +421,55 @@ fetch('kapal.json', { cache: 'no-store' }).then(function (r) { if (!r.ok) throw 
       var ar = topRemarks(ae, 3);
       var bbm = /bbm|refuel|isi/i.test(ae.map(function (e) { return e[6] + ' ' + e[1]; }).join(' '));
       var pad = /padam|power/i.test(ae.map(function (e) { return e[6] + ' ' + e[1]; }).join(' '));
-      out.push({ h: st.alat.h, t: 'Alat rusak atau listrik padam ' + n1(st.alat.h) + ' jam crane: ' + byA.map(function (a) { return a[0] + ' ' + n1(a[1]) + ' jam'; }).join(', ') + '.' + (ar.length ? ' Catatan: ' + ar.map(function (r) { return q(r.t); }).join(', ') + '.' : ''),
-        f: 'Periksa ' + byA.map(function (a) { return a[0]; }).slice(0, 2).join(' dan ') + ' dan jadwalkan perawatan sebelum kapal berikutnya.' + (bbm ? ' Isi BBM head truck di luar jam kerja kapal atau gilir agar tidak bersamaan.' : '') + (pad ? ' Cek suplai listrik dan lampu dermaga, siapkan genset cadangan.' : '') });
+      out.push({ j: st.alat.h / nC, t: 'Alat rusak atau listrik padam ' + n1(st.alat.h) + ' jam crane: ' + byA.map(function (a) { return a[0] + ' ' + n1(a[1]) + ' jam'; }).join(', ') + '.' + (ar.length ? ' Catatan: ' + ar.map(function (r) { return q(r.t); }).join(', ') + '.' : ''),
+        f: 'Periksa ' + byA.map(function (a) { return a[0]; }).slice(0, 2).join(' dan ') + ' dan jadwalkan perawatan sebelum kapal berikutnya.' + (bbm ? ' Isi BBM head truck di luar jam kerja kapal atau bergiliran agar tidak bersamaan.' : '') + (pad ? ' Untuk listrik padam, cari tahu apakah dari PLN atau jaringan internal, dan minta jadwal pemadaman agar kerja kapal bisa diatur.' : '') });
     }
     // 4. crane kedua terlambat dan selesai tidak bersamaan
+    var lateOn = false;
     if (v.cr.length >= 2) {
       var cs = v.cr.slice().sort(function (a, b) { return tm(a.s) - tm(b.s); }), first = cs[0], late = cs[cs.length - 1], gap = hh(first.s, late.s);
       if (gap >= 1.5) {
-        var busyOn = D.v.filter(function (x) { return x.id !== v.id && x.cr.some(function (c) { return c.n === late.n && tm(c.s) < tm(late.s) && tm(c.e) > tm(first.s); }); })[0];
-        var be = busyOn ? busyOn.cr.filter(function (c) { return c.n === late.n; })[0] : null;
-        out.push({ h: gap / 2, t: late.n + ' baru mulai ' + n1(gap) + ' jam setelah ' + first.n + (busyOn ? ', karena masih dipakai di ' + busyOn.kapal + ' (sampai ' + fT(be.e) + ')' : '') + '. Selama itu kapal hanya dikerjakan 1 crane.',
-          f: busyOn ? 'Atur urutan dan jadwal sandar supaya crane kedua sudah bebas saat kapal mulai, atau mulai kapal ini setelah crane kedua selesai di kapal lain.' : 'Siapkan crane kedua dan operatornya sebelum kapal mulai bongkar muat.' });
+        lateOn = true;
+        var busyOn = busyElsewhere(v, late, first), be = busyOn ? busyOn.cr.filter(function (c) { return c.n === late.n; })[0] : null;
+        out.push({ j: gap * (nC - 1) / nC, t: late.n + ' baru mulai ' + n1(gap) + ' jam setelah ' + first.n + (busyOn ? ', karena masih bekerja di ' + busyOn.kapal + ' (sampai ' + fT(be.e) + ')' : '') + '. Selama itu kapal hanya dikerjakan 1 crane.',
+          f: busyOn ? 'Ini tanda crane yang siap tidak cukup untuk semua kapal di dermaga, bukan kesalahan di kapal ini. Yang membantu: crane yang rusak segera diperbaiki, dan kapal besar disandarkan di tambatan yang crane keduanya segera bebas.' : 'Siapkan crane kedua dan operatornya sebelum kapal mulai bongkar muat.' });
       }
       var ce = v.cr.slice().sort(function (a, b) { return tm(a.e) - tm(b.e); }), endGap = hh(ce[0].e, ce[ce.length - 1].e);
       if (endGap >= 2 && v.cr.every(function (c) { return c.db != null; })) {
-        out.push({ h: endGap / 3, t: ce[0].n + ' selesai ' + n1(endGap) + ' jam lebih awal dari ' + ce[ce.length - 1].n + '. Muatan per crane: ' + v.cr.map(function (c) { return c.n + ' ' + n0((c.db || 0) + (c.lb || 0)) + ' box'; }).join(', ') + '.',
+        out.push({ j: endGap * (nC - 1) / nC / 2, t: ce[0].n + ' selesai ' + n1(endGap) + ' jam lebih awal dari ' + ce[ce.length - 1].n + '. Muatan per crane: ' + v.cr.map(function (c) { return c.n + ' ' + n0((c.db || 0) + (c.lb || 0)) + ' box'; }).join(', ') + '.',
           f: 'Bagi muatan antar crane sesuai jam mulainya supaya semua crane selesai hampir bersamaan.' });
       }
     }
-    // 4b. crane dipakai bergantian dengan kapal lain
-    shared(v).forEach(function (s) {
-      out.push({ h: s.h / 2, t: s.c.n + ' juga tercatat bekerja di ' + s.x.kapal + ' selama ' + n1(s.h) + ' jam pada waktu yang sama. Di kapal ini ' + s.c.n + ' hanya memindahkan ' + n0((s.c.db || 0) + (s.c.lb || 0)) + ' box' + (s.c.bch != null ? ' (BCH ' + n1(s.c.bch) + ')' : '') + '.',
-        f: 'Hindari membagi satu crane untuk dua kapal sekaligus; selesaikan satu kapal dulu. Kalau terpaksa berpindah, catat sebagai “sharing crane” agar jam kerja crane di laporan tidak terhitung ganda.' });
+    // 4b. crane tercatat di dua kapal sekaligus
+    var shr = shared(v), shrN = shr.map(function (s) { return s.c.n; });
+    shr.forEach(function (s) {
+      out.push({ j: s.h / 2, t: s.c.n + ' juga tercatat bekerja di ' + s.x.kapal + ' selama ' + n1(s.h) + ' jam pada waktu yang sama, jadi crane ini berpindah atau dibagi antar kapal. Di kapal ini ' + s.c.n + ' hanya memindahkan ' + n0((s.c.db || 0) + (s.c.lb || 0)) + ' box' + (s.c.bch != null ? ' (BCH ' + n1(s.c.bch) + ')' : '') + '.',
+        f: 'Memindahkan crane untuk menyelesaikan kapal lain bisa tepat, tetapi kapal ini kehilangan crane selama itu. Catat jam pindahnya sebagai “sharing crane” agar BWT, CI dan BCH di laporan tidak terhitung ganda.' });
     });
     // 5. persiapan
-    var npAvg = d3.mean(o, function (x) { return x.np; });
-    if (v.np >= 1.5) out.push({ h: v.np - 1, t: 'Persiapan sebelum bongkar muat (lashing dan lainnya) ' + n1(v.np) + ' jam' + (npAvg != null ? ', kapal lain rata-rata ' + n1(npAvg) + ' jam.' : '.'), f: 'Siapkan gang lashing dan alat sebelum kapal sandar supaya bongkar muat bisa mulai paling lambat 1 jam setelah sandar.' });
-    // 6. intensitas crane
-    if (v.box >= 450 && v.cit != null && v.cit < 1.5) out.push({ h: 1, t: 'Kapal ' + n0(v.box) + ' box rata-rata hanya dilayani ' + n2(v.cit) + ' crane.', f: 'Untuk kapal di atas 450 box, pastikan 2 crane bekerja sejak awal sampai selesai.' });
+    var npMed = d3.median(o, function (x) { return x.np; });
+    if (v.np >= 1.5) out.push({ j: Math.max(0, v.np - (npMed != null ? npMed : 1)), t: 'Persiapan sebelum bongkar muat (lashing dan lainnya) ' + n1(v.np) + ' jam' + (npMed != null ? ', kapal lain umumnya ' + n1(npMed) + ' jam.' : '.'), f: 'Siapkan gang lashing dan alat sebelum kapal sandar supaya bongkar muat bisa mulai paling lambat 1 jam setelah sandar.' });
+    // 6. intensitas crane (dilewati bila sudah dijelaskan oleh crane kedua yang terlambat)
+    if (!lateOn && v.box >= 450 && v.cit != null && v.cit < 1.5) out.push({ j: v.et != null ? v.et * (1 - v.cit / 2) : 1, t: 'Kapal ' + n0(v.box) + ' box rata-rata hanya dilayani ' + n2(v.cit) + ' crane.', f: 'Untuk kapal di atas 450 box, pakai 2 crane sejak awal sampai selesai. Bila crane tidak cukup karena rusak atau dipakai kapal lain, ini masalah ketersediaan crane, bukan di kapal ini.' });
     // 7. kapal, rencana, pandu
     if (st.kapal.h >= 0.5) {
       var ke = ev('kapal'), kr = topRemarks(ke, 3), pilot = ke.filter(function (e) { return /pilot|tug/i.test(e[1]); });
-      var ph = d3.sum(pilot, function (e) { return e[5]; });
-      out.push({ h: st.kapal.h, t: 'Hambatan dari kapal, perubahan rencana, atau pandu ' + n1(st.kapal.h) + ' jam.' + (kr.length ? ' Catatan: ' + kr.map(function (r) { return q(r.t); }).join(', ') + '.' : ''),
+      var ph = d3.sum(pilot, function (e) { return e[5]; }), kj = d3.sum(ke, function (e) { return e[2] === 'KAPAL' ? e[5] : e[5] / nC; });
+      out.push({ j: kj, t: 'Hambatan dari kapal, perubahan rencana, atau pandu ' + n1(st.kapal.h) + ' jam.' + (kr.length ? ' Catatan: ' + kr.map(function (r) { return q(r.t); }).join(', ') + '.' : ''),
         f: (ph >= 0.3 ? 'Pesan pandu dan tunda saat bongkar muat tinggal sekitar 1 jam. ' : '') + 'Konfirmasi rencana muat dan stabilitas dengan pihak kapal sebelum mulai.' });
     }
     // 8. produktivitas crane
     if (TG(v).bche && v.bche != null && v.bche < TG(v).bche * 0.9) {
       var slow = v.cr.filter(function (c) { return c.bch != null && c.bch < TG(v).bche * 0.8; });
-      out.push({ h: 0.5, t: 'Kecepatan crane (BCH ET) ' + n1(v.bche) + ' box per jam, di bawah target ' + n0(TG(v).bche) + '.' + (slow.length ? ' Paling rendah: ' + slow.map(function (c) { return c.n + ' ' + n1(c.bch); }).join(', ') + '.' : ''),
-        f: 'Cek kesiapan operator dan alat lapangan untuk crane yang lambat, terutama di jam dengan produksi rendah pada grafik produksi per jam.' });
+      var slowOwn = slow.filter(function (c) { return shrN.indexOf(c.n) < 0; });
+      if (!slow.length || slowOwn.length) out.push({ j: v.et != null ? v.et * (1 - v.bche / TG(v).bche) * (slow.length ? slowOwn.length / slow.length : 1) : 0.5, t: 'Kecepatan crane (BCH ET) ' + n1(v.bche) + ' box per jam, di bawah target ' + n0(TG(v).bche) + '.' + (slow.length ? ' Paling rendah: ' + slow.map(function (c) { return c.n + ' ' + n1(c.bch); }).join(', ') + '.' : '') + (slow.length > slowOwn.length ? ' Sebagian rendah karena crane tercatat di dua kapal (lihat butir crane yang berpindah).' : ''),
+        f: 'Cek kesiapan operator dan alat lapangan untuk crane yang lambat, terutama di jam dengan produksi rendah pada grafik produksi per jam. Sebagian bisa karena tunggu-tunggu singkat yang tidak dicatat sebagai berhenti.' });
     }
-    out.sort(function (a, b) { return b.h - a.h; });
+    out.sort(function (a, b) { return b.j - a.j; });
     return { st: st, ov: ov, rec: out };
+  }
+  function busyElsewhere(v, late, first) {
+    return D.v.filter(function (x) { return x.id !== v.id && x.cr.some(function (c) { return c.n === late.n && tm(c.s) < tm(late.s) && tm(c.e) > tm(first.s); }); })[0] || null;
   }
   function kpiRows(v) {
     return [
@@ -506,14 +537,16 @@ fetch('kapal.json', { cache: 'no-store' }).then(function (r) { if (!r.ok) throw 
     // temuan
     var add = function (b, t) { var li = el('li'); li.appendChild(el('b', null, b + ' ')); li.appendChild(document.createTextNode(t)); ol.appendChild(li); };
     var allY = [].concat.apply([], V.map(function (v) { return v.ev.filter(function (e) { return bucket(e[1]).k === 'yard'; }); }));
+    var rank = BK.filter(function (b) { return tot[b.k] > 0; }).sort(function (a, b) { return tot[b.k] - tot[a.k]; });
     if (tot.yard > 0) {
       var cy = blocks(allY), tr = topRemarks(allY, 2), kap = V.filter(function (v) { return /km\.|kapal lain|kpl lain/i.test(v.ev.map(function (e) { return e[6]; }).join(' ')); });
-      add('Lapangan adalah hambatan terbesar.', 'Crane menunggu truk atau kontainer ' + n1(tot.yard) + ' jam crane di ' + V.length + ' kapal. ' + (tr.length ? 'Catatan terbanyak ' + tr.map(function (r) { return '“' + r.t + '” (' + r.n + ' kali)'; }).join(' dan ') + '. ' : '') + (cy.length ? 'Blok yang paling sering disebut: ' + cy.slice(0, 3).join(', ') + '. ' : '') + (kap.length ? kap.length + ' kapal mencatat bentrok blok dengan kapal lain. ' : '') + 'Solusinya: atur jadwal delivery dan receiving supaya tidak di blok kapal yang sedang bekerja, dan bagi blok per kapal saat dua kapal bekerja bersamaan.');
+      add(rank[0] && rank[0].k === 'yard' ? 'Menunggu truk atau kontainer adalah hambatan terbesar.' : 'Menunggu truk atau kontainer.', 'Crane menunggu truk atau kontainer ' + n1(tot.yard) + ' jam crane di ' + V.length + ' kapal. ' + (tr.length ? 'Catatan terbanyak ' + tr.map(function (r) { return '“' + r.t + '” (' + r.n + ' kali)'; }).join(' dan ') + '. ' : '') + (cy.length ? 'Blok yang paling sering disebut: ' + cy.slice(0, 3).join(', ') + '. ' : '') + (kap.length ? kap.length + ' kapal mencatat bentrok blok dengan kapal lain. ' : '') + 'Solusinya: atur jadwal delivery dan receiving supaya tidak di blok kapal yang sedang bekerja, dan bagi blok per kapal saat dua kapal bekerja bersamaan.');
     }
     var ovs = V.map(function (v) { return overlapRest(v); }), ovT = d3.sum(ovs);
-    if (ovT >= 1) add('Istirahat masih bersamaan.', 'Di ' + ovs.filter(function (x) { return x >= 0.5; }).length + ' dari ' + V.length + ' kapal semua crane berhenti istirahat bersamaan, total ' + n1(ovT) + ' jam. Istirahat bergiliran bisa langsung memangkas BT sebanyak itu tanpa biaya tambahan.');
+    if (ovT >= 1 || tot.rest > 0) add('Istirahat.', 'Istirahat seluruhnya ' + n1(tot.rest) + ' jam crane' + (rank[0] && rank[0].k === 'rest' ? ', hambatan terbesar' : '') + '. ' + (ovT >= 1 ? 'Di ' + ovs.filter(function (x) { return x >= 0.5; }).length + ' dari ' + V.length + ' kapal semua crane pernah berhenti istirahat bersamaan, total ' + n1(ovT) + ' jam; selama itu kapal benar-benar diam. ' : '') + 'Jam ini hanya bisa dikurangi dengan operator pengganti yang menjalankan crane saat jam istirahat. Menggeser jam istirahat saja tidak memperpendek sandar, karena setiap crane tetap berhenti selama itu.');
     var late = V.filter(function (v) { if (v.cr.length < 2) return false; var s = v.cr.map(function (c) { return tm(c.s); }); return (d3.max(s) - d3.min(s)) / 3600000 >= 1.5; });
-    if (late.length) add('Crane kedua sering terlambat mulai.', late.length + ' dari ' + V.length + ' kapal, terlama ' + late.slice().sort(function (a, b) { var g = function (v) { var s = v.cr.map(function (c) { return tm(c.s); }); return d3.max(s) - d3.min(s); }; return g(b) - g(a); }).slice(0, 4).map(function (v) { var s = v.cr.map(function (c) { return tm(c.s); }); return v.kapal + ' (' + n1((d3.max(s) - d3.min(s)) / 3600000) + ' jam)'; }).join(', ') + '. Selama itu kapal hanya dikerjakan satu crane. Jadwal sandar perlu memperhitungkan kapan crane kedua bebas dari kapal lain.');
+    var lateBusy = late.filter(function (v) { var cs = v.cr.slice().sort(function (a, b) { return tm(a.s) - tm(b.s); }); return busyElsewhere(v, cs[cs.length - 1], cs[0]); }).length;
+    if (late.length) add('Crane kedua sering terlambat mulai.', late.length + ' dari ' + V.length + ' kapal, terlama ' + late.slice().sort(function (a, b) { var g = function (v) { var s = v.cr.map(function (c) { return tm(c.s); }); return d3.max(s) - d3.min(s); }; return g(b) - g(a); }).slice(0, 4).map(function (v) { var s = v.cr.map(function (c) { return tm(c.s); }); return v.kapal + ' (' + n1((d3.max(s) - d3.min(s)) / 3600000) + ' jam)'; }).join(', ') + '. Selama itu kapal hanya dikerjakan satu crane.' + (lateBusy ? ' Di ' + lateBusy + ' kapal crane keduanya masih bekerja di kapal lain, artinya crane yang siap tidak cukup untuk semua kapal di dermaga; ini masalah ketersediaan crane, bukan jadwal di satu kapal.' : ' Siapkan crane kedua dan operatornya sebelum kapal mulai.'));
     if (tot.alat >= 1) {
       var al = [].concat.apply([], V.map(function (v) { return v.ev.filter(function (e) { return bucket(e[1]).k === 'alat'; }).map(function (e) { return [v.kapal, e, v.id]; }); }));
       var pd = al.filter(function (x) { return /power down/i.test(x[1][1]); }), pdH = d3.sum(pd, function (x) { return x[1][5]; }), pdTxt = '';
@@ -523,10 +556,10 @@ fetch('kapal.json', { cache: 'no-store' }).then(function (r) { if (!r.ok) throw 
         if (byD.length) pdTxt = ' Listrik padam ' + n1(pdH) + ' jam crane di ' + new Set(pd.map(function (x) { return x[2]; })).size + ' kunjungan kapal pada ' + byD.length + ' hari, terbanyak ' + (+byD[0][0].slice(8, 10)) + ' ' + BLN[+byD[0][0].slice(5, 7) - 1] + ' (' + n1(byD[0][1].h) + ' jam crane: ' + byD[0][1].k.join(', ') + ').';
       }
       var byA = d3.rollups(al, function (g) { return d3.sum(g, function (x) { return x[1][5]; }); }, function (x) { return x[1][2]; }).sort(function (a, b) { return b[1] - a[1]; });
-      add('Alat dan listrik.', 'Berhenti karena alat rusak atau listrik padam ' + n1(tot.alat) + ' jam crane, terbanyak di ' + byA.slice(0, 3).map(function (a) { return a[0] + ' (' + n1(a[1]) + ' jam)'; }).join(', ') + '.' + pdTxt + ' Perlu perawatan pencegahan dan genset cadangan untuk penerangan.');
+      add('Alat dan listrik.', 'Berhenti karena alat rusak atau listrik padam ' + n1(tot.alat) + ' jam crane, terbanyak di ' + byA.slice(0, 3).map(function (a) { return a[0] + ' (' + n1(a[1]) + ' jam)'; }).join(', ') + '.' + pdTxt + ' Perlu perawatan pencegahan untuk crane yang paling sering rusak.' + (pdH >= 0.5 ? ' Untuk listrik padam, cari tahu apakah dari PLN atau jaringan internal, dan minta jadwal pemadaman agar kerja kapal bisa diatur.' : ''));
     }
     var sh = []; V.forEach(function (v) { shared(v).forEach(function (s) { if (v.kapal < s.x.kapal) sh.push(s.c.n + ' di ' + v.kapal + ' dan ' + s.x.kapal + ' (' + n1(s.h) + ' jam)'); }); });
-    if (sh.length) add('Satu crane tercatat di dua kapal.', sh.length + ' kejadian, misalnya ' + sh.slice(0, 3).join(', ') + '. Produksi crane itu di salah satu kapal menjadi sangat rendah. Selesaikan satu kapal dulu sebelum crane dipindah.');
+    if (sh.length) add('Satu crane tercatat di dua kapal.', sh.length + ' kejadian, misalnya ' + sh.slice(0, 3).join(', ') + '. Crane itu berpindah atau dibagi antar kapal, sehingga produksinya di salah satu kapal sangat rendah dan jam kerja crane di laporan terhitung ganda. Pemindahan crane bisa tepat untuk menyelesaikan kapal lain, tetapi catat jam pindahnya sebagai “sharing crane” agar BWT, CI dan BCH akurat.');
     var capai = function (L) { var okB = L.filter(function (v) { return TG(v).bshb && v.bshb >= TG(v).bshb; }), okT = L.filter(function (v) { return TG(v).bt && v.bt <= TG(v).bt; });
       return { n: L.length, b: okB.length, t: okT.length, mb: d3.mean(L, function (v) { return v.bshb; }), mt: d3.mean(L, function (v) { return v.bt; }) }; };
     if (V.length) {
@@ -555,9 +588,20 @@ fetch('kapal.json', { cache: 'no-store' }).then(function (r) { if (!r.ok) throw 
     $('d-sub').textContent = v.line + ' · ' + v.svc + ' · ' + v.pol + ' → ' + v.pod + ' · LOA ' + (v.loa ? n0(v.loa) + ' m' : '—') + ' · tiba ' + fT(v.ata) + ' · sandar ' + fT(v.atb) + ' · berangkat ' + fT(v.atd);
     if (v.kv) { $('d-lead').textContent = 'Kunjungan ini hanya dicatat dan tidak dihitung dalam rata-rata kinerja. ' + (v.note || ''); return; }
     if (!v.ok) { $('d-lead').textContent = 'Laporan kapal ini belum lengkap: jam selesai bongkar muat atau jumlah box belum terisi. Unggah lagi file terbarunya setelah kapal selesai.'; return; }
-    var A = analyze(v), wt = hh(v.ata, v.atb), kp = kpiRows(v), okN = kp.filter(function (k) { return hit(k[1], k[2], k[3]); }).length;
-    var topR = A.rec[0];
-    $('d-lead').textContent = 'Kapal ' + n0(v.box) + ' box (' + n0(v.teus) + ' TEUs) sandar ' + n1(v.bt) + ' jam dengan ' + v.cr.length + ' crane. ' + okN + ' dari ' + kp.length + ' indikator memenuhi target.' + (wt >= 1 ? ' Sebelum sandar kapal menunggu ' + n1(wt) + ' jam (' + n1(wt / 24) + ' hari).' : '') + (topR ? ' Masalah terbesar: ' + topR.t.split(/\.\s/)[0].replace(/^([A-Z])([a-z])/, function (m, a, b) { return a.toLowerCase() + b; }).replace(/\.$/, '') + '.' : '');
+    var A = analyze(v), kp = kpiRows(v), okN = kp.filter(function (k) { return hit(k[1], k[2], k[3]); }).length, tg = TG(v);
+    var M = wdFind(v), wtR = hh(v.ata, v.atb), wt = M && M.x.wt != null ? M.x.wt : wtR, wtBad = !(wt >= 0 && wt <= 240), C = M && !wtBad ? wdCtx(M.x) : null;
+    var topR = A.rec[0], lead = 'Kapal ' + n0(v.box) + ' box (' + n0(v.teus) + ' TEUs) sandar ' + n1(v.bt) + ' jam dengan ' + v.cr.length + ' crane' + (tg.bt ? ' (target paling lama ' + n0(tg.bt) + ' jam)' : '') + '. ' + (v.bshb != null && tg.bshb ? 'BSH BT ' + n1(v.bshb) + ' (target ' + n0(tg.bshb) + '). ' : '') + okN + ' dari ' + kp.length + ' indikator memenuhi target.';
+    if (wtBad) lead += ' Jam tiba di laporan tampaknya salah catat (' + n0(wtR) + ' jam sebelum sandar), jadi waktu tunggu tidak dihitung.';
+    else if (wt >= 1) {
+      lead += ' Sebelum sandar kapal menunggu ' + n1(wt) + ' jam (' + n1(wt / 24) + ' hari)';
+      if (C) lead += ': saat tiba ' + C.b + ' kapal sedang sandar dan ' + C.q + ' kapal sudah antre' + (C.over ? ', dan ' + C.over + ' kapal yang tiba belakangan sandar lebih dulu' : '') + '. ' + (C.full >= 0.5 ? n1(C.full) + ' jam di antaranya dermaga penuh' + (C.free >= 1 ? ', dan ' + n1(C.free) + ' jam dermaga ada tempat tetapi kapal belum sandar; alasannya tidak tercatat.' : '.') : (C.free >= 1 ? 'Selama menunggu dermaga tidak penuh (' + n1(C.free) + ' jam ada tempat), jadi kapal tidak menunggu karena dermaga penuh; alasannya tidak tercatat.' : ''));
+      else lead += '.';
+    }
+    if (topR) lead += ' Masalah terbesar: ' + topR.t.split(/\.\s/)[0].replace(/^([A-Z])([a-z])/, function (m, a, b) { return a.toLowerCase() + b; }).replace(/\.$/, '') + ', perkiraan dampak sekitar ' + n1(topR.j) + ' jam sandar.';
+    var bmK = D.bm && D.bm[v.id], mDiff = bmK && v.atb ? Math.abs((+v.atb.slice(0, 4) * 12 + +v.atb.slice(5, 7)) - (+bmK.slice(0, 4) * 12 + +bmK.slice(5, 7))) : 0;
+    if (M && M.yr) lead += ' Catatan: tanggal di laporan kapal ini tertulis tahun ' + v.atb.slice(0, 4) + ', sedangkan di laporan kinerja seluruh kapal ' + new Date(M.x.s).getFullYear() + '; kemungkinan salah ketik.';
+    else if (mDiff > 1) lead += ' Catatan: tanggal sandar di laporan kapal ini (' + (+v.atb.slice(8, 10)) + ' ' + BLN[+v.atb.slice(5, 7) - 1] + ' ' + v.atb.slice(0, 4) + ') tidak cocok dengan bulan laporannya (' + mName(bmK) + '); kemungkinan salah ketik.';
+    $('d-lead').textContent = lead.replace(/\s+/g, ' ').trim();
     // kpi
     var K = $('d-kpi');
     kp.forEach(function (k) {
@@ -566,13 +610,13 @@ fetch('kapal.json', { cache: 'no-store' }).then(function (r) { if (!r.ok) throw 
       c.appendChild(lab); c.appendChild(el('div', 'kv', k[1] == null ? '—' : n1(k[1]) + k[4]));
       c.appendChild(el('div', 'kn', k[2] != null ? 'target ' + (k[3] ? '≤ ' : '≥ ') + n1(k[2]) + k[4] : '')); K.appendChild(c);
     });
-    [['Waiting sebelum sandar', wt, ' jam', n1(wt / 24) + ' hari'], ['Crane intensity', v.cit, '', n0(v.cr.length) + ' crane dipakai']].forEach(function (k) {
+    [['Waiting sebelum sandar', wtBad ? null : wt, ' jam', wtBad ? 'jam tiba salah catat' : n1(wt / 24) + ' hari'], ['Crane intensity', v.cit, '', n0(v.cr.length) + ' crane dipakai']].forEach(function (k) {
       var c = el('div', 'kpi'); c.appendChild(el('div', 'kl', k[0])); c.appendChild(el('div', 'kv', k[1] == null || !isFinite(k[1]) ? '—' : (k[2] ? n1(k[1]) + k[2] : n2(k[1])))); c.appendChild(el('div', 'kn', k[3])); K.appendChild(c);
     });
     // rekomendasi
     var R = $('d-rec');
     if (!A.rec.length) R.appendChild(el('li', null, 'Tidak ada hambatan menonjol di laporan kapal ini.'));
-    A.rec.forEach(function (r) { var li = el('li'); li.appendChild(document.createTextNode(r.t)); li.appendChild(el('span', 'fix', r.f)); R.appendChild(li); });
+    A.rec.forEach(function (r) { var li = el('li'); li.appendChild(document.createTextNode(r.t)); li.appendChild(el('span', 'imp', 'Perkiraan dampak: sekitar ' + n1(r.j) + ' jam sandar.')); li.appendChild(el('span', 'fix', r.f)); R.appendChild(li); });
     // BT
     var parts = [['Persiapan sebelum mulai (NOT pre)', v.np, 'var(--k4)'], ['Bongkar muat berjalan (ET)', v.et, 'var(--c1)'], ['Crane menganggur (IT)', v.it, 'var(--c2)'], ['Berhenti saat operasi (NOT during)', v.nd, 'var(--c3)'], ['Setelah selesai sampai berangkat (NOT post)', v.npo, 'var(--k6)']]
       .filter(function (p) { return p[1] != null; }).map(function (p) { return { t: p[0], s: v.bt ? n0(p[1] / v.bt * 100) + '% BT' : '', v: p[1], c: p[2] }; });
@@ -897,6 +941,16 @@ fetch('kapal.json', { cache: 'no-store' }).then(function (r) { if (!r.ok) throw 
     var KL = R.kapal.filter(function (k) { return k.late != null; }).sort(function (a, b) { return a.late - b.late; });
     if (KL.length >= 4) { var half = Math.floor(KL.length / 2), lo = KL.slice(0, KL.length - half), hi = KL.slice(KL.length - half);
       R.lateCmp = { n: KL.length, avg: d3.mean(KL, function (k) { return k.late; }), btHi: d3.mean(hi, function (k) { return k.v.bt; }), btLo: d3.mean(lo, function (k) { return k.v.bt; }), crHi: d3.mean(hi, function (k) { return k.cr; }), crLo: d3.mean(lo, function (k) { return k.cr; }) }; }
+    // Pembanding pada jam yang sama: per jam (00–23), hari dengan gate di atas median jam itu dibanding hari di bawahnya.
+    var cb = [0, 0], cq = [0, 0], cUp = 0, cN = 0;
+    d3.range(24).forEach(function (h) {
+      var ks = A.filter(function (k) { return +k.slice(11, 13) === h; }); if (ks.length < 4) return;
+      var med = d3.median(ks, function (k) { return H[k].g[0] + H[k].g[1]; }), hi = ks.filter(function (k) { return H[k].g[0] + H[k].g[1] > med; }), lo = ks.filter(function (k) { return H[k].g[0] + H[k].g[1] <= med; });
+      var sw = function (L, f) { return d3.sum(L, function (k) { return H[k][f]; }); };
+      if (!sw(hi, 'cr') || !sw(lo, 'cr')) return;
+      cb[0] += sw(hi, 'w'); cb[1] += sw(hi, 'cr'); cq[0] += sw(lo, 'w'); cq[1] += sw(lo, 'cr'); cN++; if (sw(hi, 'w') / sw(hi, 'cr') > sw(lo, 'w') / sw(lo, 'cr')) cUp++;
+    });
+    R.ctl = cN >= 8 ? { busy: cb[0] / cb[1] * 100, quiet: cq[0] / cq[1] * 100, up: cUp, n: cN } : null;
     var all = keys.map(function (k) { return H[k].g; });
     R.ptos = d3.sum(keys, function (k) { return H[k].p; });
     R.rcv = d3.sum(all, function (g) { return g[0]; }); R.dlv = d3.sum(all, function (g) { return g[1]; }); R.rcvE = d3.sum(all, function (g) { return g[2]; });
@@ -954,7 +1008,7 @@ fetch('kapal.json', { cache: 'no-store' }).then(function (r) { if (!r.ok) throw 
     // kepadatan dan penyebab
     var grid = el('div', 'grid'); grid.style.marginTop = '12px'; host.appendChild(grid);
     var g1 = el('div'); grid.appendChild(g1); g1.appendChild(el('h3', null, 'Makin padat gate, makin lama crane menunggu'));
-    g1.appendChild(el('p', 'cap', 'Persen waktu kerja crane yang hilang, menurut jumlah box yang lewat gate dalam jam yang sama.'));
+    g1.appendChild(el('p', 'cap', 'Persen waktu kerja crane yang hilang, menurut jumlah box yang lewat gate dalam jam yang sama. Jam gate sepi sebagian besar malam dan jam istirahat; perbandingan pada jam yang sama ada di bagian Temuan.'));
     var kb = el('div', 'bars'); g1.appendChild(kb);
     var kmax = d3.max(R.kel, function (k) { return k.w || 0; }) || 1;
     R.kel.forEach(function (k) {
@@ -1028,14 +1082,17 @@ fetch('kapal.json', { cache: 'no-store' }).then(function (r) { if (!r.ok) throw 
     var add = function (b, t, f) { var li = el('li'); li.appendChild(el('b', null, b + ' ')); li.appendChild(document.createTextNode(t)); if (f) li.appendChild(el('span', 'fix', f)); ol.appendChild(li); };
     var cyR = R.cy.slice().sort(function (a, b) { return b.r - a.r; }).filter(function (c) { return c.r > 0; }).slice(0, 2).map(function (c) { return c.cy; });
     var cyD = R.cy.slice().sort(function (a, b) { return b.d - a.d; }).filter(function (c) { return c.d > 0; }).slice(0, 1).map(function (c) { return c.cy; });
-    add('Clash RCV dan DLV adalah penyebab terbesar.', n0(R.pClash) + '% jam crane menunggu truk atau kontainer dicatat sebagai clash: RCV ' + n0(R.pR) + '% dan DLV ' + n0(R.pD) + '%.' + (cyD.length ? ' Clash DLV paling sering di ' + cyD.join(', ') + '.' : '') + (cyR.length ? ' Clash RCV paling sering di ' + cyR.join(' dan ') + '.' : ''),
+    var otherTop = d3.max(R.pen.filter(function (p) { return !isClash(p.t); }), function (p) { return p.p; }) || 0;
+    add(R.pClash >= otherTop ? 'Clash RCV dan DLV adalah penyebab terbesar.' : 'Clash RCV dan DLV.', n0(R.pClash) + '% jam crane menunggu truk atau kontainer dicatat sebagai clash: RCV ' + n0(R.pR) + '% dan DLV ' + n0(R.pD) + '%.' + (cyD.length ? ' Clash DLV paling sering di ' + cyD.join(', ') + '.' : '') + (cyR.length ? ' Clash RCV paling sering di ' + cyR.join(' dan ') + '.' : ''),
       'Atur jendela gate per blok: saat crane memuat dari blok export, tahan atau alihkan receiving ke blok itu; saat crane membongkar ke blok import, layani delivery blok itu di jam lain.');
-    if (sepi.w != null && ramai.w != null) add('Gate ramai mengambil alat crane.', 'Saat gate di atas 90 box per jam crane menunggu ' + gPct(ramai.w) + ' dari waktu kerjanya, dibanding ' + gPct(sepi.w) + ' saat gate sepi.',
+    var ctlOk = R.ctl && R.ctl.busy > R.ctl.quiet * 1.15;
+    if (sepi.w != null && ramai.w != null) add(ctlOk || !R.ctl ? 'Gate ramai mengambil alat crane.' : 'Gate ramai dan crane menunggu.', 'Saat gate di atas 90 box per jam crane menunggu ' + gPct(ramai.w) + ' dari waktu kerjanya, dibanding ' + gPct(sepi.w) + ' saat gate sepi.' +
+      (R.ctl ? (ctlOk ? ' Sebagian selisih ini karena jamnya berbeda: gate sepi terutama malam dan jam istirahat. Pada jam yang sama, hari dengan gate lebih ramai tetap lebih buruk: crane menunggu ' + gPct(R.ctl.busy) + ' dibanding ' + gPct(R.ctl.quiet) + ' (lebih buruk di ' + R.ctl.up + ' dari ' + R.ctl.n + ' jam).' : ' Tetapi pada jam yang sama, hari dengan gate lebih ramai tidak jelas lebih buruk (' + gPct(R.ctl.busy) + ' dibanding ' + gPct(R.ctl.quiet) + '), jadi selisih di atas sebagian besar karena jamnya berbeda, misalnya malam dan jam istirahat.') : ''),
       'Tetapkan RTG dan HT khusus kapal pada jam padat (' + top3.join(', ') + ') agar lonjakan truk luar tidak mengambil alat crane.');
     if (R.peakCmp) add('Kapal yang bekerja di jam padat ikut melambat.', R.peakCmp.up + ' dari ' + R.peakCmp.n + ' kapal kehilangan lebih banyak waktu crane saat gate padat (' + gPct(R.peakCmp.hi) + ') dibanding saat gate sepi (' + gPct(R.peakCmp.lo) + ').',
       'Saat dua atau tiga kapal bekerja bersamaan, kurangi receiving dan delivery yang tidak mendesak di jam padat, dan dahulukan blok yang sedang dipakai kapal.');
     if (R.rcv && R.rcvE / R.rcv > 0.4) add('Banyak receiving adalah Empty.', n0(R.rcvE / R.rcv * 100) + '% receiving adalah kontainer Empty, yang tidak terikat jadwal kapal.', 'Geser sebagian receiving Empty ke jam sepi pukul 02.00–07.00.');
-    if (R.lateCmp) add('Receiving datang setelah kapal mulai muat.', 'Rata-rata ' + n0(R.lateCmp.avg) + '% box export masuk gate setelah crane bekerja.', 'Tetapkan closing time receiving sebelum kapal mulai muat, dan tolak atau jadwalkan ulang yang terlambat.');
+    if (R.lateCmp) add('Receiving datang setelah kapal mulai muat.', 'Rata-rata ' + n0(R.lateCmp.avg) + '% box export masuk gate setelah crane bekerja.' + (R.lateCmp.btHi - R.lateCmp.btLo < 1.5 ? ' Kapal dengan receiving paling telat hanya bersandar ' + n1(R.lateCmp.btHi - R.lateCmp.btLo) + ' jam lebih lama, jadi receiving telat bukan penyebab utama sandar lama, tetapi menambah clash RCV.' : ''), 'Tetapkan closing time receiving sebelum kapal mulai muat, dan tolak atau jadwalkan ulang yang terlambat.');
     if (R.ttRest != null && R.tt != null && R.ttRest > R.tt * 1.3) add('Truk tertahan saat istirahat.', 'Truk yang masuk pukul 12.00 dan 18.00 berada di terminal rata-rata ' + n0(R.ttRest) + ' menit, dibanding ' + n0(R.tt) + ' menit secara umum.', 'Kurangi antrean gate menjelang istirahat atau tetapkan alat yang tetap melayani gate saat istirahat.');
   }
 
@@ -1123,6 +1180,7 @@ fetch('kapal.json', { cache: 'no-store' }).then(function (r) { if (!r.ok) throw 
   window.__kp = { parseKp: parseKp, parseGate: parseGate, parsePtos: parsePtos, gCompute: gCompute, D: function () { return D; } };
   var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(render, 150); });
   render();
+  fetch('data.json', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (x) { if (x && x.r) { WD = prepWD(x.r); drawDetail(); } }).catch(function () {});
   function syncEdit() { canEdit = location.hash === '#perbarui'; render(); if (canEdit) $('editor').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
   window.addEventListener('hashchange', syncEdit);
   if (canEdit) setTimeout(function () { $('editor').scrollIntoView({ block: 'start' }); }, 50);
