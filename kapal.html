@@ -1,0 +1,1136 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Detail Kinerja Kapal · Terminal Petikemas Banjarmasin</title>
+<meta name="description" content="Detail kinerja per kunjungan kapal Terminal Petikemas Banjarmasin: linimasa operasi, produksi crane, penyebab berhenti, dan rekomendasi.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0f766e">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Kinerja TPK">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap">
+<style>html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}.stamp a{color:var(--c1)}</style>
+<style id="app-style">
+:root{--bg:#f4f6f7;--panel:#ffffff;--fg:#14212b;--muted:#586875;--line:#dce3e8;--grid:#e8edf0;--c1:#0f766e;--c2:#c2610c;--c3:#4a5fb0;--k4:#8d6a12;--k5:#a3367e;--k6:#7d8c97;--bad:#b42318;--ok:#15803d;--work:rgba(15,118,110,.22);--font-body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;--font-head:'Space Grotesk','Inter',system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d151b;--panel:#15212a;--fg:#e5ecf1;--muted:#94a5b2;--line:#263641;--grid:#213039;--c1:#2dd4bf;--c2:#fbab4c;--c3:#93a6f0;--k4:#e2b84a;--k5:#f08ac4;--k6:#8796a1;--bad:#f87171;--ok:#4ade80;--work:rgba(45,212,191,.2);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d151b;--panel:#15212a;--fg:#e5ecf1;--muted:#94a5b2;--line:#263641;--grid:#213039;--c1:#2dd4bf;--c2:#fbab4c;--c3:#93a6f0;--k4:#e2b84a;--k5:#f08ac4;--k6:#8796a1;--bad:#f87171;--ok:#4ade80;--work:rgba(45,212,191,.2);color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:14px;line-height:1.5;padding-block:24px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.site{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+.site *{box-sizing:border-box}
+h1,h2,h3{font-family:var(--font-head);margin:0;text-wrap:balance}
+h1{font-size:clamp(24px,4vw,34px);font-weight:600;letter-spacing:-.01em}
+h2{font-size:16px;font-weight:600}
+h3{font-size:14px;font-weight:600;margin:18px 0 6px}
+.top{display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:space-between;align-items:flex-end}
+.sub{margin:4px 0 0;color:var(--muted)}
+.stamp{font-size:12px;color:var(--muted)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
+.cap{margin:2px 0 10px;font-size:12px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,480px),1fr));gap:12px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:10px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0}
+.kl{font-size:12px;color:var(--muted)}
+.kv{font-family:var(--font-head);font-size:24px;font-weight:600;line-height:1.2;margin-top:4px;font-variant-numeric:tabular-nums}
+.kn{font-size:12px;color:var(--muted);margin-top:2px}
+.st{display:inline-block;font-size:11.5px;font-weight:600;padding:1px 7px;border-radius:999px;margin-left:6px;vertical-align:2px;border:1px solid currentColor}
+.st.ok{color:var(--ok)}.st.no{color:var(--bad)}
+.mchips{display:flex;flex-wrap:wrap;gap:6px}.pick{display:flex;flex-wrap:wrap;gap:6px}.pick label{display:flex;flex-direction:column;gap:4px;width:min(100%,520px)}.sel{font:inherit;font-size:14px;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:9px 10px;width:100%}.sel:focus-visible{outline:2px solid var(--c3);outline-offset:2px}
+.chip{border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:999px;padding:5px 12px;font:inherit;font-size:13px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--c1);border-color:var(--c1);color:#fff}
+.chip.dim{color:var(--muted)}
+.chip:focus-visible,.btn:focus-visible,tr[tabindex]:focus-visible{outline:2px solid var(--c3);outline-offset:2px}
+.chart{position:relative;min-height:120px;width:100%}
+.chart svg{display:block;max-width:100%}
+.chart svg text{font-size:11px;fill:var(--muted);font-family:var(--font-body)}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;margin-bottom:8px;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);box-shadow:0 4px 14px rgba(0,0,0,.18);color:var(--fg);font-size:12px;padding:6px 9px;border-radius:6px;white-space:pre-line;width:max-content;max-width:min(320px,100%);z-index:2}
+.bars{display:flex;flex-direction:column;gap:10px;position:relative}
+.brow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;align-items:end;font-size:12.5px}
+.brow small{color:var(--muted);margin-left:6px}
+.brow-v{font-weight:600;font-variant-numeric:tabular-nums}
+.btrack{grid-column:1/-1;height:8px;background:var(--grid);border-radius:4px;overflow:hidden}
+.bfill{height:100%;border-radius:4px}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:12px;font-weight:600;color:var(--muted)}
+.n{text-align:right}
+td.wrap{white-space:normal;min-width:180px}
+tr.sel td{background:var(--grid)}
+tbody tr[tabindex]{cursor:pointer}
+.good{color:var(--ok);font-weight:600}.badv{color:var(--bad);font-weight:600}
+.muted{color:var(--muted)}
+.rec{padding-left:20px;margin:6px 0 0}
+.rec li{margin-bottom:12px;line-height:1.55;max-width:92ch}
+.rec li b{font-weight:600}
+.rec .fix{display:block;margin-top:3px;color:var(--fg)}
+.rec .fix::before{content:"Solusi: ";font-weight:600;color:var(--c1)}
+.rmk{margin:6px 0 0;padding-left:18px;font-size:13px}
+.rmk li{margin-bottom:4px}
+.lead{margin:0;font-size:16px;line-height:1.55;max-width:80ch}
+.btn{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:8px;padding:7px 14px;cursor:pointer}
+.btn.primary{background:var(--c1);border-color:var(--c1);color:#fff;font-weight:600}
+.btn.sm{padding:3px 10px;font-size:12px}
+.btn:disabled{opacity:.5;cursor:default}
+.uprow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0}
+.status{font-size:13px;min-height:20px}.status.err{color:var(--bad)}
+details{color:var(--muted)}
+details summary{cursor:pointer;color:var(--fg)}
+dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:10px 0 0}
+dt{font-weight:600;color:var(--fg)}dd{margin:0}
+@media (max-width:520px){.kpis{grid-template-columns:1fr 1fr}.kv{font-size:20px}}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+<div class="site" id="site">
+
+<header class="top">
+  <div>
+    <h1>Detail Kinerja per Kapal</h1>
+    <p class="sub">Terminal Petikemas Banjarmasin: linimasa operasi, produksi crane, penyebab berhenti, dan rekomendasi per kunjungan kapal.</p>
+  </div>
+  <div class="stamp"><span id="stamp" data-dyn=""></span><br><a href="./">Dashboard ringkasan</a> · <a href="#perbarui" id="l-edit">Perbarui data</a></div>
+</header>
+
+<section class="card" id="editor" hidden="">
+  <h2>Tambah laporan</h2>
+  <p class="cap">Pilih satu atau beberapa file laporan kinerja kapal (.xlsm), file Terminal In &amp; Out (.xlsx), atau Laporan Receiving Delivery dari aplikasi lama (.xlsx). Kapal dengan voyage yang sama diganti dengan file terbaru. Data Terminal In &amp; Out untuk tanggal yang sama juga diganti.</p>
+  <input id="u-file" type="file" accept=".xlsm,.xlsx" multiple="" hidden="">
+  <div class="uprow"><button class="btn primary" type="button" id="b-pilih">Pilih file</button><span class="cap" id="u-name" data-dyn=""></span></div>
+  <div id="u-prev" data-dyn=""></div>
+  <div class="uprow"><button class="btn primary" type="button" id="b-terbit" hidden="">Terapkan</button><button class="btn" type="button" id="b-batal" hidden="">Batal</button></div>
+  <p class="status" id="status" role="status" aria-live="polite"></p>
+  <div id="ed-out" hidden>
+    <div class="uprow"><button class="btn primary" type="button" id="b-json">Unduh kapal.json</button></div>
+    <ol class="rmk">
+      <li>Buka repositori di GitHub, klik <b>Add file</b> &gt; <b>Upload files</b>.</li>
+      <li>Seret file <b>kapal.json</b> yang baru diunduh, lalu klik <b>Commit changes</b>. File lama otomatis diganti.</li>
+      <li>Tunggu beberapa menit, lalu muat ulang halaman ini.</li>
+    </ol>
+  </div>
+  <details id="ed-list"><summary>Kelola data yang tersimpan</summary><div class="tw" id="ed-rows" data-dyn=""></div></details>
+</section>
+
+<div class="mchips" id="mchips" data-dyn="" role="group" aria-label="Pilih bulan"></div>
+<div class="pick" id="pick" data-dyn="" role="group" aria-label="Pilih kapal"></div>
+
+<section class="card">
+  <h2 id="d-title" data-dyn=""></h2>
+  <p class="sub" id="d-sub" data-dyn=""></p>
+  <p class="lead" id="d-lead" data-dyn="" style="margin-top:12px"></p>
+</section>
+<div class="kpis" id="d-kpi" data-dyn=""></div>
+
+<section class="card">
+  <h2>Analisis dan rekomendasi</h2>
+  <p class="cap">Disusun otomatis dari catatan berhenti, jam mulai crane, dan target RKAP 2026.</p>
+  <ol class="rec" id="d-rec" data-dyn=""></ol>
+</section>
+
+<section class="card">
+  <h2>Linimasa operasi</h2>
+  <p class="cap">Dari sandar sampai berangkat. Blok hijau muda adalah jam crane bekerja, blok berwarna adalah saat crane berhenti. Arahkan kursor ke blok untuk melihat catatannya.</p>
+  <div class="chart" id="c-gantt" data-dyn=""></div>
+</section>
+
+<div class="grid">
+  <section class="card">
+    <h2>Ke mana waktu sandar terpakai</h2>
+    <p class="cap">Jam sandar (BT) dibagi menurut kegiatan.</p>
+    <div class="bars" id="c-bt" data-dyn=""></div>
+  </section>
+  <section class="card">
+    <h2>Penyebab crane berhenti</h2>
+    <p class="cap">Jam crane menurut penyebab, beserta catatan yang paling sering ditulis.</p>
+    <div class="bars" id="c-stop" data-dyn=""></div>
+    <ul class="rmk" id="d-rmk" data-dyn=""></ul>
+  </section>
+</div>
+
+<section class="card">
+  <h2>Produksi per jam</h2>
+  <p class="cap">Box per jam setiap crane (bongkar + muat).</p>
+  <div class="chart" id="c-hour" data-dyn=""></div>
+</section>
+
+<section class="card">
+  <h2>Crane dan alat</h2>
+  <div class="tw" id="t-crane" data-dyn=""></div>
+  <p class="cap" id="d-yard" data-dyn="" style="margin-top:10px"></p>
+</section>
+
+<section class="card">
+  <h2 id="h-all" data-dyn=""></h2>
+  <p class="cap">Hijau berarti memenuhi target RKAP 2026, merah berarti belum. Klik baris untuk melihat detail kapal.</p>
+  <div class="tw" id="t-all" data-dyn=""></div>
+</section>
+
+<section class="card">
+  <h2 id="h-cross" data-dyn=""></h2>
+  <p class="cap">Jumlah jam crane berhenti menurut penyebab. Jam dihitung per crane, jadi dua crane berhenti 1 jam dihitung 2 jam.</p>
+  <div class="grid">
+    <div class="bars" id="c-all" data-dyn=""></div>
+    <div><h3 style="margin-top:0">Temuan untuk manajemen</h3><ol class="rec" id="f-all" data-dyn=""></ol></div>
+  </div>
+</section>
+
+<section class="card" id="sec-week">
+  <h2 id="h-week" data-dyn=""></h2>
+  <p class="cap">Kapal dikelompokkan per 7 hari menurut tanggal sandar, dihitung mundur dari kapal terakhir. Tiga kolom terakhir dalam jam crane per kapal.</p>
+  <p class="lead" id="w-lead" data-dyn=""></p>
+  <div class="tw" id="t-week" data-dyn="" style="margin-top:12px"></div>
+</section>
+
+<section class="card" id="sec-gate">
+  <h2 id="h-gate" data-dyn=""></h2>
+  <div id="g-body" data-dyn=""></div>
+</section>
+
+<details>
+  <summary>Arti istilah</summary>
+  <dl>
+    <dt>BT</dt><dd>Berthing time: jam kapal sandar, dari first line sampai last line.</dd>
+    <dt>ET</dt><dd>Effective time: jam bongkar muat benar-benar berjalan.</dd>
+    <dt>IT</dt><dd>Idle time: jam crane berhenti saat operasi, misalnya menunggu truk atau crane rusak.</dd>
+    <dt>NOT</dt><dd>Not operation time: jam tidak beroperasi yang terencana, misalnya persiapan, istirahat, dan menunggu pandu.</dd>
+    <dt>BCH ET, BCH BWT, BCH BT</dt><dd>Box per crane per jam efektif, per jam kerja, dan per jam sandar.</dd>
+    <dt>BSH ET, BSH BWT, BSH BT</dt><dd>Box per kapal per jam efektif, per jam kerja, dan per jam sandar.</dd>
+    <dt>Target</dt><dd>Target RKAP Kinerja 2026 Terminal Petikemas (LTB SPTP TPK Banjarmasin): BT 17 jam, BWT 14, ET 11, IT 1, NOT 4, ET/BT 65%, BCH ET 31, BCH BWT 23, BCH BT 20, BSH ET 40, BSH BWT 33, BSH BT 28.</dd>
+    <dt>CI</dt><dd>Crane intensity: rata-rata jumlah crane yang bekerja di kapal.</dd>
+    <dt>Jam crane</dt><dd>Jam berhenti dijumlahkan untuk setiap crane. Dua crane berhenti bersamaan selama 1 jam dihitung 2 jam crane.</dd>
+  </dl>
+</details>
+
+
+<script>
+fetch('kapal.json', { cache: 'no-store' }).then(function (r) { if (!r.ok) throw new Error('kapal.json tidak bisa diambil'); return r.json(); }).then(function (D) {
+  'use strict';
+  var L = d3.formatLocale({ decimal: ',', thousands: '.', grouping: [3], currency: ['', ''] });
+  var n0 = L.format(',.0f'), n1 = L.format(',.1f'), n2 = L.format(',.2f');
+  var BLN = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+  function nc(n) { return String(n || '').toUpperCase().replace(/\s+/g, '').replace(/^QCC/, 'CC').replace(/^CC0?(\d)$/, 'CC0$1'); }
+  function normV(v) { v.cr.forEach(function (c) { c.n = nc(c.n); }); v.ev.forEach(function (e) { if (/^Q?CC/i.test(e[2])) e[2] = nc(e[2]); }); v.hr.c = v.hr.c.map(nc); return v; }
+  D.v.forEach(normV);
+  var cur = null, canEdit = location.hash === '#perbarui', busy = false, pending = null, pendingG = [];
+
+  function $(id) { return document.getElementById(id); }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function tm(s) { return s ? new Date(s).getTime() : NaN; }
+  function hh(a, b) { return (tm(b) - tm(a)) / 3600000; }
+  function fT(s) { if (!s) return '—'; var d = new Date(s); return d.getDate() + ' ' + BLN[d.getMonth()] + ' ' + String(d.getHours()).padStart(2, '0') + '.' + String(d.getMinutes()).padStart(2, '0'); }
+  function fJ(h) { return h == null || !isFinite(h) ? '—' : n1(h) + ' jam'; }
+  function makeTip(host) {
+    var t = el('div', 'tip'); t.hidden = true; host.appendChild(t);
+    return { show: function (ev, text) {
+      var r = host.getBoundingClientRect(); t.textContent = text; t.hidden = false;
+      t.style.left = Math.min(Math.max(ev.clientX - r.left + 12, 0), Math.max(0, r.width - t.offsetWidth)) + 'px';
+      t.style.top = Math.max(0, ev.clientY - r.top - t.offsetHeight - 8) + 'px';
+    }, hide: function () { t.hidden = true; } };
+  }
+  function legend(items) {
+    var d = el('div', 'legend');
+    items.forEach(function (it) { var s = el('span'), i = el('i'); i.style.background = it[1]; s.appendChild(i); s.appendChild(document.createTextNode(it[0])); d.appendChild(s); });
+    return d;
+  }
+
+  // ---------- penyebab berhenti ----------
+  var BK = [
+    { k: 'yard', t: 'Menunggu truk atau kontainer', c: 'var(--c2)', re: /waiting (truck|container|cargo)/i },
+    { k: 'rest', t: 'Istirahat dan ibadah', c: 'var(--c3)', re: /rest|prayer/i },
+    { k: 'prep', t: 'Persiapan kapal (lashing, palka)', c: 'var(--k4)', re: /lashing|boom|hatch|gangway/i },
+    { k: 'alat', t: 'Alat rusak atau listrik padam', c: 'var(--k5)', re: /breakdown|refuel|system failure|equipment support|power down|accident|repair/i },
+    { k: 'kapal', t: 'Kapal, rencana, dan pandu', c: 'var(--k6)', re: /stability|trouble engine|twistlock|cell guide|replanning|bayplan|stowage|approval|shifting|pilot|tug|document|gangway|sharing crane|clash activity crane/i },
+    { k: 'lain', t: 'Lainnya (cuaca, libur, dll.)', c: 'var(--muted)', re: /./ }
+  ];
+  function bucket(reason) { for (var i = 0; i < BK.length; i++) if (BK[i].re.test(reason || '')) return BK[i]; return BK[BK.length - 1]; }
+  function bk(k) { return BK.filter(function (b) { return b.k === k; })[0]; }
+  function normRm(s) { return String(s || '').toLowerCase().replace(/\s+/g, ' ').trim(); }
+
+  // ---------- baca file Excel ----------
+  var XB = new Date(1899, 11, 30, 0, 0, 0), XR = new Date().getTimezoneOffset(), XD = XB.getTime() + (XR - XB.getTimezoneOffset()) * 60000;
+  function dtStr(v) {
+    var ser, p2 = function (n) { return (n < 10 ? '0' : '') + n; };
+    if (v instanceof Date) { var t = v.getTime(), o = v.getTimezoneOffset(); if (o !== XR) t -= (o - XR) * 60000; ser = (t - XD) / 86400000; }
+    else if (typeof v === 'number') ser = v;
+    else return null;
+    if (!isFinite(ser)) return null;
+    var d = new Date(Math.round((ser - 25569) * 1440) * 60000);
+    return d.getUTCFullYear() + '-' + p2(d.getUTCMonth() + 1) + '-' + p2(d.getUTCDate()) + 'T' + p2(d.getUTCHours()) + ':' + p2(d.getUTCMinutes());
+  }
+  function num(v) { var x = typeof v === 'number' ? v : parseFloat(String(v == null ? '' : v).replace(',', '.')); return isFinite(x) ? Math.round(x * 100) / 100 : null; }
+  function str(v) { return v == null ? '' : String(v).replace(/\s+/g, ' ').trim(); }
+  function lineName(s) {
+    s = str(s).replace(/,?\s*PT\.?$/i, '').trim();
+    if (/salam pacific/i.test(s)) return 'SPIL';
+    return s.toLowerCase().replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+  }
+  function parseKp(buf, fname) {
+    var wb = XLSX.read(buf, { type: 'array', cellDates: true, sheets: ['Vessel_Information', 'Input Data', 'Performance_Crane'] });
+    var sh = function (n) { var s = wb.Sheets[n]; if (!s) throw new Error('Sheet "' + n + '" tidak ditemukan. Pastikan ini file laporan kinerja kapal.'); var rg = XLSX.utils.decode_range(s['!ref'] || 'A1'); rg.s.r = 0; rg.s.c = 0; s['!ref'] = XLSX.utils.encode_range(rg); return XLSX.utils.sheet_to_json(s, { header: 1, raw: true, defval: null, blankrows: true }); };
+    var VI = sh('Vessel_Information'), ID = sh('Input Data'), PC = wb.Sheets['Performance_Crane'] ? sh('Performance_Crane') : [];
+    var r = VI[7] || [];
+    if (!str(r[1])) throw new Error('Nama kapal kosong di sheet Vessel_Information.');
+    var v = { file: fname, kapal: str(r[1]).toUpperCase(), loa: num(r[2]), grt: num(r[3]), vi: str(r[4]), vo: str(r[5]), line: lineName(r[6]), svc: str(r[7]), pol: str(r[8]), pod: str(r[9]),
+      ata: dtStr(r[10]), atb: dtStr(r[11]), acm: dtStr(r[12]), acp: dtStr(r[13]), atd: dtStr(r[14]),
+      bt: num(r[16]), bwt: num(r[17]), et: num(r[18]), it: num(r[19]), np: num(r[20]), nd: num(r[21]), npo: num(r[22]), nt: num(r[23]), etbt: num(r[24]),
+      db: num(r[25]), dt: num(r[26]), lb: num(r[27]), lt: num(r[28]), box: num(r[29]), teus: num(r[30]),
+      bche: num(r[35]), bchw: num(r[36]), bchb: num(r[37]), bshe: num(r[38]), bshw: num(r[39]), bshb: num(r[40]), cib: num(r[41]), cit: num(r[42]), rmk: str(r[114]) };
+    v.id = v.kapal + '|' + v.vi;
+    var TG = { 'berthing time': 'bt', 'berth working time': 'bwt', 'efektif time': 'et', 'idle time': 'it', 'not operation time': 'nt', 'et/bt': 'etbt', 'bch et': 'bche', 'bch bwt': 'bchw', 'bch bt': 'bchb', 'bsh et': 'bshe', 'bsh bwt': 'bshw', 'bsh bt': 'bshb' };
+    v.tg = {};
+    for (var i = 10; i < Math.min(VI.length, 40); i++) {
+      var lb = str((VI[i] || [])[1]).toLowerCase().replace(/\s*\(.*\)/, '');
+      if (TG[lb] && num(VI[i][3]) != null) v.tg[TG[lb]] = num(VI[i][3]);
+    }
+    // crane
+    var codes = {};
+    v.cr = [];
+    for (i = 38; i <= 41; i++) {
+      var c = ID[i] || [];
+      if (str(c[2]) && str(c[2]) !== '-' && dtStr(c[4])) { v.cr.push({ n: str(c[2]), q: str(c[3]), s: dtStr(c[4]), e: dtStr(c[5]), bwt: num(c[6]) }); codes[str(c[3])] = v.cr[v.cr.length - 1]; }
+    }
+    for (i = 18; i < Math.min(PC.length, 40); i++) {
+      var p = PC[i] || [], q = codes[str(p[1])];
+      if (q) { q.et = num(p[4]); q.db = num(p[46]); q.lb = num(p[47]); q.bch = num(p[50]); }
+    }
+    v.yd = [];
+    for (i = 46; i <= 51; i++) { var y = ID[i] || []; if (str(y[2]) && num(y[4]) != null) v.yd.push([str(y[2]), num(y[4])]); }
+    // catatan berhenti
+    v.ev = [];
+    for (i = 55; i < ID.length; i++) {
+      var e = ID[i] || [], s0 = dtStr(e[6]), e0 = dtStr(e[7]), du = num(e[8]);
+      if (!str(e[3]) || !s0 || !e0 || du == null || du < 0) continue;
+      v.ev.push([str(e[2]), str(e[3]), str(e[4]).toUpperCase(), s0, e0, du, str(e[9])]);
+    }
+    // produksi per jam
+    var hdr = ID[28] || [], hc = [];
+    [13, 17, 21, 25].forEach(function (j) { var n = str(hdr[j]); if (n && n !== '-') hc.push([n, j]); });
+    v.hr = { c: hc.map(function (x) { return x[0]; }), r: [] };
+    for (i = 30; i < ID.length; i++) {
+      var h = ID[i] || [], hs = dtStr(h[11]);
+      if (!hs || !dtStr(h[12])) continue;
+      v.hr.r.push([hs, hc.map(function (x) { return [num(h[x[1]]) || 0, num(h[x[1] + 1]) || 0]; })]);
+    }
+    normV(v);
+    v.ok = !!(v.bt > 0 && v.bt < 500 && v.box > 0 && v.atb && v.atd && v.acm && v.acp);
+    return v;
+  }
+
+  // ---------- analisis ----------
+  function stopsBy(v) {
+    var m = {};
+    BK.forEach(function (b) { m[b.k] = { h: 0, n: 0 }; });
+    v.ev.forEach(function (e) { var b = bucket(e[1]); m[b.k].h += e[5]; m[b.k].n += e[5] > 0 ? 1 : 0; });
+    return m;
+  }
+  function topRemarks(evs, k) {
+    var g = {};
+    evs.forEach(function (e) { var r = normRm(e[6]); if (!r || /auto resume/.test(r)) return; g[r] = g[r] || { t: e[6], n: 0, h: 0 }; g[r].n++; g[r].h += e[5]; });
+    return Object.keys(g).map(function (x) { return g[x]; }).sort(function (a, b) { return b.n - a.n || b.h - a.h; }).slice(0, k || 5);
+  }
+  function blocks(evs) {
+    var s = {};
+    evs.forEach(function (e) { var re = /cy\s*0?(\d+)/gi, m; while ((m = re.exec(e[6] || ''))) s['CY ' + m[1]] = (s['CY ' + m[1]] || 0) + 1; });
+    return Object.keys(s).sort(function (a, b) { return s[b] - s[a]; });
+  }
+  function overlapRest(v) {
+    // jam saat semua crane yang sedang aktif berhenti istirahat bersamaan
+    if (v.cr.length < 2) return 0;
+    var t0 = tm(v.acm), t1 = tm(v.acp), step = 60000, n = 0;
+    if (!(t1 > t0)) return 0;
+    var rest = v.ev.filter(function (e) { return bucket(e[1]).k === 'rest'; }).map(function (e) { return [e[2], tm(e[3]), tm(e[4])]; });
+    for (var t = t0; t < t1; t += step) {
+      var act = v.cr.filter(function (c) { return tm(c.s) <= t && t < tm(c.e); });
+      if (act.length < 2) continue;
+      var all = act.every(function (c) { return rest.some(function (r) { return r[0] === c.n.toUpperCase() && r[1] <= t && t < r[2]; }); });
+      if (all) n++;
+    }
+    return n / 60;
+  }
+  function shared(v) {
+    var out = [];
+    v.cr.forEach(function (c) {
+      D.v.forEach(function (x) {
+        if (x.id === v.id) return;
+        x.cr.forEach(function (d) {
+          if (d.n !== c.n) return;
+          var h = (Math.min(tm(c.e), tm(d.e)) - Math.max(tm(c.s), tm(d.s))) / 3600000;
+          if (h >= 1) out.push({ c: c, x: x, h: h });
+        });
+      });
+    });
+    return out;
+  }
+  function others(v) { return D.v.filter(function (x) { return x.id !== v.id && x.ok; }); }
+  function analyze(v) {
+    var st = stopsBy(v), out = [], o = others(v);
+    var ev = function (k) { return v.ev.filter(function (e) { return bucket(e[1]).k === k && e[5] > 0; }); };
+    var q = function (t) { return '“' + t + '”'; };
+    // 1. lapangan
+    if (st.yard.h >= 0.5) {
+      var ye = ev('yard'), tr = topRemarks(ye, 2), cy = blocks(ye), txt = ye.map(function (e) { return e[6]; }).join(' ');
+      var clash = /clash|dlv|deliv|rcv|receiv|rsv/i.test(txt), kap = /km\.|kapal lain|kpl lain/i.test(txt);
+      var fix = clash ? 'Saat kapal ini bekerja, hentikan dulu atau alihkan delivery dan receiving di ' + (cy.length ? cy.slice(0, 3).join(', ') : 'blok yang dipakai kapal') + ', atau tumpuk muatan kapal di blok yang tidak dipakai delivery.' : 'Tambah head truck per crane atau dekatkan blok penumpukan ke berth.';
+      if (kap) fix += ' Blok yang sama juga dipakai kapal lain, jadi bagi blok per kapal saat dua kapal bekerja bersamaan.';
+      out.push({ h: st.yard.h, t: 'Crane menunggu truk atau kontainer ' + n1(st.yard.h) + ' jam crane (' + st.yard.n + ' kali).' + (tr.length ? ' Catatan terbanyak: ' + tr.map(function (r) { return q(r.t) + ' ' + r.n + ' kali'; }).join(', ') + '.' : ''), f: fix });
+    }
+    // 2. istirahat
+    var ov = overlapRest(v);
+    if (st.rest.h >= 2 || ov >= 0.5) {
+      out.push({ h: Math.max(ov, st.rest.h / 2), t: 'Istirahat ' + n1(st.rest.h) + ' jam crane' + (v.cr.length > 1 ? (ov >= 0.1 ? '; ' + n1(ov) + ' jam di antaranya semua crane berhenti bersamaan.' : ', tidak pernah semua crane berhenti bersamaan.') : '.'),
+        f: ov >= 0.5 ? 'Atur istirahat bergiliran antar crane agar selalu ada crane yang bekerja. Ini bisa memangkas BT sekitar ' + n1(ov) + ' jam.' : 'Istirahat sudah tidak bersamaan; pertahankan pola bergiliran.' });
+    }
+    // 3. alat
+    if (st.alat.h >= 0.3) {
+      var ae = ev('alat'), byA = d3.rollups(ae, function (g) { return d3.sum(g, function (e) { return e[5]; }); }, function (e) { return e[2]; }).sort(function (a, b) { return b[1] - a[1]; });
+      var ar = topRemarks(ae, 3);
+      var bbm = /bbm|refuel|isi/i.test(ae.map(function (e) { return e[6] + ' ' + e[1]; }).join(' '));
+      var pad = /padam|power/i.test(ae.map(function (e) { return e[6] + ' ' + e[1]; }).join(' '));
+      out.push({ h: st.alat.h, t: 'Alat rusak atau listrik padam ' + n1(st.alat.h) + ' jam crane: ' + byA.map(function (a) { return a[0] + ' ' + n1(a[1]) + ' jam'; }).join(', ') + '.' + (ar.length ? ' Catatan: ' + ar.map(function (r) { return q(r.t); }).join(', ') + '.' : ''),
+        f: 'Periksa ' + byA.map(function (a) { return a[0]; }).slice(0, 2).join(' dan ') + ' dan jadwalkan perawatan sebelum kapal berikutnya.' + (bbm ? ' Isi BBM head truck di luar jam kerja kapal atau gilir agar tidak bersamaan.' : '') + (pad ? ' Cek suplai listrik dan lampu dermaga, siapkan genset cadangan.' : '') });
+    }
+    // 4. crane kedua terlambat dan selesai tidak bersamaan
+    if (v.cr.length >= 2) {
+      var cs = v.cr.slice().sort(function (a, b) { return tm(a.s) - tm(b.s); }), first = cs[0], late = cs[cs.length - 1], gap = hh(first.s, late.s);
+      if (gap >= 1.5) {
+        var busyOn = D.v.filter(function (x) { return x.id !== v.id && x.cr.some(function (c) { return c.n === late.n && tm(c.s) < tm(late.s) && tm(c.e) > tm(first.s); }); })[0];
+        var be = busyOn ? busyOn.cr.filter(function (c) { return c.n === late.n; })[0] : null;
+        out.push({ h: gap / 2, t: late.n + ' baru mulai ' + n1(gap) + ' jam setelah ' + first.n + (busyOn ? ', karena masih dipakai di ' + busyOn.kapal + ' (sampai ' + fT(be.e) + ')' : '') + '. Selama itu kapal hanya dikerjakan 1 crane.',
+          f: busyOn ? 'Atur urutan dan jadwal sandar supaya crane kedua sudah bebas saat kapal mulai, atau mulai kapal ini setelah crane kedua selesai di kapal lain.' : 'Siapkan crane kedua dan operatornya sebelum kapal mulai bongkar muat.' });
+      }
+      var ce = v.cr.slice().sort(function (a, b) { return tm(a.e) - tm(b.e); }), endGap = hh(ce[0].e, ce[ce.length - 1].e);
+      if (endGap >= 2 && v.cr.every(function (c) { return c.db != null; })) {
+        out.push({ h: endGap / 3, t: ce[0].n + ' selesai ' + n1(endGap) + ' jam lebih awal dari ' + ce[ce.length - 1].n + '. Muatan per crane: ' + v.cr.map(function (c) { return c.n + ' ' + n0((c.db || 0) + (c.lb || 0)) + ' box'; }).join(', ') + '.',
+          f: 'Bagi muatan antar crane sesuai jam mulainya supaya semua crane selesai hampir bersamaan.' });
+      }
+    }
+    // 4b. crane dipakai bergantian dengan kapal lain
+    shared(v).forEach(function (s) {
+      out.push({ h: s.h / 2, t: s.c.n + ' juga tercatat bekerja di ' + s.x.kapal + ' selama ' + n1(s.h) + ' jam pada waktu yang sama. Di kapal ini ' + s.c.n + ' hanya memindahkan ' + n0((s.c.db || 0) + (s.c.lb || 0)) + ' box' + (s.c.bch != null ? ' (BCH ' + n1(s.c.bch) + ')' : '') + '.',
+        f: 'Hindari membagi satu crane untuk dua kapal sekaligus; selesaikan satu kapal dulu. Kalau terpaksa berpindah, catat sebagai “sharing crane” agar jam kerja crane di laporan tidak terhitung ganda.' });
+    });
+    // 5. persiapan
+    var npAvg = d3.mean(o, function (x) { return x.np; });
+    if (v.np >= 1.5) out.push({ h: v.np - 1, t: 'Persiapan sebelum bongkar muat (lashing dan lainnya) ' + n1(v.np) + ' jam' + (npAvg != null ? ', kapal lain rata-rata ' + n1(npAvg) + ' jam.' : '.'), f: 'Siapkan gang lashing dan alat sebelum kapal sandar supaya bongkar muat bisa mulai paling lambat 1 jam setelah sandar.' });
+    // 6. intensitas crane
+    if (v.box >= 450 && v.cit != null && v.cit < 1.5) out.push({ h: 1, t: 'Kapal ' + n0(v.box) + ' box rata-rata hanya dilayani ' + n2(v.cit) + ' crane.', f: 'Untuk kapal di atas 450 box, pastikan 2 crane bekerja sejak awal sampai selesai.' });
+    // 7. kapal, rencana, pandu
+    if (st.kapal.h >= 0.5) {
+      var ke = ev('kapal'), kr = topRemarks(ke, 3), pilot = ke.filter(function (e) { return /pilot|tug/i.test(e[1]); });
+      var ph = d3.sum(pilot, function (e) { return e[5]; });
+      out.push({ h: st.kapal.h, t: 'Hambatan dari kapal, perubahan rencana, atau pandu ' + n1(st.kapal.h) + ' jam.' + (kr.length ? ' Catatan: ' + kr.map(function (r) { return q(r.t); }).join(', ') + '.' : ''),
+        f: (ph >= 0.3 ? 'Pesan pandu dan tunda saat bongkar muat tinggal sekitar 1 jam. ' : '') + 'Konfirmasi rencana muat dan stabilitas dengan pihak kapal sebelum mulai.' });
+    }
+    // 8. produktivitas crane
+    if (TG(v).bche && v.bche != null && v.bche < TG(v).bche * 0.9) {
+      var slow = v.cr.filter(function (c) { return c.bch != null && c.bch < TG(v).bche * 0.8; });
+      out.push({ h: 0.5, t: 'Kecepatan crane (BCH ET) ' + n1(v.bche) + ' box per jam, di bawah target ' + n0(TG(v).bche) + '.' + (slow.length ? ' Paling rendah: ' + slow.map(function (c) { return c.n + ' ' + n1(c.bch); }).join(', ') + '.' : ''),
+        f: 'Cek kesiapan operator dan alat lapangan untuk crane yang lambat, terutama di jam dengan produksi rendah pada grafik produksi per jam.' });
+    }
+    out.sort(function (a, b) { return b.h - a.h; });
+    return { st: st, ov: ov, rec: out };
+  }
+  function kpiRows(v) {
+    return [
+      ['BT', v.bt, TG(v).bt, true, ' jam'], ['BWT', v.bwt, TG(v).bwt, true, ' jam'], ['ET', v.et, TG(v).et, true, ' jam'], ['IT', v.it, TG(v).it, true, ' jam'],
+      ['NOT', v.nt, TG(v).nt, true, ' jam'], ['ET/BT', v.etbt, TG(v).etbt, false, '%'],
+      ['BCH ET', v.bche, TG(v).bche, false, ''], ['BCH BWT', v.bchw, TG(v).bchw, false, ''], ['BCH BT', v.bchb, TG(v).bchb, false, ''],
+      ['BSH ET', v.bshe, TG(v).bshe, false, ''], ['BSH BWT', v.bshw, TG(v).bshw, false, ''], ['BSH BT', v.bshb, TG(v).bshb, false, '']
+    ];
+  }
+  function TG(v) { return D.rk || v.tg; }
+  function hit(val, tg, low) { if (val == null || tg == null) return null; return low ? val <= tg : val >= tg; }
+
+  // ---------- tampilan ----------
+  var BLNF = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'], mon;
+  function mk(v) { if (D.bm && D.bm[v.id]) return D.bm[v.id]; var t = v.atd || v.acp || v.atb; return t ? t.slice(0, 7) : ''; }
+  function mName(k) { return k ? BLNF[+k.slice(5, 7) - 1] + ' ' + k.slice(0, 4) : 'Semua bulan'; }
+  function months() { return Array.from(new Set(D.v.map(mk).filter(Boolean))).sort(); }
+  function VV() { return mon ? D.v.filter(function (v) { return mk(v) === mon; }) : D.v; }
+  function sorted() { return VV().slice().sort(function (a, b) { return (tm(b.atb) || 0) - (tm(a.atb) || 0); }); }
+  function drawAll() {
+    var host = $('t-all'); host.replaceChildren();
+    var V = sorted();
+    $('stamp').textContent = V.length ? V.length + ' kapal · diperbarui ' + (D.u ? fT(D.u) : '—') : '';
+    if (!V.length) { host.appendChild(el('p', 'cap', 'Belum ada laporan kapal.')); return; }
+    var t = el('table'), th = el('thead'), tr = el('tr');
+    [['Kapal'], ['Pelayaran'], ['Sandar'], ['Box', 1], ['BT (jam)', 1], ['ET/BT', 1], ['BCH ET', 1], ['BSH BT', 1], ['CI', 1], ['Hambatan terbesar']].forEach(function (c) { tr.appendChild(el('th', c[1] ? 'n' : null, c[0])); });
+    th.appendChild(tr); t.appendChild(th);
+    var tb = el('tbody');
+    V.forEach(function (v) {
+      var r = el('tr' + ''); r.tabIndex = 0; if (cur === v.id) r.className = 'sel';
+      r.appendChild(el('td', null, v.kapal)); r.appendChild(el('td', null, v.line)); r.appendChild(el('td', null, fT(v.atb)));
+      if (!v.ok) { var td = el('td', 'muted', v.kv ? 'Hanya kunjungan (' + n0(v.box) + ' box), tidak dihitung di rata-rata' : 'Laporan belum lengkap'); td.colSpan = 7; r.appendChild(td); }
+      else {
+        r.appendChild(el('td', 'n', n0(v.box)));
+        [['bt', true, n1], ['etbt', false, n1], ['bche', false, n1], ['bshb', false, n1]].forEach(function (k) {
+          var h = hit(v[k[0]], TG(v)[k[0]], k[1]); r.appendChild(el('td', 'n' + (h == null ? '' : h ? ' good' : ' badv'), k[2](v[k[0]]) + (k[0] === 'etbt' ? '%' : '')));
+        });
+        r.appendChild(el('td', 'n', n2(v.cit)));
+        var st = stopsBy(v), top = BK.filter(function (b) { return st[b.k].h > 0; }).sort(function (a, b) { return st[b.k].h - st[a.k].h; })[0];
+        r.appendChild(el('td', 'wrap', top ? top.t + ' (' + n1(st[top.k].h) + ' jam)' : '—'));
+      }
+      var go = function () { cur = v.id; render(); var d = $('d-title'); if (d) d.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+      r.addEventListener('click', go); r.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+      tb.appendChild(r);
+    });
+    t.appendChild(tb); host.appendChild(t);
+  }
+  function hbars(host, rows, max, unit) {
+    host.replaceChildren(); var tip = makeTip(host);
+    rows.forEach(function (r) {
+      var b = el('div', 'brow'), l = el('span', null, r.t); if (r.s) l.appendChild(el('small', null, r.s));
+      b.appendChild(l); b.appendChild(el('span', 'brow-v', n1(r.v) + (unit || ' jam')));
+      var tr = el('div', 'btrack'), f = el('div', 'bfill'); f.style.width = (max ? Math.max(1, r.v / max * 100) : 0) + '%'; f.style.background = r.c; tr.appendChild(f); b.appendChild(tr);
+      if (r.tip) { b.addEventListener('pointermove', function (ev) { tip.show(ev, r.tip); }); b.addEventListener('pointerleave', tip.hide); }
+      host.appendChild(b);
+    });
+  }
+  function drawCross() {
+    var V = VV().filter(function (v) { return v.ok; }), host = $('c-all'), ol = $('f-all'); ol.replaceChildren();
+    if (!V.length) { host.replaceChildren(); return; }
+    var tot = {}; BK.forEach(function (b) { tot[b.k] = 0; });
+    V.forEach(function (v) { var s = stopsBy(v); BK.forEach(function (b) { tot[b.k] += s[b.k].h; }); });
+    var rows = BK.filter(function (b) { return tot[b.k] > 0; }).map(function (b) { return { t: b.t, s: 'rata-rata ' + n1(tot[b.k] / V.length) + ' jam per kapal', v: tot[b.k], c: b.c }; }).sort(function (a, b) { return b.v - a.v; });
+    hbars(host, rows, d3.max(rows, function (r) { return r.v; }));
+    // temuan
+    var add = function (b, t) { var li = el('li'); li.appendChild(el('b', null, b + ' ')); li.appendChild(document.createTextNode(t)); ol.appendChild(li); };
+    var allY = [].concat.apply([], V.map(function (v) { return v.ev.filter(function (e) { return bucket(e[1]).k === 'yard'; }); }));
+    if (tot.yard > 0) {
+      var cy = blocks(allY), tr = topRemarks(allY, 2), kap = V.filter(function (v) { return /km\.|kapal lain|kpl lain/i.test(v.ev.map(function (e) { return e[6]; }).join(' ')); });
+      add('Lapangan adalah hambatan terbesar.', 'Crane menunggu truk atau kontainer ' + n1(tot.yard) + ' jam crane di ' + V.length + ' kapal. ' + (tr.length ? 'Catatan terbanyak ' + tr.map(function (r) { return '“' + r.t + '” (' + r.n + ' kali)'; }).join(' dan ') + '. ' : '') + (cy.length ? 'Blok yang paling sering disebut: ' + cy.slice(0, 3).join(', ') + '. ' : '') + (kap.length ? kap.length + ' kapal mencatat bentrok blok dengan kapal lain. ' : '') + 'Solusinya: atur jadwal delivery dan receiving supaya tidak di blok kapal yang sedang bekerja, dan bagi blok per kapal saat dua kapal bekerja bersamaan.');
+    }
+    var ovs = V.map(function (v) { return overlapRest(v); }), ovT = d3.sum(ovs);
+    if (ovT >= 1) add('Istirahat masih bersamaan.', 'Di ' + ovs.filter(function (x) { return x >= 0.5; }).length + ' dari ' + V.length + ' kapal semua crane berhenti istirahat bersamaan, total ' + n1(ovT) + ' jam. Istirahat bergiliran bisa langsung memangkas BT sebanyak itu tanpa biaya tambahan.');
+    var late = V.filter(function (v) { if (v.cr.length < 2) return false; var s = v.cr.map(function (c) { return tm(c.s); }); return (d3.max(s) - d3.min(s)) / 3600000 >= 1.5; });
+    if (late.length) add('Crane kedua sering terlambat mulai.', late.length + ' dari ' + V.length + ' kapal, terlama ' + late.slice().sort(function (a, b) { var g = function (v) { var s = v.cr.map(function (c) { return tm(c.s); }); return d3.max(s) - d3.min(s); }; return g(b) - g(a); }).slice(0, 4).map(function (v) { var s = v.cr.map(function (c) { return tm(c.s); }); return v.kapal + ' (' + n1((d3.max(s) - d3.min(s)) / 3600000) + ' jam)'; }).join(', ') + '. Selama itu kapal hanya dikerjakan satu crane. Jadwal sandar perlu memperhitungkan kapan crane kedua bebas dari kapal lain.');
+    if (tot.alat >= 1) {
+      var al = [].concat.apply([], V.map(function (v) { return v.ev.filter(function (e) { return bucket(e[1]).k === 'alat'; }).map(function (e) { return [v.kapal, e, v.id]; }); }));
+      var pd = al.filter(function (x) { return /power down/i.test(x[1][1]); }), pdH = d3.sum(pd, function (x) { return x[1][5]; }), pdTxt = '';
+      if (pdH >= 0.5) {
+        var byD = d3.rollups(pd, function (g) { return { h: d3.sum(g, function (x) { return x[1][5]; }), k: Array.from(new Set(g.map(function (x) { return x[0]; }))) }; }, function (x) { return String(x[1][3] || '').slice(0, 10); })
+          .filter(function (d) { return d[0]; }).sort(function (a, b) { return b[1].h - a[1].h; });
+        if (byD.length) pdTxt = ' Listrik padam ' + n1(pdH) + ' jam crane di ' + new Set(pd.map(function (x) { return x[2]; })).size + ' kunjungan kapal pada ' + byD.length + ' hari, terbanyak ' + (+byD[0][0].slice(8, 10)) + ' ' + BLN[+byD[0][0].slice(5, 7) - 1] + ' (' + n1(byD[0][1].h) + ' jam crane: ' + byD[0][1].k.join(', ') + ').';
+      }
+      var byA = d3.rollups(al, function (g) { return d3.sum(g, function (x) { return x[1][5]; }); }, function (x) { return x[1][2]; }).sort(function (a, b) { return b[1] - a[1]; });
+      add('Alat dan listrik.', 'Berhenti karena alat rusak atau listrik padam ' + n1(tot.alat) + ' jam crane, terbanyak di ' + byA.slice(0, 3).map(function (a) { return a[0] + ' (' + n1(a[1]) + ' jam)'; }).join(', ') + '.' + pdTxt + ' Perlu perawatan pencegahan dan genset cadangan untuk penerangan.');
+    }
+    var sh = []; V.forEach(function (v) { shared(v).forEach(function (s) { if (v.kapal < s.x.kapal) sh.push(s.c.n + ' di ' + v.kapal + ' dan ' + s.x.kapal + ' (' + n1(s.h) + ' jam)'); }); });
+    if (sh.length) add('Satu crane tercatat di dua kapal.', sh.length + ' kejadian, misalnya ' + sh.slice(0, 3).join(', ') + '. Produksi crane itu di salah satu kapal menjadi sangat rendah. Selesaikan satu kapal dulu sebelum crane dipindah.');
+    var capai = function (L) { var okB = L.filter(function (v) { return TG(v).bshb && v.bshb >= TG(v).bshb; }), okT = L.filter(function (v) { return TG(v).bt && v.bt <= TG(v).bt; });
+      return { n: L.length, b: okB.length, t: okT.length, mb: d3.mean(L, function (v) { return v.bshb; }), mt: d3.mean(L, function (v) { return v.bt; }) }; };
+    if (V.length) {
+      var cp = capai(V), tg0 = TG(V[0]), pc = function (a, b) { return b ? n0(a / b * 100) + '%' : '—'; };
+      var best = V.filter(function (v) { return v.bshb != null; }).sort(function (a, b) { return b.bshb - a.bshb; }).slice(0, 3);
+      var txt = 'BSH BT: ' + cp.b + ' dari ' + cp.n + ' kapal (' + pc(cp.b, cp.n) + ') mencapai target ' + n0(tg0.bshb) + ', rata-rata ' + n1(cp.mb) + '; ' + (cp.n - cp.b) + ' kapal belum mencapai target. BT: ' + cp.t + ' kapal (' + pc(cp.t, cp.n) + ') sandar paling lama ' + n0(tg0.bt) + ' jam sesuai target, rata-rata ' + n1(cp.mt) + ' jam; ' + (cp.n - cp.t) + ' kapal melebihi target BT.';
+      if (best.length) txt += ' BSH BT tertinggi: ' + best.map(function (v) { return v.kapal + ' ' + n1(v.bshb); }).join(', ') + '.';
+      if (mon) { var M2 = months(), ip = M2.indexOf(mon); if (ip > 0) { var pm = M2[ip - 1], PV = D.v.filter(function (v) { return mk(v) === pm && v.ok; });
+        if (PV.length) { var pp = capai(PV); txt += ' Dibanding ' + mName(pm) + ': BSH BT rata-rata ' + n1(pp.mb) + ' (' + pc(pp.b, pp.n) + ' kapal mencapai target) dan BT ' + n1(pp.mt) + ' jam (' + pc(pp.t, pp.n) + ' sesuai target).'; } } }
+      add('Capaian target.', txt);
+    }
+  }
+  function drawPick() {
+    var host = $('pick'); host.replaceChildren();
+    var lab = el('label', 'kl', 'Pilih kapal '), sel = el('select', 'sel');
+    sorted().forEach(function (v) { var o = el('option', null, v.kapal + ' · voy ' + v.vi + ' · sandar ' + fT(v.atb) + (v.ok ? '' : v.kv ? ' (hanya kunjungan)' : ' (belum lengkap)')); o.value = v.id; if (v.id === cur) o.selected = true; sel.appendChild(o); });
+    sel.addEventListener('change', function () { cur = sel.value; render(); });
+    lab.appendChild(sel); host.appendChild(lab);
+  }
+  function drawDetail() {
+    var v = D.v.filter(function (x) { return x.id === cur; })[0];
+    ['d-kpi', 'd-rec', 'c-gantt', 'c-bt', 'c-stop', 'd-rmk', 'c-hour', 't-crane'].forEach(function (id) { $(id).replaceChildren(); });
+    $('d-yard').textContent = '';
+    if (!v) { $('d-title').textContent = 'Belum ada kapal'; $('d-sub').textContent = ''; $('d-lead').textContent = ''; return; }
+    $('d-title').textContent = v.kapal + ' · voyage ' + v.vi;
+    $('d-sub').textContent = v.line + ' · ' + v.svc + ' · ' + v.pol + ' → ' + v.pod + ' · LOA ' + (v.loa ? n0(v.loa) + ' m' : '—') + ' · tiba ' + fT(v.ata) + ' · sandar ' + fT(v.atb) + ' · berangkat ' + fT(v.atd);
+    if (v.kv) { $('d-lead').textContent = 'Kunjungan ini hanya dicatat dan tidak dihitung dalam rata-rata kinerja. ' + (v.note || ''); return; }
+    if (!v.ok) { $('d-lead').textContent = 'Laporan kapal ini belum lengkap: jam selesai bongkar muat atau jumlah box belum terisi. Unggah lagi file terbarunya setelah kapal selesai.'; return; }
+    var A = analyze(v), wt = hh(v.ata, v.atb), kp = kpiRows(v), okN = kp.filter(function (k) { return hit(k[1], k[2], k[3]); }).length;
+    var topR = A.rec[0];
+    $('d-lead').textContent = 'Kapal ' + n0(v.box) + ' box (' + n0(v.teus) + ' TEUs) sandar ' + n1(v.bt) + ' jam dengan ' + v.cr.length + ' crane. ' + okN + ' dari ' + kp.length + ' indikator memenuhi target.' + (wt >= 1 ? ' Sebelum sandar kapal menunggu ' + n1(wt) + ' jam (' + n1(wt / 24) + ' hari).' : '') + (topR ? ' Masalah terbesar: ' + topR.t.split(/\.\s/)[0].replace(/^([A-Z])([a-z])/, function (m, a, b) { return a.toLowerCase() + b; }).replace(/\.$/, '') + '.' : '');
+    // kpi
+    var K = $('d-kpi');
+    kp.forEach(function (k) {
+      var c = el('div', 'kpi'), h = hit(k[1], k[2], k[3]), lab = el('div', 'kl', k[0]);
+      if (h != null) lab.appendChild(el('span', 'st ' + (h ? 'ok' : 'no'), h ? 'tercapai' : 'belum'));
+      c.appendChild(lab); c.appendChild(el('div', 'kv', k[1] == null ? '—' : n1(k[1]) + k[4]));
+      c.appendChild(el('div', 'kn', k[2] != null ? 'target ' + (k[3] ? '≤ ' : '≥ ') + n1(k[2]) + k[4] : '')); K.appendChild(c);
+    });
+    [['Waiting sebelum sandar', wt, ' jam', n1(wt / 24) + ' hari'], ['Crane intensity', v.cit, '', n0(v.cr.length) + ' crane dipakai']].forEach(function (k) {
+      var c = el('div', 'kpi'); c.appendChild(el('div', 'kl', k[0])); c.appendChild(el('div', 'kv', k[1] == null || !isFinite(k[1]) ? '—' : (k[2] ? n1(k[1]) + k[2] : n2(k[1])))); c.appendChild(el('div', 'kn', k[3])); K.appendChild(c);
+    });
+    // rekomendasi
+    var R = $('d-rec');
+    if (!A.rec.length) R.appendChild(el('li', null, 'Tidak ada hambatan menonjol di laporan kapal ini.'));
+    A.rec.forEach(function (r) { var li = el('li'); li.appendChild(document.createTextNode(r.t)); li.appendChild(el('span', 'fix', r.f)); R.appendChild(li); });
+    // BT
+    var parts = [['Persiapan sebelum mulai (NOT pre)', v.np, 'var(--k4)'], ['Bongkar muat berjalan (ET)', v.et, 'var(--c1)'], ['Crane menganggur (IT)', v.it, 'var(--c2)'], ['Berhenti saat operasi (NOT during)', v.nd, 'var(--c3)'], ['Setelah selesai sampai berangkat (NOT post)', v.npo, 'var(--k6)']]
+      .filter(function (p) { return p[1] != null; }).map(function (p) { return { t: p[0], s: v.bt ? n0(p[1] / v.bt * 100) + '% BT' : '', v: p[1], c: p[2] }; });
+    hbars($('c-bt'), parts, v.bt);
+    // penyebab
+    var srows = BK.filter(function (b) { return A.st[b.k].h > 0; }).map(function (b) { return { t: b.t, s: A.st[b.k].n + ' kali', v: A.st[b.k].h, c: b.c }; }).sort(function (a, b) { return b.v - a.v; });
+    if (srows.length) hbars($('c-stop'), srows, srows[0].v); else $('c-stop').appendChild(el('p', 'cap', 'Tidak ada catatan berhenti.'));
+    topRemarks(v.ev.filter(function (e) { return e[5] > 0; }), 5).forEach(function (r) { var li = el('li'); li.appendChild(el('b', null, '“' + r.t + '”')); li.appendChild(document.createTextNode(' ' + r.n + ' kali, ' + n1(r.h) + ' jam')); $('d-rmk').appendChild(li); });
+    drawGantt(v); drawHour(v); drawCrane(v);
+  }
+  function drawGantt(v) {
+    var host = $('c-gantt'), lanes = ['KAPAL'].concat(v.cr.map(function (c) { return c.n.toUpperCase(); }));
+    var used = BK.filter(function (b) { return v.ev.some(function (e) { return e[5] > 0 && bucket(e[1]).k === b.k; }); });
+    host.replaceChildren(); host.appendChild(legend([['Crane bekerja', 'var(--work)']].concat(used.map(function (b) { return [b.t, b.c]; }))));
+    var t0 = tm(v.atb), t1 = d3.max([tm(v.atd)].concat(v.cr.map(function (c) { return tm(c.e); })).concat(v.ev.map(function (e) { return tm(e[4]); })));
+    var W = Math.max(300, host.clientWidth || 320), lh = 28, m = { t: 6, r: 10, b: 30, l: 62 }, H = m.t + lanes.length * (lh + 10) + m.b;
+    var svg = d3.select(host).append('svg').attr('width', W).attr('height', H).attr('viewBox', [0, 0, W, H]).attr('role', 'img').attr('aria-label', 'Linimasa operasi ' + v.kapal);
+    var tip = makeTip(host), x = d3.scaleTime().domain([t0, t1]).range([m.l, W - m.r]);
+    var y = function (i) { return m.t + i * (lh + 10); };
+    var span = (t1 - t0) / 3600000, step = W < 520 ? (span > 30 ? 12 : 6) : (span > 40 ? 6 : span > 20 ? 3 : 2);
+    var ticks = x.ticks(d3.timeHour.every(step));
+    svg.append('g').selectAll('line').data(ticks).join('line').attr('x1', x).attr('x2', x).attr('y1', m.t).attr('y2', H - m.b + 4).style('stroke', 'var(--grid)');
+    svg.append('g').selectAll('text').data(ticks).join('text').attr('x', x).attr('y', H - m.b + 16).attr('text-anchor', 'middle')
+      .text(function (d) { return d.getHours() === 0 || d === ticks[0] ? d.getDate() + ' ' + BLN[d.getMonth()] : String(d.getHours()).padStart(2, '0') + '.00'; })
+      .style('font-weight', function (d) { return d.getHours() === 0 ? '600' : null; });
+    lanes.forEach(function (n, i) { svg.append('text').attr('x', 0).attr('y', y(i) + lh / 2).attr('dy', '0.32em').style('fill', 'var(--fg)').style('font-weight', '600').text(n === 'KAPAL' ? 'Kapal' : n); });
+    var seg = function (i, a, b, fill, text) {
+      var r = svg.append('rect').attr('x', x(tm(a))).attr('y', y(i)).attr('width', Math.max(1.5, x(tm(b)) - x(tm(a)))).attr('height', lh).attr('rx', 3).style('fill', fill);
+      if (text) r.on('pointermove', function (ev) { tip.show(ev, text); }).on('pointerleave', function () { tip.hide(); });
+      return r;
+    };
+    seg(0, v.atb, v.acm, 'var(--k4)', 'Persiapan sebelum mulai\n' + fT(v.atb) + ' – ' + fT(v.acm) + ' (' + fJ(hh(v.atb, v.acm)) + ')');
+    seg(0, v.acm, v.acp, 'var(--work)', 'Bongkar muat\n' + fT(v.acm) + ' – ' + fT(v.acp) + ' (' + fJ(hh(v.acm, v.acp)) + ')');
+    seg(0, v.acp, v.atd, 'var(--k6)', 'Selesai sampai berangkat\n' + fT(v.acp) + ' – ' + fT(v.atd) + ' (' + fJ(hh(v.acp, v.atd)) + ')');
+    v.cr.forEach(function (c, i) { seg(i + 1, c.s, c.e, 'var(--work)', c.n + ' bekerja\n' + fT(c.s) + ' – ' + fT(c.e) + ' (' + fJ(hh(c.s, c.e)) + ')'); });
+    v.ev.forEach(function (e) {
+      if (!(e[5] > 0)) return;
+      var i = lanes.indexOf(e[2]); if (i < 0) i = 0;
+      if (i === 0 && /^NOT1|^NOT3/.test(e[0])) return;
+      var b = bucket(e[1]);
+      seg(i, e[3], e[4], b.c, e[1].replace(/^\w+\s*-\s*/, '') + '\n' + fT(e[3]) + ' – ' + fT(e[4]) + ' (' + n0(e[5] * 60) + ' menit)' + (e[6] ? '\nCatatan: ' + e[6] : ''));
+    });
+  }
+  function drawHour(v) {
+    var host = $('c-hour'); host.replaceChildren();
+    var R = v.hr.r.filter(function (r) { return r[1].some(function (p) { return p[0] + p[1] > 0; }); });
+    if (!R.length) { host.appendChild(el('p', 'cap', 'Tidak ada data produksi per jam.')); return; }
+    var C = ['var(--c1)', 'var(--c3)', 'var(--k4)', 'var(--k6)'];
+    host.appendChild(legend(v.hr.c.map(function (c, i) { return [c, C[i]]; })));
+    var W = Math.max(300, host.clientWidth || 320), H = 230, m = { t: 12, r: 6, b: 26, l: 32 };
+    var svg = d3.select(host).append('svg').attr('width', W).attr('height', H).attr('viewBox', [0, 0, W, H]).attr('role', 'img').attr('aria-label', 'Diagram batang produksi per jam per crane');
+    var tip = makeTip(host);
+    var S = R.map(function (r) { var acc = 0; return { s: r[0], v: r[1].map(function (p) { var a = acc, t = p[0] + p[1]; acc += t; return [a, acc, t, p[0], p[1]]; }), tot: acc }; });
+    var x = d3.scaleBand().domain(S.map(function (r) { return r.s; })).range([m.l, W - m.r]).padding(0.15);
+    var y = d3.scaleLinear().domain([0, d3.max(S, function (r) { return r.tot; }) * 1.1 || 1]).nice().range([H - m.b, m.t]);
+    svg.append('g').selectAll('line').data(y.ticks(4)).join('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y).attr('y2', y).style('stroke', 'var(--grid)');
+    svg.append('g').selectAll('text').data(y.ticks(4)).join('text').attr('x', m.l - 6).attr('y', y).attr('dy', '0.32em').attr('text-anchor', 'end').text(n0);
+    var every = Math.ceil(28 / x.step());
+    svg.append('g').selectAll('text').data(S.filter(function (r, i) { return i % every === 0; })).join('text').attr('x', function (r) { return x(r.s) + x.bandwidth() / 2; }).attr('y', H - 8).attr('text-anchor', 'middle')
+      .text(function (r) { var d = new Date(r.s); return String(d.getHours()).padStart(2, '0'); });
+    S.forEach(function (r) {
+      r.v.forEach(function (p, i) { if (p[2] > 0) svg.append('rect').attr('x', x(r.s)).attr('width', x.bandwidth()).attr('y', y(p[1])).attr('height', Math.max(0, y(p[0]) - y(p[1]) - (i ? 1 : 0))).style('fill', C[i]); });
+      svg.append('rect').attr('x', x(r.s) - x.step() * x.paddingInner() / 2).attr('width', x.step()).attr('y', m.t).attr('height', H - m.b - m.t).style('fill', 'transparent')
+        .on('pointermove', function (ev) { tip.show(ev, fT(r.s) + '\n' + v.hr.c.map(function (c, i) { return c + ': ' + n0(r.v[i][2]) + ' box (bongkar ' + n0(r.v[i][3]) + ', muat ' + n0(r.v[i][4]) + ')'; }).join('\n') + '\nTotal ' + n0(r.tot) + ' box'); })
+        .on('pointerleave', function () { tip.hide(); });
+    });
+  }
+  function drawCrane(v) {
+    var host = $('t-crane'), t = el('table'), th = el('thead'), tr = el('tr');
+    [['Crane'], ['Mulai'], ['Selesai'], ['Jam kerja (BWT)', 1], ['Jam efektif (ET)', 1], ['Bongkar', 1], ['Muat', 1], ['BCH ET', 1], ['Jam berhenti', 1]].forEach(function (c) { tr.appendChild(el('th', c[1] ? 'n' : null, c[0])); });
+    th.appendChild(tr); t.appendChild(th); var tb = el('tbody');
+    v.cr.forEach(function (c) {
+      var r = el('tr'), stop = d3.sum(v.ev.filter(function (e) { return e[2] === c.n.toUpperCase(); }), function (e) { return e[5]; });
+      [c.n, fT(c.s), fT(c.e)].forEach(function (x) { r.appendChild(el('td', null, x)); });
+      [n1(c.bwt), c.et != null ? n1(c.et) : '—', c.db != null ? n0(c.db) : '—', c.lb != null ? n0(c.lb) : '—'].forEach(function (x) { r.appendChild(el('td', 'n', x)); });
+      var h = c.bch != null && TG(v).bche ? c.bch >= TG(v).bche : null;
+      r.appendChild(el('td', 'n' + (h == null ? '' : h ? ' good' : ' badv'), c.bch != null ? n1(c.bch) : '—'));
+      r.appendChild(el('td', 'n', n1(stop)));
+      tb.appendChild(r);
+    });
+    t.appendChild(tb); host.appendChild(t);
+    if (v.yd.length) $('d-yard').textContent = 'Alat lapangan yang tercatat: ' + v.yd.map(function (y) { return y[0].toLowerCase().replace(/\b\w/g, function (c) { return c.toUpperCase(); }) + ' ' + n0(y[1]); }).join(', ') + '.';
+  }
+
+  function drawMonths() {
+    var host = $('mchips'); host.replaceChildren(); var M = months();
+    if (mon === undefined) mon = M[M.length - 1] || null;
+    if (mon && M.indexOf(mon) < 0) mon = M[M.length - 1] || null;
+    [null].concat(M).forEach(function (k) {
+      var b = el('button', 'chip', mName(k)); b.type = 'button'; b.setAttribute('aria-pressed', String(mon === k));
+      b.addEventListener('click', function () { mon = k; cur = null; render(); }); host.appendChild(b);
+    });
+    $('h-all').textContent = 'Semua kapal · ' + mName(mon); $('h-cross').textContent = 'Hambatan dari semua kapal · ' + mName(mon);
+  }
+  // BSH BT disamakan dengan Laporan Kinerja Seluruh Kapal (dashboard Kinerja Terminal)
+  function applyBo() { if (!D.bo) return; D.v.forEach(function (v) { if (D.bo[v.id] != null) { if (v.bshb0 == null) v.bshb0 = v.bshb; v.bshb = D.bo[v.id]; } }); }
+  // ---------- perkembangan per 7 hari ----------
+  function rgDay(a, b) { var x = new Date(a), y = new Date(b); return x.getMonth() === y.getMonth() ? x.getDate() + '–' + y.getDate() + ' ' + BLN[y.getMonth()] : x.getDate() + ' ' + BLN[x.getMonth()] + '–' + y.getDate() + ' ' + BLN[y.getMonth()]; }
+  function drawWeek() {
+    var host = $('t-week'), lead = $('w-lead'); host.replaceChildren(); lead.textContent = '';
+    $('h-week').textContent = 'Perkembangan per 7 hari · ' + mName(mon);
+    var V = VV().filter(function (v) { return v.ok && tm(v.atb); }), DAY = 864e5, W = [];
+    if (V.length) {
+      var t0 = d3.min(V, function (v) { return tm(v.atb); }), d = new Date(d3.max(V, function (v) { return tm(v.atb); })); d.setHours(0, 0, 0, 0);
+      var end = d.getTime() + DAY;
+      for (var i = 0; i < 5; i++) {
+        var b = end - i * 7 * DAY, a = b - 7 * DAY; if (b <= t0) break;
+        var L = V.filter(function (v) { var t = tm(v.atb); return t >= a && t < b; }); if (!L.length) continue;
+        var S = L.map(stopsBy);
+        W.unshift({ a: a, b: b - DAY, n: L.length, tg: TG(L[0]), box: d3.mean(L, function (v) { return v.box; }), bt: d3.mean(L, function (v) { return v.bt; }), bsh: d3.mean(L, function (v) { return v.bshb; }), ci: d3.mean(L, function (v) { return v.cit; }),
+          yard: d3.mean(S, function (s) { return s.yard.h; }), rest: d3.mean(S, function (s) { return s.rest.h; }), alat: d3.mean(S, function (s) { return s.alat.h; }) });
+      }
+    }
+    if (W.length < 2) { lead.textContent = 'Belum cukup kapal untuk dibandingkan per 7 hari.'; return; }
+    var c = W[W.length - 1], p = W[W.length - 2], f = W[0];
+    var same = function (x, y) { return Math.abs(x - y) < Math.max(0.05 * Math.abs(y), 0.1); };
+    var mv = function (x, y, u) { return same(x, y) ? n1(x) + u + ', hampir sama dengan 7 hari sebelumnya (' + n1(y) + ')' : (x > y ? 'naik' : 'turun') + ' dari ' + n1(y) + ' menjadi ' + n1(x) + u; };
+    var txt = 'Dalam 7 hari terakhir (' + rgDay(c.a, c.b) + ', ' + c.n + ' kapal) BSH BT ' + mv(c.bsh, p.bsh, '') + '. BT ' + mv(c.bt, p.bt, ' jam') +
+      (c.box > p.box * 1.1 ? ', dengan muatan lebih besar (' + n0(c.box) + ' box per kapal, sebelumnya ' + n0(p.box) + ')' : c.box < p.box * 0.9 ? ', dengan muatan lebih kecil (' + n0(c.box) + ' box per kapal, sebelumnya ' + n0(p.box) + ')' : '') + '. ' +
+      'Crane menunggu truk atau kontainer ' + mv(c.yard, p.yard, ' jam crane per kapal') + (W.length > 2 ? ' (' + rgDay(f.a, f.b) + ': ' + n1(f.yard) + ' jam)' : '') + '. ' +
+      'Istirahat ' + mv(c.rest, p.rest, ' jam') + ', alat rusak dan listrik padam ' + mv(c.alat, p.alat, ' jam') + '.';
+    var up = [['crane menunggu truk atau kontainer', c.yard - p.yard], ['istirahat', c.rest - p.rest], ['alat rusak dan listrik padam', c.alat - p.alat]].sort(function (x, y) { return y[1] - x[1]; });
+    if (up[0][1] >= 0.3) txt += ' Kenaikan terbesar di ' + up[0][0] + ' (+' + n1(up[0][1]) + ' jam crane per kapal).';
+    else if (up.every(function (k) { return k[1] <= -0.3; })) txt += ' Ketiga hambatan turun dibanding 7 hari sebelumnya.';
+    lead.textContent = txt;
+    var t = el('table'), th = el('thead'), hr = el('tr'), tb = el('tbody');
+    [['Tanggal sandar'], ['Kapal', 1], ['Box per kapal', 1], ['BT (jam)', 1], ['BSH BT', 1], ['CI', 1], ['Menunggu truk/kontainer', 1], ['Istirahat', 1], ['Alat dan listrik', 1]].forEach(function (x) { hr.appendChild(el('th', x[1] ? 'n' : null, x[0])); });
+    th.appendChild(hr); t.appendChild(th);
+    W.forEach(function (w) {
+      var r = el('tr'); r.appendChild(el('td', null, rgDay(w.a, w.b)));
+      r.appendChild(el('td', 'n', n0(w.n))); r.appendChild(el('td', 'n', n0(w.box)));
+      [['bt', true], ['bshb', false]].forEach(function (k) { var val = k[0] === 'bt' ? w.bt : w.bsh, h = hit(val, w.tg[k[0]], k[1]); r.appendChild(el('td', 'n' + (h == null ? '' : h ? ' good' : ' badv'), n1(val))); });
+      r.appendChild(el('td', 'n', n2(w.ci)));
+      [w.yard, w.rest, w.alat].forEach(function (x) { r.appendChild(el('td', 'n', n1(x) + ' jam')); });
+      tb.appendChild(r);
+    });
+    t.appendChild(tb); host.appendChild(t);
+  }
+  function render() {
+    applyBo();
+    drawMonths();
+    if (!cur || !VV().some(function (v) { return v.id === cur; })) { var ok = sorted().filter(function (v) { return v.ok; }); cur = (ok[0] || sorted()[0] || {}).id || null; }
+    drawAll(); drawCross(); drawWeek(); drawGate(); drawPick(); drawDetail(); drawEditor();
+  }
+
+  // ---------- receiving / delivery (Terminal In & Out) ----------
+  // D.g = { h: {"YYYY-MM-DDTHH": [rcv, dlv, rcvEmpty, trukN, trukMenit]}, days: ["YYYY-MM-DD"...], rv: {kapal: {jam: n}}, dv: {kapal: {jam: n}}, f: [nama file] }
+  var GWT = /^(ITWTR|ITWTH|ITWTC|ITWCT|ITWCH|ITWCC)/;
+  var HARI = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+  function gMs(s) { return Date.parse(s.slice(0, 16) + ':00Z'); }
+  function gKey(ms) { return new Date(ms).toISOString().slice(0, 13); }
+  function gCat(r) {
+    r = String(r || '').toLowerCase();
+    if (/kapal lain|muat kapal|dengan km|eden mas|clash.*km\.|bongkar kapal|bongkaran lain|muat icon|clash muat|dengan icon|bongkar cy|lintas brantas/.test(r)) return 'Bentrok dengan kapal lain';
+    var rc = /rcv|rcy|receiv|rsv|resiv/.test(r), dl = /dlv|deliv|dlvy|dlvry/.test(r);
+    if (rc && dl) return 'Clash DLV dan RCV';
+    if (dl) return 'Clash DLV';
+    if (rc) return 'Clash RCV';
+    if (/plan|bay plane|replan/.test(r)) return 'Perubahan rencana muat';
+    if (/shift|oversi|overhand|aplus/.test(r)) return 'Pergantian shift';
+    if (/tbatas|terbatas|yc|rtg|\brs\b|move|crossing|reach/.test(r)) return 'Alat lapangan (RTG/RS)';
+    if (/\bht\b|truk|truck|head|bbm/.test(r)) return 'Truk (HT) kurang atau rusak';
+    if (/istir|istrht/.test(r)) return 'Istirahat';
+    if (/clash|klash|cls/.test(r)) return 'Clash lainnya';
+    if (!r.trim()) return 'Tanpa keterangan';
+    return 'Lainnya';
+  }
+  function isClash(c) { return /^Clash (RCV|DLV)/.test(c); }
+  function gTime(v) {
+    if (v instanceof Date || typeof v === 'number') return dtStr(v);
+    var m = /^(\d{4})-(\d{2})-(\d{2})[ T](\d{1,2}):(\d{2})/.exec(str(v));
+    return m ? m[1] + '-' + m[2] + '-' + m[3] + 'T' + (m[4].length < 2 ? '0' : '') + m[4] + ':' + m[5] : null;
+  }
+  function isGateWb(buf) {
+    try { var wb = XLSX.read(buf, { type: 'array', sheetRows: 2 }); var s = wb.Sheets[wb.SheetNames[0]]; var r = XLSX.utils.sheet_to_json(s, { header: 1, raw: true })[0] || [];
+      return r.some(function (x) { return /move\s*type/i.test(String(x)); }) && r.some(function (x) { return /movement date/i.test(String(x)); }); } catch (e) { return false; }
+  }
+  function isPtosWb(buf) {
+    try { var wb = XLSX.read(buf, { type: 'array', sheetRows: 2 }); var s = wb.Sheets[wb.SheetNames[0]]; var r = (XLSX.utils.sheet_to_json(s, { header: 1, raw: true })[0] || []).map(function (x) { return String(x).trim().toUpperCase(); });
+      return r.indexOf('SERVIS') >= 0 && r.indexOf('GATE IN') >= 0 && r.indexOf('NAMA KAPAL') >= 0; } catch (e) { return false; }
+  }
+  // Laporan Receiving Delivery dari aplikasi lama (PTOS): ditambahkan ke data Terminal In & Out
+  function parsePtos(buf, fname) {
+    var wb = XLSX.read(buf, { type: 'array', cellDates: true }); var s = wb.Sheets[wb.SheetNames[0]];
+    var rows = XLSX.utils.sheet_to_json(s, { header: 1, raw: true, defval: null });
+    var hd = (rows[0] || []).map(function (x) { return String(x == null ? '' : x).replace(/\s+/g, ' ').trim().toUpperCase(); });
+    var ci = function (n) { var i = hd.indexOf(n); if (i < 0) throw new Error('Kolom "' + n + '" tidak ditemukan.'); return i; };
+    var cK = ci('NAMA KAPAL'), cS = ci('STATUS'), cV = ci('SERVIS'), cI = ci('GATE IN'), cO = ci('GATE OUT'), cT = hd.indexOf('TRT');
+    var dmy = function (v) { if (v instanceof Date || typeof v === 'number') return dtStr(v); var m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2})/.exec(str(v)); if (!m) return gTime(v); var p = function (x) { return (x.length < 2 ? '0' : '') + x; }; return m[3] + '-' + p(m[2]) + '-' + p(m[1]) + 'T' + p(m[4]) + ':' + m[5]; };
+    var G = { h: {}, days: [], rv: {}, dv: {}, f: [fname], n: [0, 0] }, tmin = Infinity, tmax = -Infinity;
+    for (var i = 1; i < rows.length; i++) {
+      var r = rows[i]; if (!r) continue; var sv = str(r[cV]).toUpperCase(), k = /^RECEIV/.test(sv) ? 0 : /^DELIV/.test(sv) ? 1 : -1; if (k < 0) continue;
+      var gi = dmy(r[cI]), go = dmy(r[cO]), t = k === 0 ? gi : go; if (!t) continue;
+      var ms = gMs(t), key = gKey(ms); tmin = Math.min(tmin, ms); tmax = Math.max(tmax, ms);
+      var c = G.h[key] = G.h[key] || [0, 0, 0, 0, 0]; c[k]++; G.n[k]++; if (k === 0 && str(r[cS]).toUpperCase() === 'E') c[2]++;
+      var vn = str(r[cK]).toUpperCase(), m2 = k === 0 ? G.rv : G.dv; if (vn) { m2[vn] = m2[vn] || {}; m2[vn][key] = (m2[vn][key] || 0) + 1; }
+      var tt = cT >= 0 ? num(r[cT]) : null; if (gi && tt != null && tt >= 0 && tt <= 600) { var k2 = gKey(gMs(gi)); var c2 = G.h[k2] = G.h[k2] || [0, 0, 0, 0, 0]; c2[3]++; c2[4] += tt; }
+    }
+    if (!isFinite(tmin)) throw new Error('Tidak ada baris receiving atau delivery.');
+    for (var d = Math.floor(tmin / 864e5) * 864e5; d <= tmax; d += 864e5) G.days.push(new Date(d).toISOString().slice(0, 10));
+    G.ptos = true; return G;
+  }
+  function parseGate(buf, fname) {
+    var wb = XLSX.read(buf, { type: 'array', cellDates: true }); var s = wb.Sheets[wb.SheetNames[0]];
+    var rows = XLSX.utils.sheet_to_json(s, { header: 1, raw: true, defval: null });
+    var hd = (rows[0] || []).map(function (x) { return String(x == null ? '' : x).replace(/\s+/g, ' ').trim().toLowerCase(); });
+    var ci = function (n) { var i = hd.indexOf(n); if (i < 0) throw new Error('Kolom "' + n + '" tidak ditemukan. Pastikan ini file Terminal In & Out.'); return i; };
+    var cMv = ci('move type'), cT = ci('movement date'), cFM = ci('f/m'), cLen = ci('length'), cIn = ci('in carrier name'), cOut = ci('out carrier name');
+    var cTi = hd.indexOf('truck in'), cTo = hd.indexOf('truck out');
+    var R = [], tmin = Infinity, tmax = -Infinity;
+    for (var i = 1; i < rows.length; i++) {
+      var r = rows[i]; if (!r) continue; var mv = str(r[cMv]).toUpperCase(); if (mv !== 'GI' && mv !== 'GO') continue;
+      var t = gTime(r[cT]); if (!t) continue; var ms = gMs(t); tmin = Math.min(tmin, ms); tmax = Math.max(tmax, ms);
+      var ti = cTi >= 0 ? gTime(r[cTi]) : null, to = cTo >= 0 ? gTime(r[cTo]) : null;
+      R.push({ k: mv === 'GI' ? 0 : 1, ms: ms, e: /empty/i.test(str(r[cFM])), v: str(mv === 'GI' ? r[cOut] : r[cIn]).toUpperCase(), ti: ti ? gMs(ti) : null, tt: ti && to ? (gMs(to) - gMs(ti)) / 60000 : null });
+    }
+    if (!R.length) throw new Error('Tidak ada baris receiving (GI) atau delivery (GO).');
+    // hanya hari penuh: hari pertama dipakai kalau data mulai sebelum 01.00, hari terakhir kalau sampai 23.00
+    var d0 = new Date(tmin), d1 = new Date(tmax);
+    var a = Date.UTC(d0.getUTCFullYear(), d0.getUTCMonth(), d0.getUTCDate()) + (d0.getUTCHours() >= 1 ? 864e5 : 0);
+    var b = Date.UTC(d1.getUTCFullYear(), d1.getUTCMonth(), d1.getUTCDate()) - (d1.getUTCHours() < 23 ? 864e5 : 0);
+    if (b < a) throw new Error('File ini belum mencakup satu hari penuh.');
+    var G = { h: {}, days: [], rv: {}, dv: {}, f: [fname] };
+    for (var d = a; d <= b; d += 864e5) { G.days.push(new Date(d).toISOString().slice(0, 10)); for (var hh = 0; hh < 24; hh++) G.h[gKey(d + hh * 36e5)] = [0, 0, 0, 0, 0]; }
+    R.forEach(function (x) {
+      var k = gKey(x.ms), c = G.h[k];
+      if (c) { c[x.k]++; if (x.k === 0 && x.e) c[2]++; var m = x.k === 0 ? G.rv : G.dv; if (x.v) { m[x.v] = m[x.v] || {}; m[x.v][k] = (m[x.v][k] || 0) + 1; } }
+      if (x.ti != null && x.tt != null && x.tt >= 0 && x.tt <= 600) { var c2 = G.h[gKey(x.ti)]; if (c2) { c2[3]++; c2[4] += x.tt; } }
+    });
+    G.n = [d3.sum(Object.keys(G.h), function (k) { return G.h[k][0]; }), d3.sum(Object.keys(G.h), function (k) { return G.h[k][1]; })];
+    return G;
+  }
+  function mergeGate(G) {
+    var key = G.ptos ? 'gp' : 'g';
+    var old = D[key] || { h: {}, days: [], rv: {}, dv: {}, f: [] }, drop = {};
+    G.days.forEach(function (d) { drop[d] = 1; });
+    var keep = function (k) { return !drop[k.slice(0, 10)]; };
+    var out = { h: {}, days: old.days.filter(function (d) { return !drop[d]; }).concat(G.days).sort(), rv: {}, dv: {}, f: old.f.concat(G.f).slice(-20) };
+    Object.keys(old.h).forEach(function (k) { if (keep(k)) out.h[k] = old.h[k]; });
+    Object.keys(G.h).forEach(function (k) { out.h[k] = G.h[k]; });
+    ['rv', 'dv'].forEach(function (m) {
+      [old[m], G[m]].forEach(function (src, j) { Object.keys(src).forEach(function (v) { Object.keys(src[v]).forEach(function (k) { if (j === 1 || keep(k)) { out[m][v] = out[m][v] || {}; out[m][v][k] = src[v][k]; } }); }); });
+    });
+    D[key] = out;
+  }
+  // hari dengan data gate belum lengkap (mis. masa transisi aplikasi) tidak dihitung: receiving atau delivery di bawah 40% median harian
+  function gDayTot(d) { var t = [0, 0]; for (var h = 0; h < 24; h++) { var g = gH(d + 'T' + (h < 10 ? '0' : '') + h); t[0] += g[0]; t[1] += g[1]; } return t; }
+  function gAllDays() {
+    var g = D.g; if (!g) return { ok: [], bad: [] };
+    var T = g.days.map(function (d) { return [d, gDayTot(d)]; }), mr = d3.median(T, function (x) { return x[1][0]; }) || 0, md = d3.median(T, function (x) { return x[1][1]; }) || 0;
+    var ok = [], bad = []; T.forEach(function (x) { (x[1][0] >= 0.4 * mr && x[1][1] >= 0.4 * md ? ok : bad).push(x[0]); });
+    return { ok: ok, bad: bad };
+  }
+  function gDays() { return gAllDays().ok.filter(function (d) { return !mon || d.slice(0, 7) === mon; }); }
+  function gBad() { return gAllDays().bad.filter(function (d) { return !mon || d.slice(0, 7) === mon; }); }
+  function gH(k) { var a = D.g.h[k], b = D.gp && D.gp.h[k]; if (!b) return a || [0, 0, 0, 0, 0]; a = a || [0, 0, 0, 0, 0]; return a.map(function (x, i) { return x + b[i]; }); }
+  function gV(m, n) { var a = D.g[m][n] || {}, b = (D.gp && D.gp[m][n]) || {}, o = {}; Object.keys(a).forEach(function (k) { o[k] = a[k]; }); Object.keys(b).forEach(function (k) { o[k] = (o[k] || 0) + b[k]; }); return o; }
+  function gCompute() {
+    var days = gDays(); if (!days.length) return null;
+    var H = {}, keys = [];
+    days.forEach(function (d) { for (var h = 0; h < 24; h++) { var k = d + 'T' + (h < 10 ? '0' : '') + h; keys.push(k); H[k] = { k: k, g: gH(k), p: D.gp && D.gp.h[k] ? D.gp.h[k][0] + D.gp.h[k][1] : 0, cr: 0, w: 0, cl: 0 }; } });
+    var T0 = gMs(days[0] + 'T00:00'), T1 = gMs(days[days.length - 1] + 'T00:00') + 864e5;
+    var spread = function (s, e, f) { var a = Math.max(gMs(s), T0), b = Math.min(gMs(e), T1); var t = Math.floor(a / 36e5) * 36e5;
+      while (t < b) { var x = H[gKey(t)]; if (x) f(x, (Math.min(b, t + 36e5) - Math.max(a, t)) / 60000); t += 36e5; } };
+    var EV = [], VS = [], GH = {};
+    D.v.forEach(function (v) {
+      if (!v.atd || !v.atb || gMs(v.atd) < T0 || gMs(v.atb) >= T1) return; VS.push(v);
+      var vh = {}; GH[v.id] = vh; var vx = function (x) { var k = x.k; vh[k] = vh[k] || { cr: 0, w: 0, g: x.g[0] + x.g[1] }; return vh[k]; };
+      v.cr.forEach(function (c) { if (c.s && c.e) spread(c.s, c.e, function (x, m) { x.cr += m; vx(x).cr += m; }); });
+      v.ev.forEach(function (e) {
+        if (e[0] !== 'IDLE' || !GWT.test(e[1]) || !e[3] || !e[4]) return; var s0 = gMs(e[3]); if (s0 < T0 || s0 >= T1) return;
+        var c = gCat(e[6]), cy = (/cy\s*0?(\d)/i.exec(e[6] || '') || [])[1] || '';
+        EV.push({ v: v, h: e[5], c: c, cy: cy, s: s0 });
+        spread(e[3], e[4], function (x, m) { x.w += m; if (isClash(c)) x.cl += m; vx(x).w += m; });
+      });
+    });
+    var nd = days.length, R = { days: days, nd: nd, keys: keys, H: H };
+    R.jam = d3.range(24).map(function (h) {
+      var ks = keys.filter(function (k) { return +k.slice(11, 13) === h; }), cr = d3.sum(ks, function (k) { return H[k].cr; });
+      var tn = d3.sum(ks, function (k) { return H[k].g[3]; });
+      return { h: h, rcv: d3.sum(ks, function (k) { return H[k].g[0]; }) / nd, dlv: d3.sum(ks, function (k) { return H[k].g[1]; }) / nd,
+        w: cr ? d3.sum(ks, function (k) { return H[k].w; }) / cr * 100 : null, cl: cr ? d3.sum(ks, function (k) { return H[k].cl; }) / cr * 100 : null,
+        tt: tn ? d3.sum(ks, function (k) { return H[k].g[4]; }) / tn : null };
+    });
+    R.hari = days.map(function (d) { var ks = keys.filter(function (k) { return k.slice(0, 10) === d; }), cr = d3.sum(ks, function (k) { return H[k].cr; });
+      return { d: d, rcv: d3.sum(ks, function (k) { return H[k].g[0]; }), dlv: d3.sum(ks, function (k) { return H[k].g[1]; }), w: cr ? d3.sum(ks, function (k) { return H[k].w; }) / cr * 100 : null }; });
+    var A = keys.filter(function (k) { return H[k].cr > 0; }), GB = [[0, 30, '0–30'], [31, 60, '31–60'], [61, 90, '61–90'], [91, 1e9, 'di atas 90']];
+    R.kel = GB.map(function (b) { var ks = A.filter(function (k) { var g = H[k].g[0] + H[k].g[1]; return g >= b[0] && g <= b[1]; }), cr = d3.sum(ks, function (k) { return H[k].cr; });
+      return { t: b[2], n: ks.length, w: cr ? d3.sum(ks, function (k) { return H[k].w; }) / cr * 100 : null, cl: cr ? d3.sum(ks, function (k) { return H[k].cl; }) / cr * 100 : null }; });
+    var crA = d3.sum(A, function (k) { return H[k].cr; }); R.wAll = crA ? d3.sum(A, function (k) { return H[k].w; }) / crA * 100 : null;
+    R.tot = d3.sum(EV, function (e) { return e.h; });
+    R.pen = d3.rollups(EV, function (g) { return { n: g.length, h: d3.sum(g, function (e) { return e.h; }) }; }, function (e) { return e.c; })
+      .map(function (x) { return { t: x[0], n: x[1].n, h: x[1].h, p: R.tot ? x[1].h / R.tot * 100 : 0 }; }).sort(function (a, b) { return b.h - a.h; });
+    var pc = function (re) { return d3.sum(R.pen.filter(function (p) { return re.test(p.t); }), function (p) { return p.p; }); };
+    R.pClash = pc(/^Clash (RCV|DLV)/); R.pR = pc(/^Clash RCV$/); R.pD = pc(/^Clash DLV$/);
+    R.cy = d3.rollups(EV.filter(function (e) { return e.cy; }), function (g) { return { r: d3.sum(g, function (e) { return /RCV/.test(e.c) ? e.h : 0; }), d: d3.sum(g, function (e) { return /DLV/.test(e.c) ? e.h : 0; }), o: d3.sum(g, function (e) { return isClash(e.c) ? 0 : e.h; }) }; }, function (e) { return e.cy; })
+      .map(function (x) { return { cy: 'CY ' + x[0], r: x[1].r, d: x[1].d, o: x[1].o }; }).sort(function (a, b) { return a.cy < b.cy ? -1 : 1; });
+    var nm = function (v) { return v.kapal.toUpperCase().replace(/\s+11$/, ''); };
+    var fullFrom = T0 + 3.5 * 864e5;
+    R.kapal = VS.slice().sort(function (a, b) { return gMs(a.atb) - gMs(b.atb); }).map(function (v) {
+      var atb = gMs(v.atb), atd = gMs(v.atd), acm = v.acm ? gMs(v.acm) : atb, rv = gV('rv', nm(v)), dv = gV('dv', nm(v));
+      var rk = Object.keys(rv).filter(function (k) { var t = gMs(k + ':00'); return t <= atd && t > atd - 12 * 864e5; });
+      var rn = d3.sum(rk, function (k) { return rv[k]; }), late = d3.sum(rk, function (k) { return gMs(k + ':00') >= Math.floor(acm / 36e5) * 36e5 ? rv[k] : 0; });
+      var dn = d3.sum(Object.keys(dv), function (k) { var t = gMs(k + ':00'); return t >= Math.floor(atb / 36e5) * 36e5 && t <= atd ? dv[k] : 0; });
+      var ks = keys.filter(function (k) { var t = gMs(k + ':00'); return t >= Math.floor(atb / 36e5) * 36e5 && t < atd; });
+      var ev = EV.filter(function (e) { return e.v === v && e.s >= atb && e.s <= atd; });
+      var vh = GH[v.id] || {}, vk = Object.keys(vh), hiK = vk.filter(function (k) { return vh[k].g > 60; }), loK = vk.filter(function (k) { return vh[k].g <= 60; });
+      var crH = d3.sum(hiK, function (k) { return vh[k].cr; }), crL = d3.sum(loK, function (k) { return vh[k].cr; });
+      var cmp = crH >= 120 && crL >= 120 ? { hi: d3.sum(hiK, function (k) { return vh[k].w; }) / crH * 100, lo: d3.sum(loK, function (k) { return vh[k].w; }) / crL * 100 } : null;
+      var crT = d3.sum(vk, function (k) { return vh[k].cr; });
+      return { v: v, cmp: cmp, crh: crT / 60, wr: crT ? d3.sum(vk, function (k) { return vh[k].w; }) / crT * 100 : null, peak: ks.length ? ks.filter(function (k) { return H[k].g[0] + H[k].g[1] > 90; }).length / ks.length * 100 : null,
+        gate: ks.length ? d3.mean(ks, function (k) { return H[k].g[0] + H[k].g[1]; }) : null, w: d3.sum(ev, function (e) { return e.h; }),
+        cr: d3.sum(ev, function (e) { return /RCV/.test(e.c) ? e.h : 0; }), cd: d3.sum(ev, function (e) { return /DLV/.test(e.c) ? e.h : 0; }),
+        dl: dn, late: atb >= fullFrom && rn ? late / rn * 100 : null };
+    });
+    var KC = R.kapal.filter(function (k) { return k.cmp; });
+    if (KC.length >= 4) R.peakCmp = { n: KC.length, up: KC.filter(function (k) { return k.cmp.hi > k.cmp.lo; }).length, hi: d3.mean(KC, function (k) { return k.cmp.hi; }), lo: d3.mean(KC, function (k) { return k.cmp.lo; }),
+      top: KC.slice().sort(function (a, b) { return (b.cmp.hi - b.cmp.lo) - (a.cmp.hi - a.cmp.lo); }).slice(0, 3) };
+    var KG = R.kapal.filter(function (k) { return k.gate != null && k.wr != null && k.crh >= 4 && gMs(k.v.atb) >= T0 && gMs(k.v.atd) <= T1; }).sort(function (a, b) { return a.gate - b.gate; });
+    if (KG.length >= 6) { var t3 = Math.ceil(KG.length / 3); R.tri = [['Gate paling sepi', KG.slice(0, t3)], ['Gate sedang', KG.slice(t3, KG.length - t3)], ['Gate paling padat', KG.slice(KG.length - t3)]].map(function (x) { var g = x[1];
+      return { t: x[0], n: g.length, gate: d3.mean(g, function (k) { return k.gate; }), peak: d3.mean(g, function (k) { return k.peak; }), wr: d3.mean(g, function (k) { return k.wr; }), bsh: d3.mean(g, function (k) { return k.v.bshb; }), bt: d3.mean(g, function (k) { return k.v.bt; }), box: d3.mean(g, function (k) { return k.v.box; }) }; }); }
+    var KL = R.kapal.filter(function (k) { return k.late != null; }).sort(function (a, b) { return a.late - b.late; });
+    if (KL.length >= 4) { var half = Math.floor(KL.length / 2), lo = KL.slice(0, KL.length - half), hi = KL.slice(KL.length - half);
+      R.lateCmp = { n: KL.length, avg: d3.mean(KL, function (k) { return k.late; }), btHi: d3.mean(hi, function (k) { return k.v.bt; }), btLo: d3.mean(lo, function (k) { return k.v.bt; }), crHi: d3.mean(hi, function (k) { return k.cr; }), crLo: d3.mean(lo, function (k) { return k.cr; }) }; }
+    var all = keys.map(function (k) { return H[k].g; });
+    R.ptos = d3.sum(keys, function (k) { return H[k].p; });
+    R.rcv = d3.sum(all, function (g) { return g[0]; }); R.dlv = d3.sum(all, function (g) { return g[1]; }); R.rcvE = d3.sum(all, function (g) { return g[2]; });
+    var tn = d3.sum(all, function (g) { return g[3]; }); R.tt = tn ? d3.sum(all, function (g) { return g[4]; }) / tn : null;
+    var rest = keys.filter(function (k) { return /T(12|18)$/.test(k); }), rn2 = d3.sum(rest, function (k) { return H[k].g[3]; });
+    R.ttRest = rn2 ? d3.sum(rest, function (k) { return H[k].g[4]; }) / rn2 : null;
+    return R;
+  }
+  function gDay(d) { var x = new Date(d + 'T00:00:00Z'); return HARI[x.getUTCDay()] + ' ' + x.getUTCDate() + ' ' + BLN[x.getUTCMonth()]; }
+  function gPct(x) { return x == null ? '—' : n1(x) + '%'; }
+  function gSvg(host, H, label) { var W = Math.max(300, host.clientWidth || 640); var svg = d3.select(host).append('svg').attr('viewBox', '0 0 ' + W + ' ' + H).attr('width', '100%').attr('height', H).attr('role', 'img').attr('aria-label', label); return { svg: svg, W: W }; }
+  function gAxisStyle(g) { g.selectAll('text').style('fill', 'var(--muted)').style('font-size', '11px'); g.selectAll('line').style('stroke', 'var(--grid)'); g.select('.domain').remove(); }
+  function drawGate() {
+    var host = $('g-body'); if (!host) return; host.replaceChildren();
+    $('h-gate').textContent = 'Receiving, delivery dan crane menunggu · ' + mName(mon);
+    var R = gCompute();
+    if (!R) { host.appendChild(el('p', 'cap', 'Belum ada data Terminal In & Out untuk ' + (mon ? mName(mon) : 'periode ini') + '. Unggah file Terminal In & Out lewat Pilih file di bagian atas.')); return; }
+    var per = gDay(R.days[0]) + ' – ' + gDay(R.days[R.days.length - 1]) + ' (' + R.nd + ' hari)';
+    var top3 = R.jam.slice().sort(function (a, b) { return (b.rcv + b.dlv) - (a.rcv + a.dlv); }).slice(0, 3).map(function (j) { return String(j.h).padStart(2, '0') + '.00'; }).sort();
+    var ramai = R.kel[3], sepi = R.kel[0];
+    host.appendChild(el('p', 'lead', 'Pada ' + per + ', gate melayani ' + n0(R.rcv) + ' box receiving dan ' + n0(R.dlv) + ' box delivery' + (R.ptos ? ', termasuk ' + n0(R.ptos) + ' box yang masih dilayani aplikasi lama (PTOS) setelah perpindahan ke TOSNOS' : '') + '. Crane kapal menunggu truk atau kontainer ' + n1(R.tot) + ' jam crane, dan ' + n0(R.pClash) + '% di antaranya dicatat sebagai clash RCV atau DLV.'));
+    var bad = gBad();
+    if (bad.length) host.appendChild(el('p', 'cap', bad.length + ' hari tidak dihitung karena data gate-nya belum lengkap (receiving atau delivery jauh di bawah hari biasa, misalnya masa transisi aplikasi PTOS ke TOSNOS): ' + bad.map(function (d) { return +d.slice(8, 10); }).join(', ') + ' ' + BLNF[+bad[0].slice(5, 7) - 1] + '.'));
+    var kp = el('div', 'kpis'); kp.style.margin = '12px 0';
+    [['Receiving per hari', n0(R.rcv / R.nd), n0(R.rcv ? R.rcvE / R.rcv * 100 : 0) + '% kontainer Empty'], ['Delivery per hari', n0(R.dlv / R.nd), 'box keluar gate'],
+     ['Crane menunggu, gate sepi', gPct(sepi.w), '0–30 box per jam'], ['Crane menunggu, gate ramai', gPct(ramai.w), 'di atas 90 box per jam'],
+     ['Clash RCV / DLV', n0(R.pR) + '% / ' + n0(R.pD) + '%', 'dari jam crane menunggu']].forEach(function (k) {
+      var c = el('div', 'kpi'); c.appendChild(el('div', 'kl', k[0])); c.appendChild(el('div', 'kv', k[1])); c.appendChild(el('div', 'kn', k[2])); kp.appendChild(c); });
+    host.appendChild(kp);
+    // per jam
+    host.appendChild(el('h3', null, 'Pola per jam'));
+    host.appendChild(el('p', 'cap', 'Gate paling ramai pukul ' + top3.join(', ') + '. Bagian bawah: persen waktu kerja crane yang hilang karena menunggu truk atau kontainer pada jam itu, dan bagian yang dicatat sebagai clash RCV/DLV.'));
+    var c1 = el('div', 'chart'); host.appendChild(c1); c1.appendChild(legend([['Receiving (box per jam)', 'var(--c1)'], ['Delivery', 'var(--c3)']]));
+    (function () { var m = { t: 8, r: 10, b: 22, l: 38 }, H = 190, o = gSvg(c1, H, 'Receiving dan delivery per jam'), W = o.W, svg = o.svg, tip = makeTip(c1);
+      var x = d3.scalePoint().domain(d3.range(24)).range([m.l, W - m.r]).padding(.3), y = d3.scaleLinear().domain([0, d3.max(R.jam, function (j) { return Math.max(j.rcv, j.dlv); }) || 1]).nice().range([H - m.b, m.t]);
+      svg.append('g').attr('transform', 'translate(' + m.l + ',0)').call(d3.axisLeft(y).ticks(4).tickSize(-(W - m.l - m.r)).tickFormat(n0)).call(gAxisStyle);
+      var st = W < 520 ? 6 : 3; svg.append('g').attr('transform', 'translate(0,' + (H - m.b) + ')').call(d3.axisBottom(x).tickValues(d3.range(0, 24, st)).tickFormat(function (h) { return String(h).padStart(2, '0') + '.00'; }).tickSize(0)).call(gAxisStyle);
+      [['rcv', 'var(--c1)'], ['dlv', 'var(--c3)']].forEach(function (s) {
+        svg.append('path').datum(R.jam).attr('fill', 'none').style('stroke', s[1]).attr('stroke-width', 2).attr('d', d3.line().x(function (j) { return x(j.h); }).y(function (j) { return y(j[s[0]]); }));
+        svg.append('g').selectAll('circle').data(R.jam).join('circle').attr('cx', function (j) { return x(j.h); }).attr('cy', function (j) { return y(j[s[0]]); }).attr('r', 2.6).style('fill', s[1]); });
+      svg.append('g').selectAll('rect').data(R.jam).join('rect').attr('x', function (j) { return x(j.h) - x.step() / 2; }).attr('width', x.step()).attr('y', m.t).attr('height', H - m.t - m.b).attr('fill', 'transparent')
+        .on('pointermove', function (ev, j) { tip.show(ev, 'Pukul ' + String(j.h).padStart(2, '0') + '.00\nReceiving ' + n1(j.rcv) + ' box/jam\nDelivery ' + n1(j.dlv) + ' box/jam'); }).on('pointerleave', function () { tip.hide(); });
+    })();
+    var c2 = el('div', 'chart'); host.appendChild(c2); c2.appendChild(legend([['Clash RCV/DLV', 'var(--c2)'], ['Menunggu karena sebab lain', 'var(--grid)']]));
+    (function () { var m = { t: 8, r: 10, b: 22, l: 38 }, H = 170, o = gSvg(c2, H, 'Persen waktu crane menunggu per jam'), W = o.W, svg = o.svg, tip = makeTip(c2);
+      var x = d3.scaleBand().domain(d3.range(24)).range([m.l, W - m.r]).padding(.2), y = d3.scaleLinear().domain([0, d3.max(R.jam, function (j) { return j.w || 0; }) || 1]).nice().range([H - m.b, m.t]);
+      svg.append('g').attr('transform', 'translate(' + m.l + ',0)').call(d3.axisLeft(y).ticks(4).tickSize(-(W - m.l - m.r)).tickFormat(function (v) { return n0(v) + '%'; })).call(gAxisStyle);
+      var st = W < 520 ? 6 : 3; svg.append('g').attr('transform', 'translate(0,' + (H - m.b) + ')').call(d3.axisBottom(x).tickValues(d3.range(0, 24, st)).tickFormat(function (h) { return String(h).padStart(2, '0') + '.00'; }).tickSize(0)).call(gAxisStyle);
+      R.jam.forEach(function (j) { if (j.w == null) return;
+        svg.append('rect').attr('x', x(j.h)).attr('width', x.bandwidth()).attr('y', y(j.w)).attr('height', y(0) - y(j.w)).style('fill', 'var(--muted)').style('opacity', .35).attr('rx', 2);
+        svg.append('rect').attr('x', x(j.h)).attr('width', x.bandwidth()).attr('y', y(j.cl)).attr('height', y(0) - y(j.cl)).style('fill', 'var(--c2)').attr('rx', 2); });
+      svg.append('g').selectAll('rect').data(R.jam).join('rect').attr('x', function (j) { return x(j.h); }).attr('width', x.step()).attr('y', m.t).attr('height', H - m.t - m.b).attr('fill', 'transparent')
+        .on('pointermove', function (ev, j) { tip.show(ev, 'Pukul ' + String(j.h).padStart(2, '0') + '.00\nCrane menunggu ' + gPct(j.w) + ' dari waktu kerja\nKarena clash RCV/DLV ' + gPct(j.cl) + (j.tt != null ? '\nTruk di terminal rata-rata ' + n0(j.tt) + ' menit' : '')); }).on('pointerleave', function () { tip.hide(); });
+    })();
+    // kepadatan dan penyebab
+    var grid = el('div', 'grid'); grid.style.marginTop = '12px'; host.appendChild(grid);
+    var g1 = el('div'); grid.appendChild(g1); g1.appendChild(el('h3', null, 'Makin padat gate, makin lama crane menunggu'));
+    g1.appendChild(el('p', 'cap', 'Persen waktu kerja crane yang hilang, menurut jumlah box yang lewat gate dalam jam yang sama.'));
+    var kb = el('div', 'bars'); g1.appendChild(kb);
+    var kmax = d3.max(R.kel, function (k) { return k.w || 0; }) || 1;
+    R.kel.forEach(function (k) {
+      var b = el('div', 'brow'), l = el('span', null, 'Gate ' + k.t + ' box/jam'); l.appendChild(el('small', null, k.n + ' jam · clash ' + gPct(k.cl))); b.appendChild(l); b.appendChild(el('span', 'brow-v', gPct(k.w)));
+      var tr = el('div', 'btrack'), f = el('div', 'bfill'); f.style.width = Math.max(1, (k.w || 0) / kmax * 100) + '%'; f.style.background = 'var(--c2)'; tr.appendChild(f); b.appendChild(tr); kb.appendChild(b); });
+    var g2 = el('div'); grid.appendChild(g2); g2.appendChild(el('h3', null, 'Penyebab crane menunggu truk atau kontainer'));
+    g2.appendChild(el('p', 'cap', 'Dibaca dari remark setiap catatan berhenti. Jam dihitung per crane.'));
+    var pb = el('div', 'bars'); g2.appendChild(pb);
+    hbars(pb, R.pen.map(function (p) { return { t: p.t, s: p.n + ' kali · ' + n0(p.p) + '%', v: p.h, c: isClash(p.t) ? 'var(--c2)' : 'var(--k6)' }; }), d3.max(R.pen, function (p) { return p.h; }));
+    // CY
+    if (R.cy.length) {
+      host.appendChild(el('h3', null, 'Lapangan yang disebut di catatan clash'));
+      var tw = el('div', 'tw'), t = el('table'), th = el('thead'), hr = el('tr'), tb = el('tbody');
+      [['Lapangan'], ['Clash RCV (jam crane)', 1], ['Clash DLV (jam crane)', 1], ['Sebab lain (jam crane)', 1]].forEach(function (h) { hr.appendChild(el('th', h[1] ? 'n' : null, h[0])); });
+      th.appendChild(hr); t.appendChild(th);
+      R.cy.forEach(function (c) { var r = el('tr'); r.appendChild(el('td', null, c.cy)); [c.r, c.d, c.o].forEach(function (x) { r.appendChild(el('td', 'n', n1(x))); }); tb.appendChild(r); });
+      t.appendChild(tb); tw.appendChild(t); host.appendChild(tw);
+    }
+    // per hari + peta jam
+    host.appendChild(el('h3', null, 'Gate per hari'));
+    var c3 = el('div', 'chart'); host.appendChild(c3); c3.appendChild(legend([['Receiving', 'var(--c1)'], ['Delivery', 'var(--c3)']]));
+    (function () { var m = { t: 8, r: 10, b: 34, l: 42 }, H = 210, o = gSvg(c3, H, 'Receiving dan delivery per hari'), W = o.W, svg = o.svg, tip = makeTip(c3);
+      var x0 = d3.scaleBand().domain(R.hari.map(function (d) { return d.d; })).range([m.l, W - m.r]).padding(.2), x1 = d3.scaleBand().domain(['rcv', 'dlv']).range([0, x0.bandwidth()]).padding(.08);
+      var y = d3.scaleLinear().domain([0, d3.max(R.hari, function (d) { return Math.max(d.rcv, d.dlv); }) || 1]).nice().range([H - m.b, m.t]);
+      svg.append('g').attr('transform', 'translate(' + m.l + ',0)').call(d3.axisLeft(y).ticks(4).tickSize(-(W - m.l - m.r)).tickFormat(n0)).call(gAxisStyle);
+      var every = Math.max(1, Math.ceil(R.hari.length * 46 / (W - m.l - m.r)));
+      svg.append('g').attr('transform', 'translate(0,' + (H - m.b) + ')').call(d3.axisBottom(x0).tickValues(x0.domain().filter(function (d, i) { return i % every === 0; })).tickFormat(function (d) { var x = new Date(d + 'T00:00:00Z'); return HARI[x.getUTCDay()].slice(0, 3) + ' ' + x.getUTCDate(); }).tickSize(0)).call(gAxisStyle);
+      R.hari.forEach(function (d) { [['rcv', 'var(--c1)'], ['dlv', 'var(--c3)']].forEach(function (s) { svg.append('rect').attr('x', x0(d.d) + x1(s[0])).attr('width', x1.bandwidth()).attr('y', y(d[s[0]])).attr('height', y(0) - y(d[s[0]])).style('fill', s[1]).attr('rx', 2); });
+        svg.append('rect').attr('x', x0(d.d)).attr('width', x0.bandwidth()).attr('y', m.t).attr('height', H - m.t - m.b).attr('fill', 'transparent')
+          .on('pointermove', function (ev) { tip.show(ev, gDay(d.d) + '\nReceiving ' + n0(d.rcv) + ' box\nDelivery ' + n0(d.dlv) + ' box\nCrane menunggu ' + gPct(d.w) + ' dari waktu kerja'); }).on('pointerleave', function () { tip.hide(); }); });
+    })();
+    var c4 = el('div', 'chart'); host.appendChild(c4);
+    (function () { var m = { t: 4, r: 8, b: 22, l: 60 }, rh = 20, H = R.days.length * rh + m.t + m.b, o = gSvg(c4, H, 'Gerakan gate per jam setiap hari'), W = o.W, svg = o.svg, tip = makeTip(c4);
+      var x = d3.scaleBand().domain(d3.range(24)).range([m.l, W - m.r]).padding(.06), y = d3.scaleBand().domain(R.days).range([m.t, H - m.b]).padding(.08);
+      var mx = d3.max(R.keys, function (k) { return R.H[k].g[0] + R.H[k].g[1]; }) || 1;
+      svg.append('g').attr('transform', 'translate(' + m.l + ',0)').call(d3.axisLeft(y).tickFormat(function (d) { var x2 = new Date(d + 'T00:00:00Z'); return HARI[x2.getUTCDay()].slice(0, 3) + ' ' + x2.getUTCDate(); }).tickSize(0)).call(gAxisStyle);
+      var st = W < 520 ? 6 : 3; svg.append('g').attr('transform', 'translate(0,' + (H - m.b) + ')').call(d3.axisBottom(x).tickValues(d3.range(0, 24, st)).tickFormat(function (h) { return String(h).padStart(2, '0') + '.00'; }).tickSize(0)).call(gAxisStyle);
+      svg.append('g').selectAll('rect').data(R.keys).join('rect').attr('x', function (k) { return x(+k.slice(11, 13)); }).attr('y', function (k) { return y(k.slice(0, 10)); }).attr('width', x.bandwidth()).attr('height', y.bandwidth()).attr('rx', 2)
+        .style('fill', 'var(--c1)').style('opacity', function (k) { return 0.06 + 0.94 * (R.H[k].g[0] + R.H[k].g[1]) / mx; })
+        .on('pointermove', function (ev, k) { var g = R.H[k].g; tip.show(ev, gDay(k.slice(0, 10)) + ', pukul ' + k.slice(11, 13) + '.00\nReceiving ' + n0(g[0]) + ' · Delivery ' + n0(g[1]) + ' box'); }).on('pointerleave', function () { tip.hide(); });
+    })();
+    // per kapal
+    if (R.peakCmp || R.tri) {
+      host.appendChild(el('h3', null, 'Kapal yang sandar saat gate padat'));
+      if (R.peakCmp) { var pc2 = R.peakCmp;
+        host.appendChild(el('p', null, 'Hubungannya terlihat jelas di dalam kapal yang sama. Dari ' + pc2.n + ' kapal, ' + pc2.up + ' kapal kehilangan lebih banyak waktu crane pada jam gate padat (di atas 60 box per jam) dibanding jam gate sepi: rata-rata ' + gPct(pc2.hi) + ' berbanding ' + gPct(pc2.lo) + '. Selisih terbesar di ' + pc2.top.map(function (k) { return k.v.kapal + ' (' + n0(k.cmp.hi) + '% dan ' + n0(k.cmp.lo) + '%)'; }).join(', ') + '.')); }
+      if (R.tri) { var tr3 = R.tri, ub = tr3[2].bt - tr3[0].bt, ubx = tr3[2].box - tr3[0].box;
+        var bshTxt = tr3[2].bsh <= tr3[0].bsh - 2 ? 'BSH BT kelompok paling padat lebih rendah (' + n1(tr3[2].bsh) + ' dibanding ' + n1(tr3[0].bsh) + ')' : tr3[2].bsh >= tr3[0].bsh + 2 ? 'BSH BT kelompok paling padat justru lebih tinggi (' + n1(tr3[2].bsh) + ' dibanding ' + n1(tr3[0].bsh) + ')' : 'BSH BT ketiga kelompok hampir sama (' + tr3.map(function (t) { return n1(t.bsh); }).join(', ') + ')';
+        var wSame = d3.max(tr3, function (t) { return t.wr; }) - d3.min(tr3, function (t) { return t.wr; }) < 3;
+        host.appendChild(el('p', null, 'Antar kapal, kapal dikelompokkan menurut rata-rata gate selama sandar. Kapal di kelompok paling padat bersandar ' + n1(tr3[2].bt) + ' jam, dibanding ' + n1(tr3[0].bt) + ' jam di kelompok paling sepi' + (ubx > 30 ? ', tetapi muatannya juga lebih besar (' + n0(tr3[2].box) + ' dibanding ' + n0(tr3[0].box) + ' box). Kapal yang lama sandar memang lebih sering melewati jam padat' : '') + '. ' + bshTxt + '.' +
+          (wSame ? ' Persen waktu crane menunggu antar kelompok hampir sama (' + tr3.map(function (t) { return gPct(t.wr); }).join(', ') + '), karena setiap kapal mengalami jam padat dan jam sepi. Jadi dampak gate padat paling jelas terlihat per jam, di dalam kapal yang sama, bukan sebagai kapal tertentu yang selalu lambat.' : ' Crane menunggu ' + gPct(tr3[2].wr) + ' di kelompok paling padat dibanding ' + gPct(tr3[0].wr) + ' di kelompok paling sepi.')));
+        var tw3 = el('div', 'tw'), t3t = el('table'), th3 = el('thead'), h3r = el('tr'), tb3 = el('tbody');
+        [['Kelompok kapal'], ['Kapal', 1], ['Gate saat sandar (box/jam)', 1], ['Jam sandar saat gate di atas 90', 1], ['Crane menunggu', 1], ['BSH BT', 1], ['BT (jam)', 1], ['Box', 1]].forEach(function (h) { h3r.appendChild(el('th', h[1] ? 'n' : null, h[0])); });
+        th3.appendChild(h3r); t3t.appendChild(th3);
+        tr3.forEach(function (t) { var r = el('tr'); r.appendChild(el('td', null, t.t)); [n0(t.n), n0(t.gate), gPct(t.peak), gPct(t.wr), n1(t.bsh), n1(t.bt), n0(t.box)].forEach(function (x) { r.appendChild(el('td', 'n', x)); }); tb3.appendChild(r); });
+        t3t.appendChild(tb3); tw3.appendChild(t3t); host.appendChild(tw3); }
+    }
+    host.appendChild(el('h3', null, 'Per kapal'));
+    if (R.lateCmp) host.appendChild(el('p', 'cap', 'Rata-rata ' + n0(R.lateCmp.avg) + '% box receiving masuk gate setelah crane kapalnya mulai bekerja. Separuh kapal dengan receiving paling telat bersandar ' + n1(R.lateCmp.btHi) + ' jam dengan clash RCV ' + n1(R.lateCmp.crHi) + ' jam, dibanding ' + n1(R.lateCmp.btLo) + ' jam dan ' + n1(R.lateCmp.crLo) + ' jam pada separuh lainnya (' + R.lateCmp.n + ' kapal yang receiving-nya tercatat lengkap).'));
+    var tw2 = el('div', 'tw'), t2 = el('table'), th2 = el('thead'), hr2 = el('tr'), tb2 = el('tbody');
+    [['Kapal'], ['Sandar'], ['Box', 1], ['BT (jam)', 1], ['BSH BT', 1], ['Gate saat sandar (box/jam)', 1], ['Jam sandar saat gate di atas 90', 1], ['Menunggu: jam padat / sepi', 1], ['Crane menunggu (jam)', 1], ['Clash RCV', 1], ['Clash DLV', 1], ['Delivery saat sandar', 1], ['Receiving telat', 1]].forEach(function (h) { hr2.appendChild(el('th', h[1] ? 'n' : null, h[0])); });
+    th2.appendChild(hr2); t2.appendChild(th2);
+    R.kapal.forEach(function (k) { var r = el('tr'); r.appendChild(el('td', null, k.v.kapal)); r.appendChild(el('td', null, fT(k.v.atb)));
+      [n0(k.v.box), n1(k.v.bt), n1(k.v.bshb), k.gate == null ? '—' : n0(k.gate), k.peak == null ? '—' : n0(k.peak) + '%', k.cmp ? n0(k.cmp.hi) + '% / ' + n0(k.cmp.lo) + '%' : '—', n1(k.w), n1(k.cr), n1(k.cd), n0(k.dl), k.late == null ? '—' : n0(k.late) + '%'].forEach(function (x) { r.appendChild(el('td', 'n', x)); });
+      tb2.appendChild(r); });
+    t2.appendChild(tb2); tw2.appendChild(t2); host.appendChild(tw2);
+    host.appendChild(el('p', 'cap', 'Menunggu jam padat / sepi: persen waktu crane kapal itu yang hilang karena menunggu truk atau kontainer saat gate di atas 60 box per jam, dibanding saat gate 60 box per jam atau kurang. Receiving telat: box export kapal itu yang masuk gate setelah crane mulai bekerja; kosong bila receiving-nya terjadi sebelum data gate tersedia. Delivery saat sandar: box bongkaran kapal itu yang sudah keluar gate sebelum kapal berangkat.'));
+    // temuan
+    host.appendChild(el('h3', null, 'Temuan dan yang bisa dilakukan'));
+    var ol = el('ol', 'rec'); host.appendChild(ol);
+    var add = function (b, t, f) { var li = el('li'); li.appendChild(el('b', null, b + ' ')); li.appendChild(document.createTextNode(t)); if (f) li.appendChild(el('span', 'fix', f)); ol.appendChild(li); };
+    var cyR = R.cy.slice().sort(function (a, b) { return b.r - a.r; }).filter(function (c) { return c.r > 0; }).slice(0, 2).map(function (c) { return c.cy; });
+    var cyD = R.cy.slice().sort(function (a, b) { return b.d - a.d; }).filter(function (c) { return c.d > 0; }).slice(0, 1).map(function (c) { return c.cy; });
+    add('Clash RCV dan DLV adalah penyebab terbesar.', n0(R.pClash) + '% jam crane menunggu truk atau kontainer dicatat sebagai clash: RCV ' + n0(R.pR) + '% dan DLV ' + n0(R.pD) + '%.' + (cyD.length ? ' Clash DLV paling sering di ' + cyD.join(', ') + '.' : '') + (cyR.length ? ' Clash RCV paling sering di ' + cyR.join(' dan ') + '.' : ''),
+      'Atur jendela gate per blok: saat crane memuat dari blok export, tahan atau alihkan receiving ke blok itu; saat crane membongkar ke blok import, layani delivery blok itu di jam lain.');
+    if (sepi.w != null && ramai.w != null) add('Gate ramai mengambil alat crane.', 'Saat gate di atas 90 box per jam crane menunggu ' + gPct(ramai.w) + ' dari waktu kerjanya, dibanding ' + gPct(sepi.w) + ' saat gate sepi.',
+      'Tetapkan RTG dan HT khusus kapal pada jam padat (' + top3.join(', ') + ') agar lonjakan truk luar tidak mengambil alat crane.');
+    if (R.peakCmp) add('Kapal yang bekerja di jam padat ikut melambat.', R.peakCmp.up + ' dari ' + R.peakCmp.n + ' kapal kehilangan lebih banyak waktu crane saat gate padat (' + gPct(R.peakCmp.hi) + ') dibanding saat gate sepi (' + gPct(R.peakCmp.lo) + ').',
+      'Saat dua atau tiga kapal bekerja bersamaan, kurangi receiving dan delivery yang tidak mendesak di jam padat, dan dahulukan blok yang sedang dipakai kapal.');
+    if (R.rcv && R.rcvE / R.rcv > 0.4) add('Banyak receiving adalah Empty.', n0(R.rcvE / R.rcv * 100) + '% receiving adalah kontainer Empty, yang tidak terikat jadwal kapal.', 'Geser sebagian receiving Empty ke jam sepi pukul 02.00–07.00.');
+    if (R.lateCmp) add('Receiving datang setelah kapal mulai muat.', 'Rata-rata ' + n0(R.lateCmp.avg) + '% box export masuk gate setelah crane bekerja.', 'Tetapkan closing time receiving sebelum kapal mulai muat, dan tolak atau jadwalkan ulang yang terlambat.');
+    if (R.ttRest != null && R.tt != null && R.ttRest > R.tt * 1.3) add('Truk tertahan saat istirahat.', 'Truk yang masuk pukul 12.00 dan 18.00 berada di terminal rata-rata ' + n0(R.ttRest) + ' menit, dibanding ' + n0(R.tt) + ' menit secara umum.', 'Kurangi antrean gate menjelang istirahat atau tetapkan alat yang tetap melayani gate saat istirahat.');
+  }
+
+  // ---------- editor ----------
+  function setStatus(t, err) { var s = $('status'); s.textContent = t; s.className = 'status' + (err ? ' err' : ''); }
+  function drawEditor() {
+    $('editor').hidden = !canEdit;
+    if (!canEdit) return;
+    var host = $('ed-rows'); host.replaceChildren();
+    var t = el('table'), tb = el('tbody');
+    if (D.g && D.g.days.length) {
+      var gr = el('tr'); gr.appendChild(el('td', null, 'Terminal In & Out · ' + gDay(D.g.days[0]) + ' – ' + gDay(D.g.days[D.g.days.length - 1]))); gr.appendChild(el('td', 'muted', D.g.days.length + ' hari'));
+      var gtd = el('td', 'n'), gb = el('button', 'btn sm', 'Hapus'); gb.type = 'button';
+      gb.addEventListener('click', function () { save('Data Terminal In & Out dihapus', function () { delete D.g; }); });
+      gtd.appendChild(gb); gr.appendChild(gtd); tb.appendChild(gr);
+    }
+    if (D.gp && D.gp.days.length) {
+      var pr = el('tr'); pr.appendChild(el('td', null, 'Receiving Delivery aplikasi lama (PTOS) · ' + gDay(D.gp.days[0]) + ' – ' + gDay(D.gp.days[D.gp.days.length - 1]))); pr.appendChild(el('td', 'muted', 'ditambahkan ke Terminal In & Out'));
+      var ptd = el('td', 'n'), pb2 = el('button', 'btn sm', 'Hapus'); pb2.type = 'button';
+      pb2.addEventListener('click', function () { save('Data PTOS dihapus', function () { delete D.gp; }); });
+      ptd.appendChild(pb2); pr.appendChild(ptd); tb.appendChild(pr);
+    }
+    sorted().forEach(function (v) {
+      var r = el('tr'); r.appendChild(el('td', null, v.kapal + ' · ' + v.vi)); r.appendChild(el('td', 'muted', v.file || ''));
+      var td = el('td', 'n'), b = el('button', 'btn sm', 'Hapus'); b.type = 'button';
+      b.addEventListener('click', function () { save(v.kapal + ' dihapus', function () { D.v = D.v.filter(function (x) { return x.id !== v.id; }); }); });
+      td.appendChild(b); r.appendChild(td); tb.appendChild(r);
+    });
+    t.appendChild(tb); host.appendChild(t);
+  }
+  function download(blob, name) { var u = URL.createObjectURL(blob), x = document.createElement('a'); x.href = u; x.download = name; document.body.appendChild(x); x.click(); x.remove(); setTimeout(function () { URL.revokeObjectURL(u); }, 1000); }
+  function jsonText() { return JSON.stringify(D); }
+  $('b-json').addEventListener('click', function () { download(new Blob([jsonText()], { type: 'application/json' }), 'kapal.json'); setStatus('kapal.json sudah diunduh. Lanjutkan dengan mengunggahnya ke GitHub.'); });
+  // Di GitHub Pages halaman tidak bisa menyimpan sendiri: perubahan diterapkan di browser ini, lalu kapal.json diunduh dan diunggah ke repositori.
+  async function save(label, mutate) {
+    if (busy) return; busy = true;
+    var snap = JSON.stringify(D);
+    try { mutate(); D.u = new Date().toISOString(); render(); $('ed-out').hidden = false; setStatus(label + ' diterapkan di halaman ini. Unduh kapal.json lalu unggah ke GitHub agar tersimpan untuk semua orang.'); }
+    catch (e) { D = JSON.parse(snap); render(); setStatus('Gagal: ' + ((e && e.message) || 'tidak diketahui') + '.', true); }
+    finally { busy = false; }
+  }
+  // voyage sama tapi kunjungan beda (selisih sandar > 2 hari) -> id terpisah, tidak menimpa
+  function fixId(v) {
+    var t = Date.parse(v.atb || v.atd || ''), same = function (x) { var u = Date.parse(x.atb || x.atd || ''); return isNaN(t) || isNaN(u) || Math.abs(t - u) < 1728e5; };
+    var hit = D.v.filter(function (x) { return x.id === v.id || x.id.indexOf(v.id + '|') === 0; });
+    var m = hit.filter(same)[0];
+    if (m) v.id = m.id; else if (hit.length) v.id = v.id + '|' + (v.atb || v.atd || '').slice(0, 10);
+    return v;
+  }
+  $('b-pilih').addEventListener('click', function () { $('u-file').click(); });
+  $('u-file').addEventListener('change', async function (e) {
+    var files = Array.prototype.slice.call(e.target.files || []); if (!files.length) return;
+    $('u-name').textContent = files.length + ' file dipilih'; setStatus('Membaca file…'); pending = []; pendingG = [];
+    var prev = $('u-prev'); prev.replaceChildren(); var ul = el('ul', 'rmk');
+    for (var i = 0; i < files.length; i++) {
+      try {
+        var buf = new Uint8Array(await files[i].arrayBuffer());
+        if (isPtosWb(buf)) {
+          var GP = parsePtos(buf, files[i].name); pendingG.push(GP);
+          ul.appendChild(el('li', null, 'Receiving Delivery aplikasi lama (PTOS) · ' + gDay(GP.days[0]) + ' – ' + gDay(GP.days[GP.days.length - 1]) + ' · ' + n0(GP.n[0]) + ' receiving, ' + n0(GP.n[1]) + ' delivery, ditambahkan ke total Terminal In & Out' + (D.gp ? ' (mengganti data PTOS tanggal yang sama)' : '')));
+          continue;
+        }
+        if (isGateWb(buf)) {
+          var G = parseGate(buf, files[i].name); pendingG.push(G);
+          var lama = D.g ? G.days.filter(function (d) { return D.g.days.indexOf(d) >= 0; }).length : 0;
+          ul.appendChild(el('li', null, 'Terminal In & Out · ' + gDay(G.days[0]) + ' – ' + gDay(G.days[G.days.length - 1]) + ' (' + G.days.length + ' hari penuh) · ' + n0(G.n[0]) + ' receiving, ' + n0(G.n[1]) + ' delivery' + (lama ? ' (mengganti ' + lama + ' hari data lama)' : '')));
+          continue;
+        }
+        var v = fixId(parseKp(buf, files[i].name)); pending.push(v);
+        ul.appendChild(el('li', null, v.kapal + ' · voyage ' + v.vi + ' · ' + (v.ok ? n0(v.box) + ' box, BT ' + n1(v.bt) + ' jam' : 'belum lengkap') + (D.v.some(function (x) { return x.id === v.id; }) ? ' (mengganti data lama)' : '')));
+      } catch (err) { ul.appendChild(el('li', null, files[i].name + ': ' + (err.message || err))); }
+    }
+    prev.appendChild(ul);
+    var nOk = pending.length + pendingG.length;
+    setStatus(nOk ? [pending.length ? pending.length + ' kapal' : '', pendingG.length ? pendingG.length + ' file receiving/delivery' : ''].filter(Boolean).join(' dan ') + ' siap disimpan.' : 'Tidak ada file yang bisa dibaca.', !nOk);
+    $('b-terbit').hidden = !nOk; $('b-batal').hidden = false; e.target.value = '';
+  });
+  $('b-batal').addEventListener('click', function () { pending = null; pendingG = []; $('u-prev').replaceChildren(); $('u-name').textContent = ''; $('b-terbit').hidden = true; $('b-batal').hidden = true; setStatus(''); });
+  $('b-terbit').addEventListener('click', function () {
+    if (!pending) return; var P = pending, PG = pendingG;
+    var lbl = [P.length ? P.length + ' laporan kapal' : '', PG.length ? 'data receiving/delivery' : ''].filter(Boolean).join(' dan ');
+    save(lbl, function () { P.forEach(function (v) { D.v = D.v.filter(function (x) { return x.id !== v.id; }); D.v.push(v); }); PG.forEach(mergeGate); if (P.length) cur = P[0].id; })
+      .then(function () { if (!busy) { pending = null; pendingG = []; $('u-prev').replaceChildren(); $('b-terbit').hidden = true; $('b-batal').hidden = true; } });
+  });
+  window.__kp = { parseKp: parseKp, parseGate: parseGate, parsePtos: parsePtos, gCompute: gCompute, D: function () { return D; } };
+  var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(render, 150); });
+  render();
+  function syncEdit() { canEdit = location.hash === '#perbarui'; render(); if (canEdit) $('editor').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  window.addEventListener('hashchange', syncEdit);
+  if (canEdit) setTimeout(function () { $('editor').scrollIntoView({ block: 'start' }); }, 50);
+}).catch(function (e) {
+  var h = document.getElementById('d-title'); if (h) h.textContent = 'Data belum bisa dimuat: ' + ((e && e.message) || 'periksa koneksi') + '.';
+});
+</script>
+</div>
+<script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));</script>
+</body>
+</html>

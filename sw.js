@@ -1,7 +1,7 @@
 // Service worker: data dan halaman diambil dari internet dulu (selalu terbaru),
 // salinan terakhir dipakai bila sedang offline.
-const CACHE = 'kinerja-tpk-v1';
-const CORE = ['./', 'index.html', 'perbarui.html', 'data.json', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
+const CACHE = 'kinerja-tpk-v2';
+const CORE = ['./', 'index.html', 'perbarui.html', 'data.json', 'kapal.html', 'kapal.json', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
