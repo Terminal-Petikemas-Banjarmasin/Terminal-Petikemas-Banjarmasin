@@ -411,6 +411,7 @@ dd{margin:0}
     <tr><td>Kapal yang memenuhi target BT</td><td class="n">—</td><td class="n">56%</td><td class="n">21%</td></tr>
   </tbody></table></div>
   <p>Produktivitas kapal 22,5 box per jam sandar (BSH BT, tanpa LCT EMPAT SAUDARA 03) adalah yang terendah tahun ini. Kecepatan crane 27,7 box per jam, jauh di bawah Januari–Mei. Menunggu truk dan kontainer naik lebih dari tiga kali lipat, dan istirahat dua kali lipat. Kapal 15–22 November bersandar lama: MERATUS PARIAMAN 45,6 jam, PULAU HOKI 38,0 jam, TANTO LANGGENG 37,1 jam, ARMADA SENADA 33,4 jam dan DERYA MAS 32,1 jam.</p>
+  <p><b>Yard tidak penuh secara keseluruhan.</b> Laporan Container Yard Block Summary 16–22 November mencatat YOR harian 48–58%, rata-rata 53%, sekitar sama dengan Juni–Oktober (52%). YOR justru turun saat waiting time naik: 54–58% pada 16–19 November dan 48–51% pada 20–22 November, jadi kenaikan waiting time 20–22 November tidak berasal dari yard yang makin penuh. Yang menonjol adalah penumpukan yang tidak merata: blok 3C rata-rata 83% (sampai 91%) dan 3B 78% (sampai 87%), sedangkan CY1 hanya 40% dan blok 3G 15%. Di blok sepadat itu alat yard harus lebih sering memindahkan kontainer lain sebelum mengambil kontainer yang dicari, sehingga truk menunggu lebih lama. Jadi naiknya menunggu truk dan kontainer lebih mungkin berasal dari blok yang padat dan pembagian truk daripada kapasitas yard. Untuk memastikannya, perlu dicek dari blok mana kontainer kapal yang lama menunggu truk.</p>
 
   <h3 class="anh">4. Berth kosong di sela kapal padahal antrean panjang</h3>
   <p>Sampai 19 November, dari 49 pergantian kapal, berth kosong rata-rata 3,3 jam, total 161 jam. Tiga pergantian memakan 8 jam atau lebih saat 9–11 kapal sedang menunggu: di Berth 4 sebelum LUMOSO SELAMAT (10,6 jam) dan sebelum ICON PERDANA (10,6 jam), dan di Berth 3 sebelum INTAN DAYA 17 (8,9 jam).</p>
@@ -465,7 +466,7 @@ dd{margin:0}
     <dt>ET</dt><dd>Effective time: jam bongkar muat berjalan.</dd>
     <dt>Waiting time sandar</dt><dd>Jam dari kapal tiba (Arrive) sampai first line, yaitu menunggu berth. Kunjungan dengan tanggal kosong, negatif, atau lebih dari 240 jam dianggap salah catat dan tidak dihitung.</dd>
     <dt>BOR</dt><dd>Berth occupancy ratio: persen panjang dermaga yang terpakai kapal sepanjang waktu. Januari–Oktober dari form input utilisasi Terminal Petikemas. November dihitung dari data kapal dengan cara yang sama: (panjang kapal + 5 meter) × jam sandar, dibagi panjang dermaga 600 meter × 24 jam × jumlah hari, sesuai Laporan BOR BTP. Hari terakhir di data belum dihitung karena kapal yang masih sandar belum tercatat.</dd>
-    <dt>YOR</dt><dd>Yard occupancy ratio: persen kapasitas lapangan penumpukan yang terisi kontainer. Januari–Oktober dari form input utilisasi, November rata-rata YOR harian dari Laporan Summary YOR 1–16 November.</dd>
+    <dt>YOR</dt><dd>Yard occupancy ratio: persen kapasitas lapangan penumpukan yang terisi kontainer. Januari–Oktober dari form input utilisasi. November adalah rata-rata YOR harian 16–22 November, dihitung dari TEU dan kapasitas setiap blok di laporan Container Yard Block Summary. Angka Density Rate di ringkasan harian laporan itu tidak dipakai karena sama setiap hari (38,91%).</dd>
     <dt>ET/BT</dt><dd>Persen waktu sandar yang terpakai untuk bongkar muat.</dd>
     <dt>BWT</dt><dd>Berth working time: jam kerja kapal di dermaga.</dd>
     <dt>BCH</dt><dd>Box per crane per jam. Grafik produktivitas memakai jam kerja sandar (BWT).</dd>
@@ -519,7 +520,7 @@ function startApp(DATA) {
     ]
   };
   var BORF = [30, 37, 33, 34, 33, 44, 43, 41, 43, 49];
-  var YOR = [42.11, 41.82, 44.64, 47.13, 52.06, 51.16, 49.83, 52.22, 55.43, 52.48, 36.71];
+  var YOR = [42.11, 41.82, 44.64, 47.13, 52.06, 51.16, 49.83, 52.22, 55.43, 52.48, 53.27];
   var BLN = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
   var BLNF = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
   var RUTIN = ['Rest','Prayer, breakfasting, Sahur','Day Off Operation'];
@@ -833,7 +834,7 @@ function startApp(DATA) {
     var bVals = BM.filter(function (v) { return v != null; }), bv = sel ? BM[sel - 1] : (bVals.length ? d3.mean(bVals) : null);
     var bn = sel ? (BM[sel - 1] == null ? 'belum ada data' : (sel > BORF.length ? (bNov && bNov.m === sel ? '1–' + bNov.d + ' ' + BLNF[sel - 1] : BLNF[sel - 1]) + ', dari data kapal' : BLNF[sel - 1])) : 'rata-rata Januari–' + BLNF[bVals.length - 1];
     var k = $('kpis'); k.replaceChildren();
-    [['Kapal dilayani', n0(S.length), sel ? BLNF[sel - 1] : 'seluruh periode'], ['Total box', n0(box), 'bongkar dan muat'], ['Total TEUs', n0(teus), 'bongkar dan muat'], ['Capaian target TEUs', n1(teus / (sel ? TGTM[sel - 1] : TGT) * 100) + '%', sel ? 'dari target ' + BLNF[sel - 1] + ' ' + n0(TGTM[sel - 1]) + ' TEUs' : 'dari target 2026 ' + n0(TGT) + ' TEUs', teus / (sel ? TGTM[sel - 1] : TGT)], [sisa > 0 ? 'Kekurangan TEUs' : 'Kelebihan TEUs', n0(Math.abs(sisa)), sisaNote], ['BOR', bv == null ? '—' : n1(bv) + '%', bn], ['YOR', sel ? (YOR[sel - 1] == null ? '—' : n1(YOR[sel - 1]) + '%') : n1(d3.mean(YOR)) + '%', sel ? (sel === 11 ? 'rata-rata harian 1–16 November' : BLNF[sel - 1]) : 'rata-rata Januari–' + BLNF[YOR.length - 1]],
+    [['Kapal dilayani', n0(S.length), sel ? BLNF[sel - 1] : 'seluruh periode'], ['Total box', n0(box), 'bongkar dan muat'], ['Total TEUs', n0(teus), 'bongkar dan muat'], ['Capaian target TEUs', n1(teus / (sel ? TGTM[sel - 1] : TGT) * 100) + '%', sel ? 'dari target ' + BLNF[sel - 1] + ' ' + n0(TGTM[sel - 1]) + ' TEUs' : 'dari target 2026 ' + n0(TGT) + ' TEUs', teus / (sel ? TGTM[sel - 1] : TGT)], [sisa > 0 ? 'Kekurangan TEUs' : 'Kelebihan TEUs', n0(Math.abs(sisa)), sisaNote], ['BOR', bv == null ? '—' : n1(bv) + '%', bn], ['YOR', sel ? (YOR[sel - 1] == null ? '—' : n1(YOR[sel - 1]) + '%') : n1(d3.mean(YOR)) + '%', sel ? (sel === 11 ? 'rata-rata harian 16–22 November' : BLNF[sel - 1]) : 'rata-rata Januari–' + BLNF[YOR.length - 1]],
      ['Waktu sandar (BT)', f1(bt), 'jam rata-rata per kapal'], ['Waktu efektif (ET/BT)', eb == null ? '—' : n1(eb) + '%', 'dari waktu sandar'], ['Produktivitas kapal (BSH BT)', f1(bsb), 'box per jam sandar']].forEach(function (c) {
       var d = el('div', 'card'); d.appendChild(el('div', 'kl', c[0])); d.appendChild(el('div', 'kv', c[1])); d.appendChild(el('div', 'kn', c[2])); if (c[3] != null) { var tr = el('div', 'btrack'); tr.style.marginTop = '8px'; var fl = el('div', 'bfill'); fl.style.width = Math.min(100, c[3] * 100) + '%'; tr.appendChild(fl); d.appendChild(tr); } k.appendChild(d);
     });
