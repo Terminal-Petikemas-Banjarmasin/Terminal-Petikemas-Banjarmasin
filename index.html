@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Kinerja Terminal Petikemas Banjarmasin</title>
-<meta name="description" content="Dashboard kinerja kunjungan kapal Terminal Petikemas Banjarmasin 2026: TEUs, waktu sandar, produktivitas dan waiting time.">
+<meta name="description" content="Dashboard kinerja Terminal Petikemas Banjarmasin 2026: TEUs, waktu sandar, produktivitas, waiting time dan kinerja keuangan.">
 <meta name="robots" content="noindex">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f766e'/%3E%3Crect x='7' y='16' width='4' height='9' rx='1' fill='white'/%3E%3Crect x='14' y='11' width='4' height='14' rx='1' fill='white'/%3E%3Crect x='21' y='7' width='4' height='18' rx='1' fill='white'/%3E%3C/svg%3E">
 <link rel="manifest" href="manifest.webmanifest">
@@ -98,7 +98,7 @@ dd{margin:0}
 @media (max-width:560px){.wl summary{grid-template-columns:minmax(0,1fr) auto}.wl .wbar{grid-column:1/-1;order:3}}
 .grid>.card:last-child:nth-child(odd){grid-column:1/-1}
 @media (prefers-reduced-motion:no-preference){.bfill{transition:width .3s ease}}
-.ycols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:22px 30px;margin:8px 0 6px}.ycol{min-width:0}.ycol h4{font-family:var(--font-head);font-size:13.5px;font-weight:600;margin:0 0 4px;text-wrap:balance}.ycol p{margin:12px 0 0;font-size:13px;line-height:1.55}.dv{position:relative;display:flex;flex-direction:column;gap:9px;margin:10px 0 0}.dvr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 10px;align-items:end;font-size:12px}.dvr small{color:var(--muted);margin-left:6px}.dvr.tot{border-top:1px solid var(--line);padding-top:9px}.dvr.tot>span:first-child{font-weight:600}.dvt{grid-column:1/-1;position:relative;height:10px;background:var(--grid);border-radius:4px}.dvt i{position:absolute;top:0;bottom:0;border-radius:4px;background:var(--c1)}.dvt i.neg{background:var(--c2)}.dvt b{position:absolute;top:-3px;bottom:-3px;width:2px;margin-left:-1px;background:var(--fg);opacity:.45}.dvt i.ref{background:var(--y25)}.rkl{max-width:760px}#c-wtd .tip,#c-rk .tip,#c-yoy .tip,.dv .tip{white-space:pre-line;width:max-content;max-width:min(280px,100%)}.sr{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.ycols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:22px 30px;margin:8px 0 6px}.ycol{min-width:0}.ycol h4{font-family:var(--font-head);font-size:13.5px;font-weight:600;margin:0 0 4px;text-wrap:balance}.ycol p{margin:12px 0 0;font-size:13px;line-height:1.55}.dv{position:relative;display:flex;flex-direction:column;gap:9px;margin:10px 0 0}.dvr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 10px;align-items:end;font-size:12px}.dvr small{color:var(--muted);margin-left:6px}.dvr.tot{border-top:1px solid var(--line);padding-top:9px}.dvr.tot>span:first-child{font-weight:600}.dvt{grid-column:1/-1;position:relative;height:10px;background:var(--grid);border-radius:4px}.dvt i{position:absolute;top:0;bottom:0;border-radius:4px;background:var(--c1)}.dvt i.neg{background:var(--c2)}.dvt b{position:absolute;top:-3px;bottom:-3px;width:2px;margin-left:-1px;background:var(--fg);opacity:.45}.dvt i.ref{background:var(--y25)}.rkl{max-width:760px}#c-wtd .tip,#c-rk .tip,#c-yoy .tip,#c-fin1 .tip,#c-fin2 .tip,.dv .tip{white-space:pre-line;width:max-content;max-width:min(280px,100%)}.sr{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .wv small{display:block;font-weight:400;color:var(--muted);font-size:11.5px}
 .asof{font-size:12px;color:var(--muted);margin:2px 0 10px}.asof .stale{color:var(--c2);font-weight:600}
 .cmap{display:grid;grid-template-columns:minmax(0,1fr) 18px minmax(0,1fr) 18px minmax(0,1fr) 18px minmax(0,1fr);gap:8px;margin:8px 0 14px;align-items:stretch}
@@ -115,6 +115,7 @@ dd{margin:0}
 :root{--w1:#c2610c;--w2:#4a5fb0;--w3:#00897b}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--w1:#d27a2a;--w2:#6f84dc;--w3:#22998b}}
 :root[data-theme="dark"]{--w1:#d27a2a;--w2:#6f84dc;--w3:#22998b}
+.fkpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:10px;margin:4px 0 14px}.fk{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px;min-width:0}.fk .kv{font-size:24px}@media(max-width:520px){.fkpis{grid-template-columns:1fr 1fr}.fkpis>.fk:last-child:nth-child(odd){grid-column:1/-1}.fk .kv{font-size:21px}}.fgr{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:4px 28px}.fgr .anh{margin-top:16px}#keuangan>p{max-width:90ch}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 </head>
@@ -123,11 +124,11 @@ dd{margin:0}
 <header class="top">
   <div>
     <h1>Kinerja Terminal Petikemas Banjarmasin</h1>
-    <p class="sub">Kunjungan kapal tahun 2026: waktu sandar, produktivitas, dan penyebab henti.</p>
+    <p class="sub">Kunjungan kapal tahun 2026: waktu sandar, produktivitas, penyebab henti, dan kinerja keuangan.</p>
   </div>
   <div class="stamp" aria-live="polite"><span class="dot"></span><span id="stamp" data-dyn=""></span></div>
 </header>
-<nav class="sub" style="margin:0"><a href="kapal.html" style="color:var(--c1);font-weight:600">Lihat detail kinerja per kapal →</a></nav>
+<nav class="sub" style="margin:0"><a href="kapal.html" style="color:var(--c1);font-weight:600">Lihat detail kinerja per kapal →</a> <span aria-hidden="true">·</span> <a href="#keuangan" style="color:var(--c1);font-weight:600">Kinerja keuangan ↓</a></nav>
 
 <div class="chips" id="chips" data-dyn="" role="group" aria-label="Pilih bulan"></div>
 
@@ -244,6 +245,55 @@ dd{margin:0}
   </ol>
 </section>
 
+
+<section class="card" id="keuangan">
+  <h2>Kinerja keuangan</h2>
+  <p class="asof">Sumber: Performance Review TPK Banjarmasin periode Desember 2025 dan Oktober 2026. M = miliar rupiah. Laba usaha = pendapatan usaha dikurangi beban usaha.</p>
+  <p class="cap">Januari–Oktober 2026, dibanding RKAP dan periode yang sama tahun 2025.</p>
+  <div class="fkpis">
+    <div class="fk"><div class="kl">Pendapatan usaha</div><div class="kv">Rp 321,0 M</div><div class="kn">98,2%&nbsp;RKAP · +2,1%&nbsp;dari&nbsp;2025</div></div>
+    <div class="fk"><div class="kl">Beban usaha</div><div class="kv">Rp 284,9 M</div><div class="kn">88,2%&nbsp;RKAP · +1,6%&nbsp;dari&nbsp;2025</div></div>
+    <div class="fk"><div class="kl">Laba usaha</div><div class="kv">Rp 36,1 M</div><div class="kn">RKAP&nbsp;Rp&nbsp;3,8&nbsp;M · 2025&nbsp;Rp&nbsp;34,0&nbsp;M</div></div>
+    <div class="fk"><div class="kl">Operating ratio</div><div class="kv">88,8%</div><div class="kn">RKAP&nbsp;98,8% · 2025&nbsp;89,2%</div></div>
+    <div class="fk"><div class="kl">Margin laba usaha</div><div class="kv">11,2%</div><div class="kn">RKAP&nbsp;1,2% · 2025&nbsp;10,8%</div></div>
+  </div>
+  <p><b>Ringkasnya:</b> Januari–Oktober 2026 pendapatan usaha Rp 321,0 miliar dan beban usaha Rp 284,9 miliar, sehingga laba usaha Rp 36,1 miliar. Operating ratio 88,8%, artinya setiap Rp 100 pendapatan dipakai Rp 88,8 untuk beban, dan margin laba usaha 11,2%. Laba usaha 9,5 kali RKAP, tetapi <b>bukan karena pendapatan</b>: pendapatan justru 1,8% di bawah RKAP. Hampir seluruh selisih berasal dari beban yang jauh di bawah anggaran, terutama penyusutan. Dibanding 2025 kinerja sedikit membaik: Januari–September pendapatan naik 5,9%, sejalan dengan TEUs (+5,5%), sedangkan beban naik 5,1%.</p>
+  <div class="tw"><table><thead><tr><th></th><th class="n">Jan–Okt 2025</th><th class="n">Jan–Okt 2026</th><th class="n">RKAP Jan–Okt 2026</th><th class="n">2025 setahun</th><th class="n">RKAP 2025</th><th class="n">RKAP 2026</th></tr></thead><tbody>
+    <tr><td>Pendapatan usaha (M)</td><td class="n">314,3</td><td class="n">321,0</td><td class="n">326,9</td><td class="n">381,2</td><td class="n">370,0</td><td class="n">396,1</td></tr>
+    <tr><td>Beban usaha (M)</td><td class="n">280,3</td><td class="n">284,9</td><td class="n">323,1</td><td class="n">346,9</td><td class="n">355,1</td><td class="n">391,5</td></tr>
+    <tr><td>Laba usaha (M)</td><td class="n">34,0</td><td class="n">36,1</td><td class="n">3,8</td><td class="n">34,3</td><td class="n">14,8</td><td class="n">4,6</td></tr>
+    <tr><td>Operating ratio</td><td class="n">89,2%</td><td class="n">88,8%</td><td class="n">98,8%</td><td class="n">91,0%</td><td class="n">96,0%</td><td class="n">98,8%</td></tr>
+    <tr><td>Margin laba usaha</td><td class="n">10,8%</td><td class="n">11,2%</td><td class="n">1,2%</td><td class="n">9,0%</td><td class="n">4,0%</td><td class="n">1,2%</td></tr>
+    <tr><td>TEUs</td><td class="n">469.106</td><td class="n">494.405</td><td class="n">486.901</td><td class="n">569.596</td><td class="n">552.904</td><td class="n">589.966</td></tr>
+    <tr><td>Pendapatan per TEUs (ribu rupiah)</td><td class="n">670</td><td class="n">649</td><td class="n">671</td><td class="n">669</td><td class="n">669</td><td class="n">671</td></tr>
+    <tr><td>Beban per TEUs (ribu rupiah)</td><td class="n">598</td><td class="n">576</td><td class="n">663</td><td class="n">609</td><td class="n">642</td><td class="n">664</td></tr>
+  </tbody></table></div>
+  <p class="cap">Laporan Desember 2025 mencatat laba usaha 2025 Rp 33,05 miliar. Tabel ini memakai pendapatan dikurangi beban (Rp 34,3 miliar), sama dengan laba per TEUs dan kurva S di laporan yang sama.</p>
+
+  <div class="fgr">
+    <div><h3 class="anh">Pendapatan dan beban per bulan, 2026</h3><p class="cap">Miliar rupiah. Angka di atas batang adalah laba usaha bulan itu.</p><div class="chart" id="c-fin1" data-dyn=""></div></div>
+    <div><h3 class="anh">Operating ratio kumulatif</h3><p class="cap">Beban usaha dibagi pendapatan usaha sejak Januari. Makin rendah makin baik; 100% berarti impas.</p><div class="chart" id="c-fin2" data-dyn=""></div></div>
+  </div>
+  <p>Oktober menyimpang dari pola bulan sebelumnya. Pendapatan Oktober hanya Rp 24,5 miliar, 70% dari RKAP bulan itu, padahal TEUs Oktober naik 4,2% dari Oktober 2025. Laporan menyebut penyebabnya peralihan nota pendapatan. Sampai September pendapatan masih 101,5% RKAP, dan pendapatan per TEUs Januari–September Rp 673 ribu, hampir sama dengan 2025 (Rp 671 ribu). Kalau Oktober mengikuti angka per TEUs itu, pendapatannya sekitar Rp 36,2 miliar, jadi Oktober sekitar Rp 11,6 miliar di bawah pola. Karena itu pendapatan Januari–Oktober hanya naik 2,1%, jauh di bawah kenaikan TEUs 5,4%.</p>
+  <p>Operating ratio per bulan naik turun (2026: 80–98%), antara lain karena tagihan beban tidak selalu tercatat di bulan pekerjaannya. Pada 2025 operating ratio kumulatif naik dari 89,2% di Oktober menjadi 91,0% di Desember, karena laba November–Desember hampir nol. Bila pola akhir tahun itu terulang, angka setahun 2026 akan lebih tinggi dari 88,8%.</p>
+
+  <h3 class="anh">Mengapa laba usaha jauh di atas RKAP</h3>
+  <p class="cap">Selisih dengan RKAP Januari–Oktober 2026, miliar rupiah. Pos beban yang di bawah anggaran menambah laba.</p>
+  <div class="legend"><span><i style="background:var(--c1)"></i>menambah laba</span><span><i style="background:var(--c2)"></i>mengurangi laba</span></div>
+  <div class="dv rkl" id="c-fin3" data-dyn=""></div>
+  <p>RKAP 2026 hanya menargetkan laba usaha Rp 4,6 miliar setahun, dengan operating ratio 98,8%, terutama karena menganggarkan beban penyusutan dan amortisasi Rp 37,2 miliar sampai Oktober. Realisasinya Rp 7,4 miliar; menurut laporan, perhitungan penyusutan yang direncanakan dalam anggaran belum terealisasi. Selisih Rp 29,8 miliar ini menjelaskan 92% kelebihan laba. Tanpa selisih itu laba usaha sekitar Rp 6,3 miliar, 1,7 kali RKAP. Beban pegawai Rp 8,0 miliar di bawah anggaran karena jumlah pegawai di bawah asumsi RKAP (189 orang, RKAP 196).</p>
+  <p>Sebagian beban terlihat rendah hanya karena tagihannya belum masuk. Menurut laporan, pemeliharaan alat oleh PT BIMA (Oktober, pekerjaan non KHS Agustus–Oktober, serta HT dan chassis sistem on call Januari–Oktober) dan pemeliharaan instalasi oleh PT LEGI (Januari–Maret dan Juli–Oktober) belum ditagih. Saat tagihan ini masuk, beban naik dan laba turun. Sebaliknya beban sumber daya pihak ketiga, pos terbesar (57% dari beban usaha), melampaui anggaran karena biaya kerja sama aplikasi PTOSPK/TOSNUS dan revenue sharing yang menurut laporan naik 25%.</p>
+
+  <h3 class="anh">Profit margin</h3>
+  <p>Dashboard memakai margin laba usaha, yaitu laba usaha dibagi pendapatan usaha, karena angka ini bisa dibandingkan langsung dengan RKAP dan tahun lalu. Laporan juga mencantumkan net profit margin 12,55% (2025: 6,67%), yang memasukkan pendapatan dan beban di luar usaha: sampai Oktober 2026 pendapatan Rp 327,1 miliar, beban Rp 286,0 miliar, dan laba Rp 41,0 miliar. Pembanding RKAP di laporan (1,16%) dihitung dari laba usaha, jadi lebih tepat dibanding dengan margin laba usaha 11,2%.</p>
+
+  <h3 class="anh">Yang perlu diperhatikan manajemen</h3>
+  <ol class="an">
+    <li><b>Catat beban pemeliharaan setiap bulan walaupun tagihan belum masuk.</b> Tagihan PT BIMA dan PT LEGI yang tertunda membuat laba bulan berjalan terlihat lebih tinggi, lalu turun saat tagihan datang.</li>
+    <li><b>Pastikan nota Oktober terbit.</b> Pendapatan Oktober sekitar Rp 11,6 miliar di bawah pola Januari–September padahal TEUs naik. Periksa apakah nota yang tertunda karena peralihan sistem sudah tercatat di November.</li>
+    <li><b>Untuk RKAP 2027, susun anggaran penyusutan sesuai jadwal aset yang realistis.</b> RKAP 2025 dan 2026 menargetkan operating ratio 96–99%, sedangkan realisasi kedua tahun 89–91%. Target yang terlalu jauh dari kenyataan membuat capaian laba ratusan persen tidak lagi menggambarkan kinerja.</li>
+  </ol>
+</section>
 
 <section class="card">
   <h2>5 kapal dengan BSH BT tertinggi</h2>
@@ -475,6 +525,9 @@ dd{margin:0}
     <dt>Rata-rata</dt><dd>Rata-rata per kapal, bukan rata-rata tertimbang jumlah box.</dd>
     <dt>Jam kapal dan jam crane</dt><dd>Di analisis waiting time, jam henti per kapal (istirahat, menunggu truk) adalah jam kapal: jam ketika semua crane berhenti bersamaan, seperti di laporan kinerja. Grafik Penyebab henti terbesar dan halaman detail per kapal memakai jam crane: dua crane berhenti 1 jam dihitung 2 jam. Karena istirahat biasanya bersamaan dan menunggu truk tidak, istirahat tampak lebih besar dalam jam kapal dan menunggu truk lebih besar dalam jam crane.</dd>
     <dt>Keadaan dermaga saat menunggu</dt><dd>Dihitung dari jam first line dan BT semua kapal. Dermaga dianggap penuh bila 3 kapal sedang sandar. 3 jam terakhir sebelum first line dihitung sebagai kapal bergerak dan sandar.</dd>
+    <dt>Operating ratio</dt><dd>Beban usaha dibagi pendapatan usaha. 88,8% berarti setiap Rp 100 pendapatan dipakai Rp 88,8 untuk beban usaha. Makin rendah makin baik; di atas 100% berarti rugi usaha.</dd>
+    <dt>Margin laba usaha</dt><dd>Laba usaha (pendapatan usaha dikurangi beban usaha) dibagi pendapatan usaha, sama dengan 100% dikurangi operating ratio.</dd>
+    <dt>Net profit margin</dt><dd>Angka di laporan Performance Review: laba termasuk pendapatan dan beban di luar usaha, dibagi pendapatan termasuk pendapatan di luar usaha.</dd>
   </dl>
 </details>
 </div>
@@ -522,6 +575,29 @@ function startApp(DATA) {
   };
   var BORF = [30, 37, 33, 34, 33, 44, 43, 41, 43, 49];
   var YOR = [42.11, 41.82, 44.64, 47.13, 52.06, 51.16, 49.83, 52.22, 55.43, 52.48, 50.59];
+  // Kinerja keuangan dari Performance Review Desember 2025 dan Oktober 2026, miliar rupiah.
+  // Nilai kumulatif Januari sampai bulan itu. Beban 2026 = pendapatan - laba usaha, karena angka beban di kurva S laporan
+  // sejak Mei tidak cocok dengan pendapatan dikurangi laba; nilai Oktober sama dengan halaman Performance Highlights.
+  var FIN = {
+    p25: [31.90, 60.90, 90.68, 117.17, 149.16, 180.05, 212.91, 246.62, 280.02, 314.313, 347.07, 381.177],
+    b25: [28.72, 56.11, 82.26, 102.97, 132.66, 160.88, 187.77, 214.09, 251.97, 280.298, 313.04, 346.884],
+    p26: [31.43, 60.64, 90.06, 123.30, 155.67, 190.83, 226.59, 260.81, 296.46, 320.990],
+    l26: [5.19, 5.72, 9.78, 11.88, 15.95, 22.93, 25.06, 29.45, 31.52, 36.084],
+    pr: [31.69, 62.66, 96.32, 121.96, 156.32, 190.53, 224.68, 259.02, 292.01, 326.861],
+    lr: [0.32, 0.53, 1.26, 1.62, 1.75, 2.24, 2.81, 3.43, 3.57, 3.803],
+    cat: { 10: 'Menurut laporan, pendapatan turun karena\nperalihan nota pendapatan. TEUs Oktober\nnaik 4,2% dari Oktober 2025.' },
+    gap: [
+      { t: 'Penyusutan dan amortisasi', s: '20% RKAP', v: 29.76, tip: 'Realisasi Rp 7,4 M\nRKAP Rp 37,2 M' },
+      { t: 'Penghasilan pegawai', s: '84% RKAP', v: 8.04, tip: 'Realisasi Rp 41,1 M\nRKAP Rp 49,2 M\nPegawai 189 orang, RKAP 196' },
+      { t: 'Pemeliharaan', s: '93% RKAP', v: 2.77, tip: 'Realisasi Rp 35,1 M\nRKAP Rp 37,9 M\nSebagian tagihan PT BIMA dan PT LEGI belum masuk' },
+      { t: 'Asuransi', s: '52% RKAP', v: 2.76, tip: 'Realisasi Rp 3,0 M\nRKAP Rp 5,7 M' },
+      { t: 'Umum dan administrasi kantor', s: '94% RKAP', v: 0.76, tip: 'Realisasi Rp 11,4 M\nRKAP Rp 12,2 M' },
+      { t: 'Bahan', s: '104% RKAP', v: -0.86, tip: 'Realisasi Rp 25,3 M\nRKAP Rp 24,4 M\nBBM, listrik (4 unit E-RTG baru), perlengkapan operasional' },
+      { t: 'Sumber daya pihak ketiga', s: '103% RKAP', v: -5.07, tip: 'Realisasi Rp 161,5 M\nRKAP Rp 156,4 M\n57% dari seluruh beban usaha' },
+      { t: 'Pendapatan usaha', s: '98% RKAP', v: -5.87, tip: 'Realisasi Rp 321,0 M\nRKAP Rp 326,9 M\nOktober hanya 70% RKAP bulan itu' },
+      { t: 'Laba usaha', s: 'Rp 3,8 M → Rp 36,1 M', v: 32.28, tot: 1, tip: 'Realisasi Rp 36,1 M\nRKAP Rp 3,8 M (948,8%)' }
+    ]
+  };
   var BLN = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
   var BLNF = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
   var RUTIN = ['Rest','Prayer, breakfasting, Sahur','Day Off Operation'];
@@ -888,7 +964,7 @@ function startApp(DATA) {
       var w = Math.abs(r.v) / span * 100, tr = el('div', 'dvt'), bar = el('i', r.v < 0 ? 'neg' : (r.c || null)), zl = el('b');
       bar.style.left = (r.v < 0 ? z - w : z) + '%'; bar.style.width = Math.max(w, 0.8) + '%'; zl.style.left = z + '%';
       tr.appendChild(bar); if (lo < 0) tr.appendChild(zl);
-      row.appendChild(lab); row.appendChild(el('span', 'brow-v', (o.plain ? '' : (r.v < 0 ? '−' : '+')) + n0(Math.abs(r.v)) + (o.unit || ' TEUs'))); row.appendChild(tr);
+      row.appendChild(lab); row.appendChild(el('span', 'brow-v', (o.plain ? '' : (r.v < 0 ? '−' : '+')) + (o.fmt || n0)(Math.abs(r.v)) + (o.unit || ' TEUs'))); row.appendChild(tr);
       if (r.tip) { row.addEventListener('pointermove', function (ev) { tip.show(ev, r.tip); }); row.addEventListener('pointerleave', function () { tip.hide(); }); }
       host.appendChild(row);
     });
@@ -980,6 +1056,97 @@ function startApp(DATA) {
     out.textContent = t;
   }
 
+  // ---------- kinerja keuangan ----------
+  function finMonthly(c) { return c.map(function (v, i) { return i ? v - c[i - 1] : v; }); }
+  function srTable(host, head, rows) {
+    var w = el('div', 'sr'), t = el('table'), hr = el('tr');
+    head.forEach(function (h) { hr.appendChild(el('th', null, h)); }); t.appendChild(hr);
+    rows.forEach(function (r) { var tr = el('tr'); r.forEach(function (c) { tr.appendChild(el('td', null, c)); }); t.appendChild(tr); });
+    w.appendChild(t); host.appendChild(w);
+  }
+  function chartFin1() {
+    var host = $('c-fin1'); if (!host) return;
+    var b26 = FIN.p26.map(function (p, i) { return p - FIN.l26[i]; });
+    var P = finMonthly(FIN.p26), B = finMonthly(b26), P5 = finMonthly(FIN.p25), B5 = finMonthly(FIN.b25);
+    var R = P.map(function (p, i) { return { m: i + 1, p: p, b: B[i], l: p - B[i], p5: P5[i], b5: B5[i] }; });
+    var H = 250, m = { t: 24, r: 6, b: 24, l: 30 };
+    var f = frame(host, H, legend([['Pendapatan usaha', 'var(--w3)'], ['Beban usaha', 'var(--w1)']])), svg = f.svg, W = f.W, tip = makeTip(host);
+    var hi = R.reduce(function (a, r) { return r.l > a.l ? r : a; });
+    svg.attr('role', 'img').attr('aria-label', 'Diagram batang pendapatan dan beban usaha per bulan, Januari sampai Oktober 2026, dalam miliar rupiah. Laba usaha bulanan tertinggi ' + BLNF[hi.m - 1] + ' ' + n1(hi.l) + ' miliar. Pendapatan Oktober ' + n1(R[R.length - 1].p) + ' miliar.');
+    var x = d3.scaleBand().domain(R.map(function (r) { return r.m; })).range([m.l, W - m.r]).paddingInner(0.24).paddingOuter(0.08);
+    var xi = d3.scaleBand().domain([0, 1]).range([0, x.bandwidth()]).paddingInner(0.12);
+    var y = d3.scaleLinear().domain([0, d3.max(R, function (r) { return Math.max(r.p, r.b); }) * 1.15]).nice().range([H - m.b, m.t]);
+    axes(svg, y, y.ticks(4), W, m, function (v) { return n0(v); });
+    svg.append('g').selectAll('text').data(R).join('text').attr('x', function (r) { return x(r.m) + x.bandwidth() / 2; }).attr('y', H - 8).attr('text-anchor', 'middle').text(function (r) { return BLN[r.m - 1]; });
+    var g = svg.append('g').selectAll('g').data(R).join('g').attr('transform', function (r) { return 'translate(' + x(r.m) + ',0)'; });
+    [['p', 'var(--w3)', 0], ['b', 'var(--w1)', 1]].forEach(function (s) {
+      g.append('rect').attr('x', xi(s[2])).attr('width', xi.bandwidth()).attr('y', function (r) { return y(r[s[0]]); })
+        .attr('height', function (r) { return y(0) - y(r[s[0]]); }).attr('rx', 2).style('fill', s[1]);
+    });
+    var short = x.bandwidth() < 40;
+    g.append('text').attr('x', x.bandwidth() / 2).attr('y', function (r) { return y(Math.max(r.p, r.b)) - 6; }).attr('text-anchor', 'middle')
+      .style('font-size', short ? '9.5px' : '10.5px').style('font-weight', '600').style('fill', 'var(--fg)')
+      .text(function (r) { return (r.l < 0 ? '−' : '+') + n1(Math.abs(r.l)); });
+    g.append('rect').attr('width', x.bandwidth()).attr('y', m.t).attr('height', H - m.b - m.t).style('fill', 'transparent')
+      .on('pointermove', function (ev, r) { tip.show(ev, BLNF[r.m - 1] + ' 2026\nPendapatan Rp ' + n1(r.p) + ' M (2025: ' + n1(r.p5) + ')\nBeban Rp ' + n1(r.b) + ' M (2025: ' + n1(r.b5) + ')\nLaba usaha Rp ' + n1(r.l) + ' M\nOperating ratio ' + n1(r.b / r.p * 100) + '%' + (FIN.cat[r.m] ? '\n' + FIN.cat[r.m] : '')); })
+      .on('pointerleave', function () { tip.hide(); });
+    srTable(host, ['Bulan 2026', 'Pendapatan usaha (M)', 'Beban usaha (M)', 'Laba usaha (M)', 'Operating ratio'],
+      R.map(function (r) { return [BLNF[r.m - 1], n1(r.p), n1(r.b), n1(r.l), n1(r.b / r.p * 100) + '%']; }));
+  }
+  function chartFin2() {
+    var host = $('c-fin2'); if (!host) return;
+    var orr = function (P, Bf) { return P.map(function (p, i) { return { m: i + 1, v: Bf(i, p) / p * 100 }; }); };
+    var ser = [
+      { k: '2026', c: 'var(--w2)', d: orr(FIN.p26, function (i, p) { return p - FIN.l26[i]; }) },
+      { k: '2025', c: 'var(--y25)', d: orr(FIN.p25, function (i) { return FIN.b25[i]; }) },
+      { k: 'RKAP 2026', c: 'var(--muted)', dash: '5 4', d: orr(FIN.pr, function (i, p) { return p - FIN.lr[i]; }) }
+    ];
+    var lg = el('div', 'legend');
+    ser.forEach(function (s) {
+      var sp = el('span'), i = el('i'); i.style.width = '14px'; i.style.height = '3px'; i.style.verticalAlign = '3px';
+      i.style.background = s.dash ? 'repeating-linear-gradient(90deg,' + s.c + ' 0 4px,transparent 4px 7px)' : s.c;
+      sp.appendChild(i); sp.appendChild(document.createTextNode(s.k)); lg.appendChild(sp);
+    });
+    var H = 250, m = { t: 14, r: 78, b: 24, l: 36 };
+    var f = frame(host, H, lg), svg = f.svg, W = f.W, tip = makeTip(host);
+    var last = function (s) { return s.d[s.d.length - 1]; };
+    svg.attr('role', 'img').attr('aria-label', 'Diagram garis operating ratio kumulatif per bulan. 2026 sampai Oktober ' + n1(last(ser[0]).v) + ' persen, 2025 setahun ' + n1(last(ser[1]).v) + ' persen, RKAP 2026 sampai Oktober ' + n1(last(ser[2]).v) + ' persen.');
+    var x = d3.scalePoint().domain(d3.range(1, 13)).range([m.l, W - m.r]).padding(0.4);
+    var y = d3.scaleLinear().domain([80, 100]).range([H - m.b, m.t]);
+    axes(svg, y, [80, 85, 90, 95, 100], W, m, function (v) { return n0(v) + '%'; });
+    var narrow = x.step() < 24;
+    svg.append('g').selectAll('text').data(d3.range(1, 13)).join('text').attr('x', x).attr('y', H - 8).attr('text-anchor', 'middle')
+      .text(function (mm) { return narrow ? BLNF[mm - 1].charAt(0) : BLN[mm - 1]; });
+    var line = d3.line().x(function (d) { return x(d.m); }).y(function (d) { return y(d.v); });
+    var cross = svg.append('line').attr('y1', m.t).attr('y2', H - m.b).style('stroke', 'var(--muted)').style('opacity', 0.5).attr('stroke-width', 1).style('display', 'none');
+    ser.slice().reverse().forEach(function (s) {
+      svg.append('path').datum(s.d).attr('fill', 'none').style('stroke', s.c).attr('stroke-width', 2).attr('stroke-dasharray', s.dash || null).attr('d', line);
+      var lp = last(s);
+      svg.append('circle').attr('cx', x(lp.m)).attr('cy', y(lp.v)).attr('r', 4).style('fill', s.c).style('stroke', 'var(--panel)').attr('stroke-width', 2);
+    });
+    var labs = ser.map(function (s) { var lp = last(s); return { s: s, lp: lp, y: y(lp.v) }; }).sort(function (a, b) { return a.y - b.y; });
+    for (var i = 1; i < labs.length; i++) if (labs[i].y - labs[i - 1].y < 13) labs[i].y = labs[i - 1].y + 13;
+    labs.forEach(function (o) {
+      var x0 = x(o.lp.m) + 6, x1 = W - m.r + 6;
+      if (x1 - x0 > 8) svg.append('line').attr('x1', x0).attr('x2', x1 - 3).attr('y1', y(o.lp.v)).attr('y2', o.y).style('stroke', o.s.c).style('opacity', 0.6).attr('stroke-dasharray', '1 3');
+      svg.append('text').attr('x', x1).attr('y', o.y).attr('dy', '0.32em').style('font-size', '10.5px').style('fill', 'var(--fg)')
+        .text((o.s.k === 'RKAP 2026' ? 'RKAP' : o.s.k) + ' ' + n1(o.lp.v) + '%');
+    });
+    svg.append('rect').attr('x', m.l).attr('width', W - m.r - m.l).attr('y', m.t).attr('height', H - m.b - m.t).style('fill', 'transparent')
+      .on('pointermove', function (ev) {
+        var px = d3.pointer(ev)[0], mm = d3.least(d3.range(1, 13), function (k) { return Math.abs(x(k) - px); });
+        cross.attr('x1', x(mm)).attr('x2', x(mm)).style('display', null);
+        var t = BLNF[mm - 1] + ' (sejak Januari)';
+        ser.forEach(function (s) { var d = s.d[mm - 1]; if (d) t += '\n' + s.k + ': ' + n1(d.v) + '%'; });
+        tip.show(ev, t);
+      })
+      .on('pointerleave', function () { cross.style('display', 'none'); tip.hide(); });
+    srTable(host, ['Bulan', '2025', '2026', 'RKAP 2026'], d3.range(1, 13).map(function (mm) {
+      return [BLNF[mm - 1]].concat(ser[1].d[mm - 1] ? n1(ser[1].d[mm - 1].v) + '%' : '—', ser[0].d[mm - 1] ? n1(ser[0].d[mm - 1].v) + '%' : '—', ser[2].d[mm - 1] ? n1(ser[2].d[mm - 1].v) + '%' : '—');
+    }));
+  }
+  function drawFin() { chartFin1(); chartFin2(); dvBars('c-fin3', FIN.gap, { unit: ' M', fmt: n1 }); }
+
   // ---------- waktu tunggu menurut keadaan dermaga ----------
   // Setiap jam menunggu (dari tiba sampai 3 jam sebelum first line) dibagi menurut jumlah kapal yang sedang sandar saat itu.
   var WS = null;
@@ -1055,7 +1222,7 @@ function startApp(DATA) {
 
   function render() {
     var S = subset(), M = monthly();
-    drawTop(S); chartBox(M); chartProd(M); chartWaktu(M); chartWtd(); drawSebab(); drawLines(S); drawWL(S); drawTop5(S); drawLast(); drawBanding(); drawYoY(); drawRk(); chartWsplit(); drawAsof();
+    drawTop(S); chartBox(M); chartProd(M); chartWaktu(M); chartWtd(); drawSebab(); drawLines(S); drawWL(S); drawTop5(S); drawLast(); drawBanding(); drawYoY(); drawRk(); drawFin(); chartWsplit(); drawAsof();
   }
 
   var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(function () { render(); }, 150); });
