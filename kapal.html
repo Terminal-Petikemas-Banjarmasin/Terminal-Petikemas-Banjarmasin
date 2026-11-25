@@ -484,6 +484,8 @@ fetch('kapal.json', { cache: 'no-store' }).then(function (r) { if (!r.ok) throw 
 
   // ---------- tampilan ----------
   var BLNF = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'], mon;
+  // tautan bisa memilih bulan, misalnya kapal.html?bulan=2026-11#sec-gate
+  var qBulan = new URLSearchParams(location.search).get('bulan'); if (qBulan && /^\d{4}-\d{2}$/.test(qBulan)) mon = qBulan;
   function mk(v) { if (D.bm && D.bm[v.id]) return D.bm[v.id]; var t = v.atd || v.acp || v.atb; return t ? t.slice(0, 7) : ''; }
   function mName(k) { return k ? BLNF[+k.slice(5, 7) - 1] + ' ' + k.slice(0, 4) : 'Semua bulan'; }
   function months() { return Array.from(new Set(D.v.map(mk).filter(Boolean))).sort(); }
@@ -1180,7 +1182,12 @@ fetch('kapal.json', { cache: 'no-store' }).then(function (r) { if (!r.ok) throw 
   window.__kp = { parseKp: parseKp, parseGate: parseGate, parsePtos: parsePtos, gCompute: gCompute, D: function () { return D; } };
   var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(render, 150); });
   render();
-  fetch('data.json', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (x) { if (x && x.r) { WD = prepWD(x.r); drawDetail(); } }).catch(function () {});
+  // tautan ke bagian tertentu (mis. #sec-gate): gulir ke sana setelah isinya tergambar, kecuali pengguna sudah menggulir sendiri
+  var hashEl = location.hash && location.hash !== '#perbarui' ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null, userMoved = false;
+  if (hashEl) ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach(function (t) { window.addEventListener(t, function () { userMoved = true; }, { once: true, passive: true }); });
+  function goHash() { if (hashEl && !userMoved) hashEl.scrollIntoView({ block: 'start' }); }
+  setTimeout(goHash, 50);
+  fetch('data.json', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (x) { if (x && x.r) { WD = prepWD(x.r); drawDetail(); } setTimeout(goHash, 50); }).catch(function () {});
   function syncEdit() { canEdit = location.hash === '#perbarui'; render(); if (canEdit) $('editor').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
   window.addEventListener('hashchange', syncEdit);
   if (canEdit) setTimeout(function () { $('editor').scrollIntoView({ block: 'start' }); }, 50);
