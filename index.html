@@ -29,7 +29,7 @@ h1,h2{font-family:var(--font-head);margin:0;text-wrap:balance}
 h1{font-size:clamp(24px,4vw,34px);font-weight:600;letter-spacing:-.01em}
 h2{font-size:16px;font-weight:600}
 .top{display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:space-between;align-items:flex-end}
-.sub{margin:4px 0 0;color:var(--muted)}
+.sub{margin:4px 0 0;color:var(--muted)}@media(max-width:560px){nav.sub{display:flex;flex-direction:column;align-items:flex-start;gap:6px}nav.sub>span[aria-hidden]{display:none}}
 .stamp{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);display:inline-block}
 .take{margin:0;font-size:17px;line-height:1.55;max-width:72ch}
@@ -128,7 +128,7 @@ dd{margin:0}
   </div>
   <div class="stamp" aria-live="polite"><span class="dot"></span><span id="stamp" data-dyn=""></span></div>
 </header>
-<nav class="sub" style="margin:0"><a href="kapal.html" style="color:var(--c1);font-weight:600">Lihat detail kinerja per kapal →</a> <span aria-hidden="true">·</span> <a href="#keuangan" style="color:var(--c1);font-weight:600">Kinerja keuangan ↓</a></nav>
+<nav class="sub" style="margin:0"><a href="kapal.html" style="color:var(--c1);font-weight:600">Lihat detail kinerja per kapal →</a><span aria-hidden="true">&nbsp;·</span> <a href="#keuangan" style="color:var(--c1);font-weight:600">Kinerja keuangan ↓</a><span aria-hidden="true">&nbsp;·</span> <a href="kapal.html?bulan=2026-11#sec-gate" style="color:var(--c1);font-weight:600">Receiving dan delivery November 2026 →</a></nav>
 
 <div class="chips" id="chips" data-dyn="" role="group" aria-label="Pilih bulan"></div>
 
