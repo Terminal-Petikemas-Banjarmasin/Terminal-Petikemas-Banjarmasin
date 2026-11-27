@@ -38,12 +38,12 @@ h2{font-size:16px;font-weight:600}
 .chip{border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:999px;padding:5px 12px;font:inherit;font-size:13px;cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--c1);border-color:var(--c1);color:#fff}
 .chip:focus-visible,.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--c3);outline-offset:2px}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:10px}@media(max-width:891px){.kpis>.card:last-child:nth-child(odd){grid-column:1/-1}}@media(max-width:520px){.kpis{grid-template-columns:1fr 1fr}}.kpis .kv{font-size:24px}
+.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.kpis>.card:last-child:nth-child(odd){grid-column:span 2}@media(min-width:640px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(min-width:960px){.kpis{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(min-width:1150px){.kpis{grid-template-columns:repeat(6,minmax(0,1fr))}}.kpis .kv{font-size:24px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
 .kl{font-size:12px;color:var(--muted)}
 .kv{font-family:var(--font-head);font-size:28px;font-weight:600;line-height:1.2;margin-top:4px;font-variant-numeric:tabular-nums}
 .kn{font-size:12px;color:var(--muted);margin-top:2px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,480px),1fr));gap:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,480px),1fr));gap:12px}.grid>.wide{grid-column:1/-1}#c-dwt .tip{white-space:pre}.dwt-txt{margin:6px 0 0}
 .cap{margin:2px 0 10px;font-size:12px;color:var(--muted)}
 .ms{display:flex;flex-wrap:wrap;gap:20px;align-items:center}.ms .pie{flex:0 0 240px;min-height:0;margin:0 auto}.ms .tw{flex:1 1 320px}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px}
 .anh{font-family:var(--font-head);font-size:14px;font-weight:600;margin:22px 0 8px}.abars{display:flex;flex-direction:column;gap:10px;margin:10px 0 14px;max-width:760px}.abars .brow span:first-child{white-space:normal}.bfill.w{background:var(--c2)}.bfill.now{background:var(--muted)}.and{margin-top:14px}.and summary{font-weight:600}#analisis p,#analisis-nov p,#analisis-teus p{max-width:90ch}.bfill.neg{background:var(--muted)}.an{padding-left:20px;margin:14px 0}.an li{margin-bottom:10px;line-height:1.55;max-width:90ch}
@@ -147,6 +147,7 @@ dd{margin:0}
   <div class="card"><h2>Produktivitas per bulan</h2><p class="cap">Rata-rata box per jam kerja sandar (BWT), per kapal.</p><div class="chart" id="c-prod" data-dyn=""></div></div>
   <div class="card"><h2>Call kapal per bulan</h2><p class="cap">Jumlah kunjungan kapal (call). Garis putus-putus adalah rata-rata per bulan Januari–Oktober 2025.</p><div class="chart" id="c-call" data-dyn=""></div></div>
   <div class="card"><h2>TEUs per call</h2><p class="cap">Rata-rata TEUs bongkar dan muat per kunjungan kapal (call).</p><div class="chart" id="c-tpc" data-dyn=""></div></div>
+  <div class="card wide"><h2>Dwelling time per bulan</h2><p class="cap">Rata-rata hari peti kemas di lapangan, dari rata-rata bongkar dan muat seperti di form input. Garis putus-putus adalah rata-rata Januari–Oktober 2025.</p><div class="chart" id="c-dwt" data-dyn=""></div><p class="cap dwt-txt" id="dwt-txt" data-dyn=""></p></div>
 </section>
 
 <section class="card" id="analisis-teus">
@@ -520,6 +521,7 @@ dd{margin:0}
     <dt>Waiting time sandar</dt><dd>Jam dari kapal tiba (Arrive) sampai first line, yaitu menunggu berth. Kunjungan dengan tanggal kosong, negatif, atau lebih dari 240 jam dianggap salah catat dan tidak dihitung.</dd>
     <dt>BOR</dt><dd>Berth occupancy ratio: persen panjang dermaga yang terpakai kapal sepanjang waktu. Januari–Oktober dari form input utilisasi Terminal Petikemas. November dihitung dari data kapal dengan cara yang sama: (panjang kapal + 5 meter) × jam sandar, dibagi panjang dermaga 600 meter × 24 jam × jumlah hari, sesuai Laporan BOR BTP. Hari terakhir di data belum dihitung karena kapal yang masih sandar belum tercatat.</dd>
     <dt>YOR</dt><dd>Yard occupancy ratio: persen kapasitas lapangan penumpukan yang terisi kontainer. Januari–Oktober dari form input utilisasi. November adalah rata-rata YOR harian 1–26 November dari gabungan dua laporan, karena selama November pencatatan yard berpindah dari sistem lama ke sistem baru. YOR harian = YOR_STACK di Laporan Summary YOR (sistem lama) ditambah TEU semua blok di Container Yard Block Summary dibagi kapasitas semua blok, 10.669 TEU (sistem baru). Tanggal 14 dan 21 November tidak dihitung karena tidak ada di Laporan Summary YOR, dan 27 November belum dihitung karena hari itu belum selesai saat laporan diambil. Kolom YOR_DAILY tidak dipakai karena berisi rata-rata berjalan sejak 1 November, bukan YOR hari itu.</dd>
+    <dt>Dwelling time</dt><dd>Lama peti kemas di lapangan penumpukan, dalam hari: peti kemas bongkar dari dibongkar sampai keluar gate, peti kemas muat dari masuk gate sampai dimuat ke kapal. Angka utama adalah rata-rata bongkar dan muat, masing-masing rata-rata full dan empty, seperti Dwelling Time Dalam Negeri di form input. Rata-rata ini tidak ditimbang jumlah peti kemas, jadi bongkar empty yang jumlahnya sedikit tetap berbobot seperempat. Januari–Oktober dari form input. November dari 37.396 peti kemas yang keluar 1–27 November: yang masuk lewat sistem lama dari Lap Dwelling Time PTOS-PK, sisanya dari Terminal In &amp; Out sistem baru. Sistem lama mencatat dalam hari bulat, sistem baru sampai jam. Kalau peti kemas sistem baru juga dihitung dalam hari bulat ke atas, dwelling time November menjadi 3,9 hari, bukan 3,5 hari.</dd>
     <dt>ET/BT</dt><dd>Persen waktu sandar yang terpakai untuk bongkar muat.</dd>
     <dt>BWT</dt><dd>Berth working time: jam kerja kapal di dermaga.</dd>
     <dt>BCH</dt><dd>Box per crane per jam. Grafik produktivitas memakai jam kerja sandar (BWT).</dd>
@@ -577,6 +579,15 @@ function startApp(DATA) {
   };
   var BORF = [30, 37, 33, 34, 33, 44, 43, 41, 43, 49];
   var YOR = [42.11, 41.82, 44.64, 47.13, 52.06, 51.16, 49.83, 52.22, 55.43, 52.48, 51.96];
+  // Dwelling time (hari): bongkar full/empty dan muat full/empty. Januari–Oktober dari form input 2026 sheet KINERJA
+  // (Dwelling Time Dalam Negeri). November dari peti kemas yang keluar 1–27 November: Lap Dwelling Time sistem lama
+  // (PTOS-PK) dan Terminal In & Out sistem baru.
+  var DWT = { bf: [4.12, 3.42, 4.51, 4.3, 4.91, 4.43, 4.45, 4.89, 5.004, 4.902, 4.2903],
+    be: [14.25, 10.29, 11.3, 5.48, 6.13, 13.7, 9.04, 9.83, 2.1, 2.995, 3.5503],
+    mf: [2.92, 2.99, 2.91, 3.36, 3.37, 3.23, 2.75, 2.79, 3.215, 3.087, 2.7768],
+    me: [3.72, 3.85, 3.77, 3.91, 3.64, 4.8, 3.89, 3.51, 4.109, 3.355, 3.5821] };
+  var DWT25 = 4.984, DWTP = 'peti kemas keluar 1–27 November'; // rata-rata Januari–Oktober 2025 dari form input 2025
+  function dwt(i) { var b = (DWT.bf[i] + DWT.be[i]) / 2, m = (DWT.mf[i] + DWT.me[i]) / 2; return { b: b, m: m, v: (b + m) / 2 }; }
   // Kinerja keuangan dari Performance Review Desember 2025 dan Oktober 2026, miliar rupiah.
   // Nilai kumulatif Januari sampai bulan itu. Beban 2026 = pendapatan - laba usaha, karena angka beban di kurva S laporan
   // sejak Mei tidak cocok dengan pendapatan dikurangi laba; nilai Oktober sama dengan halaman Performance Highlights.
@@ -745,6 +756,35 @@ function startApp(DATA) {
     svg.append('g').selectAll('circle').data(R).join('circle').attr('cx', function (r) { return x(r.m); }).attr('cy', function (r) { return y(r.v); }).attr('r', 12).style('fill', 'transparent')
       .on('pointermove', function (ev, r) { tip.show(ev, BLNF[r.m - 1] + ': ' + n0(r.v) + ' TEUs per call (' + n0(r.teus) + ' TEUs, ' + n0(r.n) + ' call)'); })
       .on('pointerleave', function () { tip.hide(); });
+  }
+
+  function dwtTxt(i, sep) {
+    var d = dwt(i);
+    return BLNF[i] + (i === DWT.bf.length - 1 && DWTP ? ' (' + DWTP + ')' : '') + ': ' + n1(d.v) + ' hari.' + sep +
+      'Bongkar ' + n1(d.b) + ' hari (full ' + n1(DWT.bf[i]) + ', empty ' + n1(DWT.be[i]) + ').' + sep +
+      'Muat ' + n1(d.m) + ' hari (full ' + n1(DWT.mf[i]) + ', empty ' + n1(DWT.me[i]) + ').';
+  }
+  function chartDwt() {
+    var host = $('c-dwt'); if (!host) return;
+    var H = 230, m = { t: 18, r: 6, b: 24, l: 30 };
+    var f = frame(host, H), svg = f.svg, W = f.W; var tip = makeTip(host);
+    var R = DWT.bf.map(function (v, i) { return { m: i + 1, i: i, v: dwt(i).v }; }), last = R.length;
+    svg.attr('role', 'img').attr('aria-label', 'Diagram batang dwelling time per bulan dalam hari, dengan garis rata-rata Januari–Oktober 2025 ' + n1(DWT25) + ' hari');
+    var x = d3.scaleBand().domain(R.map(function (r) { return r.m; })).range([m.l, W - m.r]).padding(0.25);
+    var y = d3.scaleLinear().domain([0, Math.max(d3.max(R, function (r) { return r.v; }), DWT25) * 1.15]).nice().range([H - m.b, m.t]);
+    axes(svg, y, y.ticks(4), W, m, n0);
+    svg.append('g').selectAll('text').data(R).join('text').attr('x', function (r) { return x(r.m) + x.bandwidth() / 2; }).attr('y', H - 8).attr('text-anchor', 'middle').text(function (r) { return BLN[r.m - 1]; });
+    svg.append('g').selectAll('rect').data(R).join('rect').attr('x', function (r) { return x(r.m); }).attr('width', x.bandwidth())
+      .attr('y', function (r) { return y(r.v); }).attr('height', function (r) { return y(0) - y(r.v); }).attr('rx', 2).style('fill', 'var(--c1)')
+      .style('opacity', function (r) { return (sel && r.m !== sel) ? 0.3 : (r.m === last && !sel && DWTP ? 0.55 : 1); })
+      .on('pointermove', function (ev, r) { tip.show(ev, dwtTxt(r.i, '\n')); })
+      .on('pointerleave', function () { tip.hide(); });
+    var yr = y(DWT25);
+    svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', yr).attr('y2', yr).style('stroke', 'var(--y25)').attr('stroke-width', 2).attr('stroke-dasharray', '5 4').style('pointer-events', 'none');
+    svg.append('g').selectAll('text').data(R).join('text').attr('x', function (r) { return x(r.m) + x.bandwidth() / 2; }).attr('y', function (r) { return y(r.v) - 5; })
+      .attr('text-anchor', 'middle').style('font-size', '10px').style('fill', 'var(--fg)').style('paint-order', 'stroke').style('stroke', 'var(--panel)').style('stroke-width', '3px').style('pointer-events', 'none').text(function (r) { return x.bandwidth() >= 18 ? n1(r.v) : ''; });
+    svg.append('text').attr('x', W - m.r).attr('y', yr + 14).attr('text-anchor', 'end').style('font-size', '10px').style('fill', 'var(--muted)').style('paint-order', 'stroke').style('stroke', 'var(--panel)').style('stroke-width', '3px').style('pointer-events', 'none').text('2025: ' + n1(DWT25) + ' hari');
+    $('dwt-txt').textContent = dwtTxt((sel && sel <= last ? sel : last) - 1, ' ');
   }
 
   function chartWaktu(M) {
@@ -964,7 +1004,7 @@ function startApp(DATA) {
     var bVals = BM.filter(function (v) { return v != null; }), bv = sel ? BM[sel - 1] : (bVals.length ? d3.mean(bVals) : null);
     var bn = sel ? (BM[sel - 1] == null ? 'belum ada data' : (sel > BORF.length ? (bNov && bNov.m === sel ? '1–' + bNov.d + ' ' + BLNF[sel - 1] : BLNF[sel - 1]) + ', dari data kapal' : BLNF[sel - 1])) : 'rata-rata Januari–' + BLNF[bVals.length - 1];
     var k = $('kpis'); k.replaceChildren();
-    [['Kapal dilayani', n0(S.length), sel ? BLNF[sel - 1] : 'seluruh periode'], ['Total box', n0(box), 'bongkar dan muat'], ['Total TEUs', n0(teus), 'bongkar dan muat'], ['Capaian target TEUs', n1(teus / (sel ? TGTM[sel - 1] : TGT) * 100) + '%', sel ? 'dari target ' + BLNF[sel - 1] + ' ' + n0(TGTM[sel - 1]) + ' TEUs' : 'dari target 2026 ' + n0(TGT) + ' TEUs', teus / (sel ? TGTM[sel - 1] : TGT)], [sisa > 0 ? 'Kekurangan TEUs' : 'Kelebihan TEUs', n0(Math.abs(sisa)), sisaNote], ['BOR', bv == null ? '—' : n1(bv) + '%', bn], ['YOR', sel ? (YOR[sel - 1] == null ? '—' : n1(YOR[sel - 1]) + '%') : n1(d3.mean(YOR)) + '%', sel ? (sel === 11 ? 'rata-rata harian 1–26 November' : BLNF[sel - 1]) : 'rata-rata Januari–' + BLNF[YOR.length - 1]],
+    [['Kapal dilayani', n0(S.length), sel ? BLNF[sel - 1] : 'seluruh periode'], ['Total box', n0(box), 'bongkar dan muat'], ['Total TEUs', n0(teus), 'bongkar dan muat'], ['Capaian target TEUs', n1(teus / (sel ? TGTM[sel - 1] : TGT) * 100) + '%', sel ? 'dari target ' + BLNF[sel - 1] + ' ' + n0(TGTM[sel - 1]) + ' TEUs' : 'dari target 2026 ' + n0(TGT) + ' TEUs', teus / (sel ? TGTM[sel - 1] : TGT)], [sisa > 0 ? 'Kekurangan TEUs' : 'Kelebihan TEUs', n0(Math.abs(sisa)), sisaNote], ['BOR', bv == null ? '—' : n1(bv) + '%', bn], ['YOR', sel ? (YOR[sel - 1] == null ? '—' : n1(YOR[sel - 1]) + '%') : n1(d3.mean(YOR)) + '%', sel ? (sel === 11 ? 'rata-rata harian 1–26 November' : BLNF[sel - 1]) : 'rata-rata Januari–' + BLNF[YOR.length - 1]], ['Dwelling time', sel ? (sel > DWT.bf.length ? '—' : n1(dwt(sel - 1).v) + ' hari') : n1(d3.mean(DWT.bf, function (v, i) { return dwt(i).v; })) + ' hari', sel ? (sel > DWT.bf.length ? 'belum ada data' : (sel === DWT.bf.length && DWTP ? DWTP : BLNF[sel - 1])) : 'rata-rata Januari–' + BLNF[DWT.bf.length - 1]],
      ['Waktu sandar (BT)', f1(bt), 'jam rata-rata per kapal'], ['Waktu efektif (ET/BT)', eb == null ? '—' : n1(eb) + '%', 'dari waktu sandar'], ['Produktivitas kapal (BSH BT)', f1(bsb), 'box per jam sandar']].forEach(function (c) {
       var d = el('div', 'card'); d.appendChild(el('div', 'kl', c[0])); d.appendChild(el('div', 'kv', c[1])); d.appendChild(el('div', 'kn', c[2])); if (c[3] != null) { var tr = el('div', 'btrack'); tr.style.marginTop = '8px'; var fl = el('div', 'bfill'); fl.style.width = Math.min(100, c[3] * 100) + '%'; tr.appendChild(fl); d.appendChild(tr); } k.appendChild(d);
     });
@@ -1275,7 +1315,7 @@ function startApp(DATA) {
 
   function render() {
     var S = subset(), M = monthly();
-    drawTop(S); chartBox(M); chartProd(M); chartCall(M); chartTpc(M); chartWaktu(M); chartWtd(); drawSebab(); drawLines(S); drawWL(S); drawTop5(S); drawLast(); drawBanding(); drawYoY(); drawRk(); drawFin(); chartWsplit(); drawAsof();
+    drawTop(S); chartBox(M); chartProd(M); chartCall(M); chartTpc(M); chartDwt(); chartWaktu(M); chartWtd(); drawSebab(); drawLines(S); drawWL(S); drawTop5(S); drawLast(); drawBanding(); drawYoY(); drawRk(); drawFin(); chartWsplit(); drawAsof();
   }
 
   var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(function () { render(); }, 150); });
